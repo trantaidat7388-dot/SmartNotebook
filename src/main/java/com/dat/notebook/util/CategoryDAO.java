@@ -36,15 +36,15 @@ public class CategoryDAO {
                 return new ArrayList<>(categories);
             }
 
-            String sql = "SELECT id, name, color FROM Categories ORDER BY id ASC";
+            String sql = "SELECT CategoryID, CategoryName FROM Categories ORDER BY CategoryID ASC";
             try (PreparedStatement ps = conn.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
                 List<Category> result = new ArrayList<>();
                 while (rs.next()) {
                     Category category = new Category();
-                    category.setId(rs.getInt("id"));
-                    category.setName(rs.getString("name"));
-                    category.setColor(rs.getString("color"));
+                    category.setId(rs.getInt("CategoryID"));
+                    category.setName(rs.getString("CategoryName"));
+                    category.setColor("#667eea"); // Default color
                     result.add(category);
                 }
                 return result;
@@ -68,7 +68,7 @@ public class CategoryDAO {
                 return null;
             }
 
-            String sql = "SELECT id, name, color FROM Categories WHERE id = ?";
+            String sql = "SELECT CategoryID, CategoryName FROM Categories WHERE CategoryID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -76,9 +76,9 @@ public class CategoryDAO {
                         return null;
                     }
                     Category category = new Category();
-                    category.setId(rs.getInt("id"));
-                    category.setName(rs.getString("name"));
-                    category.setColor(rs.getString("color"));
+                    category.setId(rs.getInt("CategoryID"));
+                    category.setName(rs.getString("CategoryName"));
+                    category.setColor("#667eea");
                     return category;
                 }
             }
@@ -102,10 +102,9 @@ public class CategoryDAO {
                 return categories.add(category);
             }
 
-            String sql = "INSERT INTO Categories (name, color) VALUES (?, ?)";
+            String sql = "INSERT INTO Categories (CategoryName) VALUES (?)";
             try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, category.getName());
-                ps.setString(2, category.getColor());
                 int affected = ps.executeUpdate();
                 if (affected <= 0) {
                     return false;
@@ -138,11 +137,10 @@ public class CategoryDAO {
                 return false;
             }
 
-            String sql = "UPDATE Categories SET name = ?, color = ? WHERE id = ?";
+            String sql = "UPDATE Categories SET CategoryName = ? WHERE CategoryID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updatedCat.getName());
-                ps.setString(2, updatedCat.getColor());
-                ps.setInt(3, updatedCat.getId());
+                ps.setInt(2, updatedCat.getId());
                 return ps.executeUpdate() > 0;
             }
         } catch (SQLException e) {
@@ -164,7 +162,7 @@ public class CategoryDAO {
             if (conn == null) {
                 return categories.removeIf(cat -> cat.getId() == id);
             }
-            String sql = "DELETE FROM Categories WHERE id = ?";
+            String sql = "DELETE FROM Categories WHERE CategoryID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 return ps.executeUpdate() > 0;

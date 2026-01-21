@@ -8,8 +8,14 @@ import com.dat.notebook.util.CategoryDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -285,6 +291,23 @@ public class MainController {
         lblCurrentCategory.setText("Học tập");
         setCategoryButtonActive(btnStudyNotes);
         loadNotes();
+    }
+
+    @FXML
+    private void handleOpenSettings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/SettingsView.fxml"));
+            Parent root = loader.load();
+            
+            Stage settingsStage = new Stage();
+            settingsStage.setTitle("Cài đặt - Smart Notebook");
+            settingsStage.initModality(Modality.APPLICATION_MODAL);
+            settingsStage.setScene(new Scene(root));
+            settingsStage.setResizable(false);
+            settingsStage.show();
+        } catch (IOException e) {
+            showAlert("Lỗi", "Không thể mở cửa sổ cài đặt: " + e.getMessage());
+        }
     }
 
     private void showAlert(String title, String content) {

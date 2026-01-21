@@ -48,8 +48,8 @@ public class NoteDAO {
                 return new ArrayList<>(notes);
             }
 
-            String sql = "SELECT id, title, content, category_id, created_at, updated_at " +
-                    "FROM Notes ORDER BY updated_at DESC, id DESC";
+            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+                    "FROM Notes ORDER BY UpdatedAt DESC, NoteID DESC";
             try (PreparedStatement ps = conn.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
                 List<Note> result = new ArrayList<>();
@@ -80,11 +80,11 @@ public class NoteDAO {
 
             String sql;
             if (categoryId == 0) {
-                sql = "SELECT id, title, content, category_id, created_at, updated_at " +
-                        "FROM Notes WHERE category_id IS NULL ORDER BY updated_at DESC, id DESC";
+                sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+                        "FROM Notes WHERE CategoryID IS NULL ORDER BY UpdatedAt DESC, NoteID DESC";
             } else {
-                sql = "SELECT id, title, content, category_id, created_at, updated_at " +
-                        "FROM Notes WHERE category_id = ? ORDER BY updated_at DESC, id DESC";
+                sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+                        "FROM Notes WHERE CategoryID = ? ORDER BY UpdatedAt DESC, NoteID DESC";
             }
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -124,7 +124,7 @@ public class NoteDAO {
                 return null;
             }
 
-            String sql = "SELECT id, title, content, category_id, created_at, updated_at FROM Notes WHERE id = ?";
+            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt FROM Notes WHERE NoteID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -156,7 +156,7 @@ public class NoteDAO {
                 return notes.add(note);
             }
 
-            String sql = "INSERT INTO Notes (title, content, category_id, created_at, updated_at) VALUES (?, ?, ?, GETDATE(), GETDATE())";
+            String sql = "INSERT INTO Notes (Title, Content, CategoryID, CreatedAt, UpdatedAt) VALUES (?, ?, ?, GETDATE(), GETDATE())";
             try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, note.getTitle());
                 ps.setString(2, note.getContent());
@@ -203,7 +203,7 @@ public class NoteDAO {
                 return false;
             }
 
-            String sql = "UPDATE Notes SET title = ?, content = ?, category_id = ?, updated_at = GETDATE() WHERE id = ?";
+            String sql = "UPDATE Notes SET Title = ?, Content = ?, CategoryID = ?, UpdatedAt = GETDATE() WHERE NoteID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updatedNote.getTitle());
                 ps.setString(2, updatedNote.getContent());
@@ -237,7 +237,7 @@ public class NoteDAO {
             if (conn == null) {
                 return notes.removeIf(note -> note.getId() == id);
             }
-            String sql = "DELETE FROM Notes WHERE id = ?";
+            String sql = "DELETE FROM Notes WHERE NoteID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 return ps.executeUpdate() > 0;
@@ -264,10 +264,10 @@ public class NoteDAO {
                 return results;
             }
 
-            String sql = "SELECT id, title, content, category_id, created_at, updated_at " +
+            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
                     "FROM Notes " +
-                    "WHERE title LIKE ? OR content LIKE ? " +
-                    "ORDER BY updated_at DESC, id DESC";
+                    "WHERE Title LIKE ? OR Content LIKE ? " +
+                    "ORDER BY UpdatedAt DESC, NoteID DESC";
             String pattern = "%" + keyword + "%";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, pattern);
@@ -295,21 +295,21 @@ public class NoteDAO {
 
     private static Note mapRow(ResultSet rs) throws SQLException {
         Note note = new Note();
-        note.setId(rs.getInt("id"));
-        note.setTitle(rs.getString("title"));
-        note.setContent(rs.getString("content"));
+        note.setId(rs.getInt("NoteID"));
+        note.setTitle(rs.getString("Title"));
+        note.setContent(rs.getString("Content"));
 
-        int catId = rs.getInt("category_id");
+        int catId = rs.getInt("CategoryID");
         if (rs.wasNull()) {
             catId = 0;
         }
         note.setCategoryId(catId);
 
-        Timestamp created = rs.getTimestamp("created_at");
+        Timestamp created = rs.getTimestamp("CreatedAt");
         if (created != null) {
             note.setCreatedAt(created.toLocalDateTime());
         }
-        Timestamp updated = rs.getTimestamp("updated_at");
+        Timestamp updated = rs.getTimestamp("UpdatedAt");
         if (updated != null) {
             note.setUpdatedAt(updated.toLocalDateTime());
         }

@@ -63,7 +63,8 @@
                 
                 <Separator styleClass="sidebar-separator"/>
                 
-                <Button text="⚙️  Cài đặt" styleClass="category-btn" maxWidth="Infinity"/>
+                <Button text="⚙️  Cài đặt" styleClass="category-btn" maxWidth="Infinity" 
+                        onAction="#handleOpenSettings"/>
             </VBox>
 
             <!-- COLUMN 2: NOTE LIST -->

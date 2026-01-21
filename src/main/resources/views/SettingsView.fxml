@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.dat.notebook.controller.SettingsController"
+            stylesheets="@../css/style.css"
+            styleClass="settings-dialog"
+            prefWidth="700" prefHeight="500">
+    
+    <!-- HEADER -->
+    <top>
+        <HBox styleClass="settings-header" alignment="CENTER_LEFT" spacing="12">
+            <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+            <Text text="⚙️" styleClass="settings-icon"/>
+            <Label text="Cài đặt ứng dụng" styleClass="settings-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="✕" onAction="#handleClose" styleClass="btn-close-settings"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <TabPane fx:id="tabPane" styleClass="settings-tabs" tabClosingPolicy="UNAVAILABLE">
+            
+            <!-- TAB 1: APPEARANCE -->
+            <Tab text="🎨  Giao diện">
+                <VBox spacing="20" styleClass="settings-content">
+                    <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
+                    
+                    <Label text="Tùy chỉnh giao diện" styleClass="section-header"/>
+                    
+                    <VBox spacing="12">
+                        <Label text="Kích thước chữ" styleClass="field-label"/>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Slider fx:id="sliderFontSize" min="12" max="20" value="13" 
+                                    showTickLabels="true" showTickMarks="true" 
+                                    majorTickUnit="2" minorTickCount="1" 
+                                    prefWidth="300"/>
+                            <Label fx:id="lblFontSize" text="13px" styleClass="slider-value"/>
+                        </HBox>
+                    </VBox>
+                    
+                    <VBox spacing="12">
+                        <Label text="Theme" styleClass="field-label"/>
+                        <ComboBox fx:id="cmbTheme" promptText="Chọn theme" 
+                                  styleClass="settings-combo" prefWidth="250"/>
+                    </VBox>
+                    
+                    <Separator styleClass="settings-separator"/>
+                    
+                    <Label text="💡 Gợi ý: Các tùy chọn theme và màu sắc sẽ được bổ sung trong phiên bản tiếp theo." 
+                           styleClass="hint-text" wrapText="true"/>
+                </VBox>
+            </Tab>
+            
+            <!-- TAB 2: PREFERENCES -->
+            <Tab text="⚙️  Tùy chọn">
+                <VBox spacing="20" styleClass="settings-content">
+                    <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
+                    
+                    <Label text="Cài đặt chung" styleClass="section-header"/>
+                    
+                    <VBox spacing="15">
+                        <CheckBox fx:id="chkAutoSave" text="Tự động lưu khi chỉnh sửa" 
+                                  styleClass="checkbox-setting" selected="true"/>
+                        <Label text="Ghi chú sẽ được lưu tự động sau khi bạn ngừng gõ 2 giây" 
+                               styleClass="hint-text" wrapText="true"/>
+                    </VBox>
+                    
+                    <Separator styleClass="settings-separator"/>
+                    
+                    <VBox spacing="15">
+                        <CheckBox fx:id="chkShowNotifications" text="Hiển thị thông báo" 
+                                  styleClass="checkbox-setting" selected="true"/>
+                        <Label text="Nhận thông báo khi có nhắc nhở hoặc cập nhật quan trọng" 
+                               styleClass="hint-text" wrapText="true"/>
+                    </VBox>
+                    
+                    <Separator styleClass="settings-separator"/>
+                    
+                    <VBox spacing="15">
+                        <CheckBox fx:id="chkConfirmDelete" text="Xác nhận trước khi xóa" 
+                                  styleClass="checkbox-setting" selected="true"/>
+                        <Label text="Hiển thị hộp thoại xác nhận khi xóa ghi chú hoặc danh mục" 
+                               styleClass="hint-text" wrapText="true"/>
+                    </VBox>
+                    
+                    <Region VBox.vgrow="ALWAYS"/>
+                    
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button text="Đặt lại mặc định" onAction="#handleResetDefaults" styleClass="btn-secondary"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+            
+            <!-- TAB 3: ABOUT -->
+            <Tab text="ℹ️  Thông tin">
+                <VBox spacing="25" alignment="CENTER" styleClass="settings-content">
+                    <padding><Insets top="40" right="30" bottom="40" left="30"/></padding>
+                    
+                    <Text text="📓" styleClass="about-icon"/>
+                    <Label text="Smart Notebook" styleClass="about-title"/>
+                    <Label text="Phiên bản 1.0.0" styleClass="about-version"/>
+                    
+                    <Separator prefWidth="400" styleClass="settings-separator"/>
+                    
+                    <VBox spacing="8" alignment="CENTER">
+                        <Label text="Ứng dụng ghi chú thông minh" styleClass="about-desc"/>
+                        <Label text="Xây dựng với JavaFX 21 và SQL Server" styleClass="about-desc"/>
+                    </VBox>
+                    
+                    <VBox spacing="8" alignment="CENTER">
+                        <Label text="📧 Email: contact@smartnotebook.com" styleClass="about-contact"/>
+                        <Label text="🌐 GitHub: @trantaidat7388-dot" styleClass="about-contact"/>
+                    </VBox>
+                    
+                    <Region VBox.vgrow="ALWAYS"/>
+                    
+                    <Label text="© 2026 Smart Notebook. All rights reserved." 
+                           styleClass="about-copyright"/>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+</BorderPane>
