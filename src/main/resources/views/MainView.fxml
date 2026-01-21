@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.dat.notebook.controller.MainController"
+            stylesheets="@../css/style.css"
+            styleClass="root-pane">
+    
+    <!-- HEADER BAR -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="header-bar">
+            <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+            
+            <!-- Logo -->
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Text text="📓" styleClass="logo-icon"/>
+                <Label text="Smart Notebook" styleClass="logo-text"/>
+            </HBox>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <!-- Search Box -->
+            <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="8">
+                <padding><Insets top="6" right="12" bottom="6" left="12"/></padding>
+                <Text text="🔍" styleClass="search-icon"/>
+                <TextField fx:id="txtSearch" promptText="Tìm kiếm ghi chú..." 
+                           styleClass="search-input" prefWidth="220"/>
+            </HBox>
+            
+            <!-- Add Button -->
+            <Button text="+ Thêm mới" onAction="#handleAddNewNote" styleClass="btn-primary"/>
+        </HBox>
+    </top>
+
+    <!-- MAIN CONTENT - 3 COLUMNS -->
+    <center>
+        <HBox styleClass="main-content">
+            
+            <!-- COLUMN 1: SIDEBAR - Categories -->
+            <VBox prefWidth="180" styleClass="sidebar">
+                <padding><Insets top="15" right="10" bottom="15" left="10"/></padding>
+                
+                <Label text="DANH MỤC" styleClass="section-title"/>
+                <VBox spacing="3" styleClass="category-list">
+                    <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" 
+                            styleClass="category-btn,category-active" maxWidth="Infinity"
+                            onAction="#handleShowAllNotes"/>
+                    <Button fx:id="btnWorkNotes" text="💼  Công việc" 
+                            styleClass="category-btn" maxWidth="Infinity"
+                            onAction="#handleShowWorkNotes"/>
+                    <Button fx:id="btnPersonalNotes" text="👤  Cá nhân" 
+                            styleClass="category-btn" maxWidth="Infinity"
+                            onAction="#handleShowPersonalNotes"/>
+                    <Button fx:id="btnStudyNotes" text="📚  Học tập" 
+                            styleClass="category-btn" maxWidth="Infinity"
+                            onAction="#handleShowStudyNotes"/>
+                </VBox>
+                
+                <Region VBox.vgrow="ALWAYS"/>
+                
+                <Separator styleClass="sidebar-separator"/>
+                
+                <Button text="⚙️  Cài đặt" styleClass="category-btn" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- COLUMN 2: NOTE LIST -->
+            <VBox prefWidth="280" styleClass="note-list-panel">
+                <padding><Insets top="15" right="10" bottom="15" left="10"/></padding>
+                
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label fx:id="lblCurrentCategory" text="Tất cả ghi chú" styleClass="panel-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="lblNoteCount" text="0 ghi chú" styleClass="note-count"/>
+                </HBox>
+                
+                <ListView fx:id="listNotes" VBox.vgrow="ALWAYS" styleClass="notes-listview"/>
+            </VBox>
+
+            <!-- COLUMN 3: EDITOR -->
+            <VBox HBox.hgrow="ALWAYS" styleClass="editor-panel">
+                <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
+                
+                <!-- Editor Header -->
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <TextField fx:id="txtTitle" promptText="Tiêu đề ghi chú..." 
+                               styleClass="title-input" HBox.hgrow="ALWAYS"/>
+                    <ComboBox fx:id="cmbCategory" promptText="Chọn danh mục" 
+                              styleClass="category-combo" prefWidth="150"/>
+                </HBox>
+                
+                <Region prefHeight="15"/>
+                
+                <!-- Editor Content -->
+                <TextArea fx:id="txtContent" promptText="Bắt đầu viết nội dung tại đây..." 
+                          VBox.vgrow="ALWAYS" wrapText="true" styleClass="content-editor"/>
+                
+                <Region prefHeight="15"/>
+                
+                <!-- Editor Footer -->
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Label fx:id="lblLastUpdated" text="" styleClass="last-updated"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="🗑️ Xóa" onAction="#handleDeleteNote" styleClass="btn-danger"/>
+                    <Button text="💾 Lưu ghi chú" onAction="#handleSaveNote" styleClass="btn-success"/>
+                </HBox>
+            </VBox>
+            
+        </HBox>
+    </center>
+</BorderPane>

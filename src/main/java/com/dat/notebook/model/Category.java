@@ -1,0 +1,26 @@
+package com.dat.notebook.model;
+
+/**
+ * Model đại diện cho danh mục ghi chú
+ */
+public class Category {
+    private int id;
+    private String name;
+    private String color;
+
+    public Category() {}
+
+    public Category(int id, String name, String color) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+    }
+
+    // Getters và Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+}
