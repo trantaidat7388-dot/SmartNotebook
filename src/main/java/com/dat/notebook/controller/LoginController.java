@@ -368,12 +368,13 @@ public class LoginController {
             Stage mainStage = new Stage();
             mainStage.setTitle("SmartNotebook - Sổ tay thông minh v2.0");
             
-            // Kích thước lớn hơn để phù hợp với HTMLEditor
-            Scene scene = new Scene(root, 1400, 850);
+            // Kích thước vừa phải, không toàn màn hình - người dùng có thể maximize khi cần
+            Scene scene = new Scene(root, 1200, 750);
             mainStage.setScene(scene);
             mainStage.setMinWidth(1000);
             mainStage.setMinHeight(600);
             mainStage.setResizable(true);
+            mainStage.setMaximized(false); // Không maximize tự động
             
             // Center on screen
             mainStage.centerOnScreen();
