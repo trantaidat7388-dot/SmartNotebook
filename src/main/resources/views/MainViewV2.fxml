@@ -14,7 +14,7 @@
     
     <!-- ==================== LEFT SIDEBAR ==================== -->
     <left>
-        <VBox styleClass="sidebar" prefWidth="220" minWidth="180" maxWidth="260">
+        <VBox styleClass="sidebar" prefWidth="200" minWidth="180" maxWidth="240">
             <!-- Header -->
             <VBox styleClass="sidebar-header" spacing="5">
                 <HBox alignment="CENTER_LEFT" spacing="10">
@@ -98,7 +98,7 @@
     
     <!-- ==================== CENTER - NOTES LIST ==================== -->
     <center>
-        <VBox styleClass="content-area" prefWidth="320" minWidth="280">
+        <VBox styleClass="content-area" prefWidth="280" minWidth="250">
             <!-- Header -->
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <VBox HBox.hgrow="ALWAYS">
@@ -132,7 +132,7 @@
     
     <!-- ==================== RIGHT - EDITOR PANEL ==================== -->
     <right>
-        <VBox fx:id="editorPanel" prefWidth="750" minWidth="500" 
+        <VBox fx:id="editorPanel" prefWidth="650" minWidth="480" 
               styleClass="content-area" 
               style="-fx-border-color: #e2e8f0; -fx-border-width: 0 0 0 1;">
             
@@ -187,8 +187,8 @@
             <!-- Đây là phần quan trọng: HTMLEditor thay cho TextArea -->
             <HTMLEditor fx:id="htmlEditor" 
                         VBox.vgrow="ALWAYS"
-                        prefHeight="500"
-                        minHeight="400"
+                        prefHeight="450"
+                        minHeight="300"
                         style="-fx-border-color: #e5e7eb; -fx-border-radius: 8;"/>
             
             <!-- Quick Actions -->

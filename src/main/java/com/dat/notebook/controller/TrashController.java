@@ -173,8 +173,8 @@ public class TrashController {
     @FXML
     private void handleBack() {
         try {
-            // Go back to main view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MainView.fxml"));
+            // Go back to main view V2 (current interface)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/MainViewV2.fxml"));
             Parent root = loader.load();
             
             Stage stage = (Stage) btnBack.getScene().getWindow();
@@ -182,7 +182,7 @@ public class TrashController {
             stage.setScene(scene);
             stage.centerOnScreen();
         } catch (IOException e) {
-            System.err.println("Error loading MainView: " + e.getMessage());
+            System.err.println("Error loading MainViewV2: " + e.getMessage());
             e.printStackTrace();
         }
     }
