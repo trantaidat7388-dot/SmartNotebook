@@ -3,5 +3,6 @@
         "src/main/java"
     ],
     "java.project.outputPath": "target/classes",
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "terminal.integrated.cursorStyle": "line"
 }

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.HTMLEditor?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dat.notebook.controller.MainControllerV2"
+            styleClass="main-root"
+            stylesheets="@../css/fresh-candy.css"
+            prefWidth="1400" prefHeight="850" 
+            minWidth="1000" minHeight="600">
+    
+    <!-- ==================== LEFT SIDEBAR ==================== -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="220" minWidth="180" maxWidth="260">
+            <!-- Header -->
+            <VBox styleClass="sidebar-header" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="📓" style="-fx-font-size: 28px;"/>
+                    <VBox>
+                        <Label text="SmartNote" styleClass="sidebar-logo"/>
+                        <Label text="v2.0 Rich Text" styleClass="sidebar-version"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+            
+            <!-- Search -->
+            <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="10" 
+                  style="-fx-background-color: rgba(255,255,255,0.2); -fx-border-color: transparent;">
+                <Label text="🔍" style="-fx-font-size: 16px; -fx-text-fill: white;"/>
+                <TextField fx:id="txtSearch" 
+                           promptText="Tìm kiếm..." 
+                           style="-fx-background-color: transparent; -fx-text-fill: white; -fx-prompt-text-fill: rgba(255,255,255,0.7);"
+                           HBox.hgrow="ALWAYS"/>
+            </HBox>
+            
+            <!-- Menu Section -->
+            <Label text="KHÔNG GIAN LÀM VIỆC" styleClass="sidebar-section-title"/>
+            
+            <VBox spacing="8">
+                <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" 
+                        styleClass="sidebar-btn, sidebar-btn-active"
+                        onAction="#handleShowAllNotes" maxWidth="Infinity"/>
+                
+                <Button fx:id="btnFavorites" text="⭐  Yêu thích" 
+                        styleClass="sidebar-btn"
+                        onAction="#handleShowFavorites" maxWidth="Infinity"/>
+                
+                <Button fx:id="btnTrash" text="🗑️  Thùng rác" 
+                        styleClass="sidebar-btn"
+                        onAction="#handleShowTrash" maxWidth="Infinity"/>
+            </VBox>
+            
+            <!-- Filter by Status -->
+            <Label text="LỌC THEO TRẠNG THÁI" styleClass="sidebar-section-title"/>
+            
+            <VBox spacing="5">
+                <Button fx:id="btnFilterRegular" text="📝 Thường" 
+                        styleClass="sidebar-btn-small"
+                        onAction="#handleFilterRegular" maxWidth="Infinity"/>
+                <Button fx:id="btnFilterUrgent" text="🔥 Khẩn cấp" 
+                        styleClass="sidebar-btn-small"
+                        onAction="#handleFilterUrgent" maxWidth="Infinity"/>
+                <Button fx:id="btnFilterIdeas" text="💡 Ý tưởng" 
+                        styleClass="sidebar-btn-small"
+                        onAction="#handleFilterIdeas" maxWidth="Infinity"/>
+                <Button fx:id="btnFilterCompleted" text="✅ Hoàn thành" 
+                        styleClass="sidebar-btn-small"
+                        onAction="#handleFilterCompleted" maxWidth="Infinity"/>
+            </VBox>
+            
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <!-- Bottom Section -->
+            <VBox spacing="8">
+                <Button fx:id="btnSettings" text="⚙️  Cài đặt" 
+                        styleClass="sidebar-btn"
+                        onAction="#handleShowSettings" maxWidth="Infinity"/>
+                
+                <Button fx:id="btnLogout" text="🚪  Đăng xuất" 
+                        styleClass="sidebar-btn"
+                        onAction="#handleLogout" maxWidth="Infinity"/>
+                
+                <!-- User Info -->
+                <HBox styleClass="sidebar-user-info" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="👤" style="-fx-font-size: 24px;"/>
+                    <VBox>
+                        <Label fx:id="lblUsername" text="Người dùng" styleClass="sidebar-user-name"/>
+                        <Label text="Pro Account" styleClass="sidebar-user-email"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </left>
+    
+    <!-- ==================== CENTER - NOTES LIST ==================== -->
+    <center>
+        <VBox styleClass="content-area" prefWidth="320" minWidth="280">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblContentTitle" text="Ghi chú" styleClass="content-title"/>
+                    <Label fx:id="lblNotesCount" text="0 ghi chú" styleClass="content-subtitle"/>
+                </VBox>
+                
+                <!-- Sort -->
+                <ComboBox fx:id="cmbSort" 
+                          promptText="Sắp xếp" 
+                          styleClass="combo-box"
+                          style="-fx-pref-width: 130px;"/>
+            </HBox>
+            
+            <!-- Create Note Button -->
+            <Button fx:id="btnCreateNote" text="✨ Tạo ghi chú mới" 
+                    styleClass="btn-primary"
+                    onAction="#handleCreateNote" 
+                    maxWidth="Infinity"
+                    style="-fx-padding: 12 20;"/>
+            
+            <!-- Notes List -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" 
+                        style="-fx-background-color: transparent; -fx-background: transparent;">
+                <VBox fx:id="vboxNotesList" spacing="10" style="-fx-padding: 10 5;">
+                    <!-- Notes will be loaded dynamically -->
+                </VBox>
+            </ScrollPane>
+        </VBox>
+    </center>
+    
+    <!-- ==================== RIGHT - EDITOR PANEL ==================== -->
+    <right>
+        <VBox fx:id="editorPanel" prefWidth="750" minWidth="500" 
+              styleClass="content-area" 
+              style="-fx-border-color: #e2e8f0; -fx-border-width: 0 0 0 1;">
+            
+            <!-- Editor Header -->
+            <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 10 0;">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblEditorTitle" text="Soạn thảo ghi chú" 
+                           styleClass="content-title" style="-fx-font-size: 18px;"/>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="lblNoteDate" text="" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                        <Label fx:id="lblSaveStatus" text="" 
+                               style="-fx-text-fill: #10b981; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                    </HBox>
+                </VBox>
+                
+                <!-- Action Buttons -->
+                <HBox spacing="8" alignment="CENTER">
+                    <Button fx:id="btnFavorite" text="☆" 
+                            styleClass="toolbar-btn-lg" 
+                            onAction="#handleToggleFavorite"
+                            style="-fx-font-size: 18px;"/>
+                    <Button fx:id="btnChangeStatus" text="📊" 
+                            styleClass="toolbar-btn-lg" 
+                            onAction="#handleChangeStatus"/>
+                    <Button fx:id="btnDelete" text="🗑️" 
+                            styleClass="toolbar-btn-lg, toolbar-btn-danger" 
+                            onAction="#handleDeleteNote"/>
+                </HBox>
+            </HBox>
+            
+            <!-- Title Input -->
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+                <Label text="Tiêu đề:" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                <TextField fx:id="txtNoteTitle" 
+                           promptText="Nhập tiêu đề ghi chú..."
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-font-size: 16px; -fx-padding: 10; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #d1d5db;"/>
+            </HBox>
+            
+            <!-- Status Badge -->
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 10 0;">
+                <Label text="Trạng thái:" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+                <Label fx:id="lblStatus" text="REGULAR" styleClass="status-badge"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Màu:" style="-fx-text-fill: #6b7280;"/>
+                <HBox fx:id="colorPicker" spacing="5">
+                    <!-- Color buttons will be added dynamically -->
+                </HBox>
+            </HBox>
+            
+            <!-- ==================== HTML EDITOR ==================== -->
+            <!-- Đây là phần quan trọng: HTMLEditor thay cho TextArea -->
+            <HTMLEditor fx:id="htmlEditor" 
+                        VBox.vgrow="ALWAYS"
+                        prefHeight="500"
+                        minHeight="400"
+                        style="-fx-border-color: #e5e7eb; -fx-border-radius: 8;"/>
+            
+            <!-- Quick Actions -->
+            <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                <Button text="💾 Lưu ngay" 
+                        styleClass="btn-outline"
+                        onAction="#handleSaveNote"
+                        prefWidth="130" prefHeight="38"/>
+                <Button text="📋 Sao chép" 
+                        styleClass="btn-outline"
+                        onAction="#handleCopyContent"
+                        prefWidth="130" prefHeight="38"/>
+                <Button text="📤 Xuất file" 
+                        styleClass="btn-outline"
+                        onAction="#handleExportNote"
+                        prefWidth="130" prefHeight="38"/>
+            </HBox>
+            
+            <!-- Keyboard Shortcuts Hint -->
+            <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                <Label text="💡 Ctrl+N: Tạo mới | Ctrl+B: In đậm | Ctrl+I: In nghiêng | Auto-save sau 1.5 giây" 
+                       style="-fx-text-fill: #9ca3af; -fx-font-size: 11px;"/>
+            </HBox>
+        </VBox>
+    </right>
+</BorderPane>

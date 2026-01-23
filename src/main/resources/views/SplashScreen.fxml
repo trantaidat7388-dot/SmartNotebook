@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.dat.notebook.controller.SplashController"
+           prefWidth="700" prefHeight="500"
+           style="-fx-background-color: linear-gradient(to bottom right, #a8edea, #c3b1e1, #fed7e2);">
+    
+    <VBox fx:id="mainContainer" alignment="CENTER" spacing="35">
+        <padding>
+            <Insets top="60" right="60" bottom="60" left="60"/>
+        </padding>
+        
+        <!-- Animated Logo Icon -->
+        <Label fx:id="logoIcon" text="📓" style="-fx-font-size: 100px;">
+            <effect>
+                <DropShadow color="rgba(0,0,0,0.2)" radius="15" offsetY="5"/>
+            </effect>
+        </Label>
+        
+        <!-- App Name with Shadow -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="Smart Notebook" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: white; -fx-font-family: 'Segoe UI', sans-serif;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.25)" radius="12" offsetY="3"/>
+                </effect>
+            </Label>
+            <Label text="Write ideas. Save memories." style="-fx-font-size: 18px; -fx-text-fill: white; -fx-opacity: 0.9; -fx-font-style: italic;"/>
+        </VBox>
+        
+        <!-- Spacer -->
+        <Region prefHeight="20"/>
+        
+        <!-- Loading Section -->
+        <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20;">
+            <Label fx:id="loadingText" text="✨ Loading your ideas..." 
+                   style="-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: 500;"/>
+            
+            <ProgressBar fx:id="progressBar" 
+                         prefWidth="350" 
+                         prefHeight="12" 
+                         progress="0.0" 
+                         style="-fx-accent: white; -fx-background-color: rgba(255,255,255,0.3); -fx-background-radius: 10;">
+                <effect>
+                    <DropShadow color="rgba(0,0,0,0.1)" radius="8"/>
+                </effect>
+            </ProgressBar>
+            
+            <Label text="Version 1.0 - Gen Z Edition" 
+                   style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.7); -fx-padding: 10 0 0 0;"/>
+        </VBox>
+    </VBox>
+</StackPane>

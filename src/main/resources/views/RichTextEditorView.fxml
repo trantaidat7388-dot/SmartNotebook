@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.HTMLEditor?>
+<?import javafx.geometry.Insets?>
+
+<!--
+    RichTextEditorView.fxml
+    View chính cho Rich Text Editor với TabPane
+    Mỗi note mở trong một tab riêng
+    
+    Features:
+    - TabPane để quản lý nhiều notes cùng lúc
+    - HTMLEditor cho Rich Text Editing
+    - Toolbar với formatting options
+    - Auto-save indicator
+    - Version history button
+-->
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dat.notebook.controller.RichTextEditorController"
+            styleClass="editor-root"
+            stylesheets="@../css/fresh-candy.css"
+            prefWidth="1000" prefHeight="650"
+            minWidth="800" minHeight="500">
+    
+    <!-- Top Toolbar -->
+    <top>
+        <VBox styleClass="editor-toolbar-container">
+            <!-- Main Toolbar -->
+            <HBox styleClass="editor-main-toolbar" alignment="CENTER_LEFT" spacing="10">
+                <padding>
+                    <Insets top="10" bottom="10" left="15" right="15"/>
+                </padding>
+                
+                <!-- Title -->
+                <Label text="📝 Rich Text Editor" 
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                
+                <Region HBox.hgrow="ALWAYS"/>
+                
+                <!-- Quick Actions -->
+                <HBox spacing="8">
+                    <Button fx:id="btnNewNote" text="+ Ghi chú mới" 
+                            styleClass="btn-primary"
+                            onAction="#handleNewNote"
+                            style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+                    
+                    <Separator orientation="VERTICAL"/>
+                    
+                    <Button fx:id="btnSaveNote" text="💾 Lưu" 
+                            styleClass="toolbar-btn"
+                            onAction="#handleSaveNote"
+                            style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+                    
+                    <Button fx:id="btnVersionHistory" text="🕐 Lịch sử" 
+                            styleClass="toolbar-btn"
+                            onAction="#handleShowVersionHistory"
+                            style="-fx-background-color: #6366f1; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 8 16;"/>
+                    
+                    <!-- Auto-save indicator -->
+                    <Label fx:id="lblAutoSaveStatus" text="✓ Đã lưu" 
+                           style="-fx-text-fill: #10b981; -fx-font-size: 12px; -fx-padding: 8 0;"/>
+                </HBox>
+            </HBox>
+            
+            <!-- Quick Toolbar -->
+            <HBox styleClass="editor-format-toolbar" alignment="CENTER_LEFT" spacing="8">
+                <padding>
+                    <Insets top="8" bottom="8" left="15" right="15"/>
+                </padding>
+                
+                <Label text="💡 Tip: HTMLEditor có đầy đủ công cụ định dạng bên trong. Bold: Ctrl+B, Italic: Ctrl+I, Underline: Ctrl+U" 
+                       style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                
+                <Region HBox.hgrow="ALWAYS"/>
+                
+                <!-- Insert Options -->
+                <Button fx:id="btnInsertImage" text="🖼️ Chèn ảnh" 
+                        styleClass="toolbar-btn"
+                        onAction="#handleInsertImage"/>
+                
+                <Separator orientation="VERTICAL"/>
+                
+                <!-- Word Count -->
+                <Label fx:id="lblWordCount" text="0 từ" 
+                       style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <!-- Center - TabPane for Multiple Notes -->
+    <center>
+        <BorderPane>
+            <!-- Tab Container -->
+            <center>
+                <TabPane fx:id="noteTabPane" 
+                         tabClosingPolicy="ALL_TABS"
+                         style="-fx-background-color: #f8fafc;">
+                    
+                    <!-- Empty state tab (shown when no notes are open) -->
+                    <Tab fx:id="emptyTab" text="Chào mừng" closable="false">
+                        <VBox alignment="CENTER" spacing="20" 
+                              style="-fx-padding: 50; -fx-background-color: white;">
+                            <Label text="📝" style="-fx-font-size: 64px;"/>
+                            <Label text="Chào mừng đến Rich Text Editor" 
+                                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                            <Label text="Nhấn '+ Ghi chú mới' để bắt đầu viết" 
+                                   style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
+                            <Label text="hoặc chọn một ghi chú từ danh sách bên trái" 
+                                   style="-fx-font-size: 14px; -fx-text-fill: #64748b;"/>
+                            
+                            <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                                <Label text="⌨️ Phím tắt:" 
+                                       style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #475569;"/>
+                                <HBox spacing="15">
+                                    <VBox spacing="5">
+                                        <Label text="Ctrl + B: Bold" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                        <Label text="Ctrl + I: Italic" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                        <Label text="Ctrl + U: Underline" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                    </VBox>
+                                    <VBox spacing="5">
+                                        <Label text="Ctrl + S: Lưu" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                        <Label text="Ctrl + N: Ghi chú mới" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                        <Label text="Ctrl + W: Đóng tab" style="-fx-font-size: 12px; -fx-text-fill: #64748b;"/>
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+                    </Tab>
+                    
+                    <!-- Dynamic tabs will be added here programmatically -->
+                </TabPane>
+            </center>
+        </BorderPane>
+    </center>
+    
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox styleClass="status-bar" alignment="CENTER_LEFT" spacing="15">
+            <padding>
+                <Insets top="8" bottom="8" left="15" right="15"/>
+            </padding>
+            
+            <Label fx:id="lblStatus" text="Sẵn sàng" 
+                   style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label fx:id="lblCurrentNote" text="Chưa mở ghi chú nào" 
+                   style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label fx:id="lblLastSaved" text="" 
+                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label fx:id="lblTabCount" text="0 tab" 
+                   style="-fx-text-fill: #94a3b8; -fx-font-size: 11px;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

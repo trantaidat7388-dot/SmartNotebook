@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.dat.notebook.controller.RegisterController"
+           styleClass="register-root"
+           stylesheets="@../css/fresh-candy.css"
+           prefWidth="900" prefHeight="700">
+    
+    <!-- Register Card -->
+    <VBox styleClass="register-card" alignment="CENTER" spacing="18">
+        
+        <!-- Icon -->
+        <Label text="✨" styleClass="register-icon"/>
+        
+        <!-- Title -->
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="Tạo tài khoản mới" styleClass="register-title"/>
+            <Label text="Đăng ký dễ dàng - Không áp lực" styleClass="login-subtitle"/>
+        </VBox>
+        
+        <!-- Error Message -->
+        <HBox fx:id="errorBox" styleClass="error-box" alignment="CENTER" spacing="10" visible="false" managed="false">
+            <Label text="⚠️" style="-fx-font-size: 16px;"/>
+            <Label fx:id="errorLabel" style="-fx-text-fill: #c53030; -fx-font-size: 14px;"/>
+        </HBox>
+        
+        <!-- Success Message -->
+        <HBox fx:id="successBox" styleClass="success-box" alignment="CENTER" spacing="10" visible="false" managed="false">
+            <Label text="✅" style="-fx-font-size: 16px;"/>
+            <Label fx:id="successLabel" style="-fx-text-fill: #276749; -fx-font-size: 14px;"/>
+        </HBox>
+        
+        <!-- Form Fields -->
+        <VBox spacing="12">
+            <padding>
+                <Insets top="5"/>
+            </padding>
+            
+            <!-- Username -->
+            <VBox spacing="6">
+                <Label text="Tên đăng nhập *" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="👤" styleClass="input-icon"/>
+                    <TextField fx:id="usernameField" 
+                               promptText="Nhập tên đăng nhập (3-20 ký tự)" 
+                               styleClass="text-field-fresh"
+                               HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="usernameError" styleClass="error-label" visible="false" managed="false"/>
+            </VBox>
+            
+            <!-- Email -->
+            <VBox spacing="6">
+                <Label text="Email" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📧" styleClass="input-icon"/>
+                    <TextField fx:id="emailField" 
+                               promptText="email@example.com (không bắt buộc)" 
+                               styleClass="text-field-fresh"
+                               HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="emailError" styleClass="error-label" visible="false" managed="false"/>
+            </VBox>
+            
+            <!-- Password -->
+            <VBox spacing="6">
+                <Label text="Mật khẩu *" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🔒" styleClass="input-icon"/>
+                    <PasswordField fx:id="passwordField" 
+                                   promptText="Tối thiểu 6 ký tự" 
+                                   styleClass="password-field-fresh"
+                                   HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="passwordError" styleClass="error-label" visible="false" managed="false"/>
+            </VBox>
+            
+            <!-- Confirm Password -->
+            <VBox spacing="6">
+                <Label text="Xác nhận mật khẩu *" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🔐" styleClass="input-icon"/>
+                    <PasswordField fx:id="confirmPasswordField" 
+                                   promptText="Nhập lại mật khẩu" 
+                                   styleClass="password-field-fresh"
+                                   HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="confirmPasswordError" styleClass="error-label" visible="false" managed="false"/>
+            </VBox>
+        </VBox>
+        
+        <!-- Buttons -->
+        <VBox spacing="12">
+            <padding>
+                <Insets top="10"/>
+            </padding>
+            
+            <HBox spacing="15" alignment="CENTER">
+                <Button text="✨  Đăng ký" 
+                        styleClass="btn-mint" 
+                        onAction="#handleRegister"
+                        prefWidth="180"/>
+                
+                <Button text="🔄  Nhập lại" 
+                        styleClass="btn-secondary" 
+                        onAction="#handleReset"
+                        prefWidth="140"/>
+            </HBox>
+        </VBox>
+        
+        <!-- Back to Login -->
+        <HBox alignment="CENTER" spacing="5">
+            <padding>
+                <Insets top="10"/>
+            </padding>
+            <Label text="Đã có tài khoản?" styleClass="link-text"/>
+            <Hyperlink text="Đăng nhập ngay" styleClass="link-action" onAction="#handleBackToLogin"/>
+        </HBox>
+    </VBox>
+</StackPane>

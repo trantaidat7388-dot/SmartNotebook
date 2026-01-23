@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.dat.notebook.controller.AiChatController"
+            styleClass="ai-chat-root"
+            stylesheets="@../css/fresh-candy.css"
+            prefWidth="500" prefHeight="600">
+    
+    <!-- Header -->
+    <top>
+        <VBox styleClass="ai-chat-header" spacing="5">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="🤖" style="-fx-font-size: 32px;"/>
+                <VBox>
+                    <Label text="AI Assistant" styleClass="ai-chat-title"/>
+                    <Label text="Hỏi bất cứ điều gì về ghi chú của bạn" styleClass="ai-chat-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✕" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18px; -fx-cursor: hand;"
+                        onAction="#handleClose"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <!-- Chat Messages -->
+    <center>
+        <ScrollPane fx:id="chatScrollPane" fitToWidth="true" 
+                    style="-fx-background-color: transparent; -fx-background: #f7fafc;">
+            <VBox fx:id="chatContainer" spacing="15" style="-fx-padding: 20;">
+                
+                <!-- Welcome Message -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="🤖" style="-fx-font-size: 24px;"/>
+                    <VBox styleClass="chat-message-ai" maxWidth="350">
+                        <Label text="Xin chào! 👋 Tôi là AI Assistant của Smart Notebook." wrapText="true"/>
+                        <Label text="Bạn có thể hỏi tôi về:" wrapText="true" style="-fx-padding: 10 0 5 0;"/>
+                        <Label text="• Tóm tắt ghi chú" wrapText="true"/>
+                        <Label text="• Gợi ý ý tưởng" wrapText="true"/>
+                        <Label text="• Tìm kiếm thông minh" wrapText="true"/>
+                        <Label text="• Và nhiều hơn nữa! ✨" wrapText="true"/>
+                    </VBox>
+                </HBox>
+                
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Input Area -->
+    <bottom>
+        <VBox style="-fx-padding: 15; -fx-background-color: white; -fx-border-color: #e2e8f0; -fx-border-width: 1 0 0 0;">
+            <HBox styleClass="chat-input-container" alignment="CENTER" spacing="10">
+                <TextField fx:id="messageInput" 
+                           promptText="Nhập tin nhắn..." 
+                           styleClass="chat-input-field"
+                           HBox.hgrow="ALWAYS"
+                           onAction="#handleSendMessage"/>
+                <Button fx:id="sendButton" text="➤" styleClass="chat-send-btn"
+                        style="-fx-text-fill: white; -fx-font-size: 16px;"
+                        onAction="#handleSendMessage"/>
+            </HBox>
+            <Label text="AI có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng." 
+                   style="-fx-font-size: 11px; -fx-text-fill: #a0aec0; -fx-padding: 8 0 0 5;"/>
+        </VBox>
+    </bottom>
+</BorderPane>

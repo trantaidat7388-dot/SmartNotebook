@@ -1,0 +1,124 @@
+╔═══════════════════════════════════════════════════════════════╗
+║  SmartNotebook - Rich Text Editor Keyboard Shortcuts         ║
+║  Cheat Sheet - In ra và dán lên màn hình!                    ║
+╚═══════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────┐
+│ 📝 GHI CHÚ (NOTES)                                           │
+├─────────────────────────────────────────────────────────────┤
+│ Ctrl + N         │  Tạo ghi chú mới trong tab mới           │
+│ Ctrl + S         │  Lưu ghi chú hiện tại                    │
+│ Ctrl + W         │  Đóng tab hiện tại                       │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ ✏️ ĐỊNH DẠNG VĂN BẢN (TEXT FORMATTING)                      │
+├─────────────────────────────────────────────────────────────┤
+│ Ctrl + B         │  Chữ đậm (Bold)                          │
+│ Ctrl + I         │  Chữ nghiêng (Italic)                    │
+│ Ctrl + U         │  Gạch chân (Underline)                   │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🎨 TOOLBAR BUTTONS                                           │
+├─────────────────────────────────────────────────────────────┤
+│ 🖼️ Ảnh            │  Chèn ảnh từ file                        │
+│ 🔗 Link           │  Chèn liên kết                           │
+│ ⊞ Bảng            │  Chèn bảng 3x3                           │
+│ • List            │  Danh sách bullet                        │
+│ 1. List           │  Danh sách số                            │
+│ 💾 Lưu            │  Lưu thủ công (tạo version)              │
+│ 🕐 Lịch sử        │  Xem version history                     │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🎯 THAO TÁC NHANH (QUICK ACTIONS)                           │
+├─────────────────────────────────────────────────────────────┤
+│ Double Click     │  Mở note trong Rich Text Editor         │
+│ Right Click      │  Context menu (copy, delete, etc.)       │
+│ Tab              │  Di chuyển giữa các tabs                │
+│ Alt + F4         │  Đóng cửa sổ Rich Text Editor           │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🔄 AUTO-SAVE                                                 │
+├─────────────────────────────────────────────────────────────┤
+│ Tự động lưu      │  Sau 3 giây không có thay đổi           │
+│ Hiển thị         │  "✓ Đã tự động lưu" ở góc trên           │
+│ Không tạo        │  Version history (silent save)           │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 📜 VERSION HISTORY                                           │
+├─────────────────────────────────────────────────────────────┤
+│ Click "🕐"       │  Mở dialog version history               │
+│ Chọn version     │  Click để xem chi tiết                   │
+│ Khôi phục        │  Click "Khôi phục phiên bản này"         │
+│ Auto-create      │  Mỗi lần Manual Save (Ctrl+S)            │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🎨 ĐỊNH DẠNG MÀU SẮC                                         │
+├─────────────────────────────────────────────────────────────┤
+│ ColorPicker "Màu chữ"   │  Đổi màu chữ đã chọn              │
+│ ColorPicker "Nền"       │  Highlight text                   │
+│ Click vào màu           │  Chọn từ palette                  │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🖼️ CHÈN ẢNH                                                  │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Click "🖼️ Ảnh"                                           │
+│ 2. Chọn file PNG/JPG/GIF                                    │
+│ 3. Ảnh tự động embed Base64 vào HTML                        │
+│ 4. Không cần upload server                                  │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 💡 TIPS & TRICKS                                             │
+├─────────────────────────────────────────────────────────────┤
+│ • Giữ Ctrl + Click nhiều tabs để chuyển đổi nhanh          │
+│ • Drag & Drop ảnh trực tiếp vào editor (nếu hỗ trợ)         │
+│ • Copy/Paste giữ nguyên định dạng từ Word/Google Docs       │
+│ • Undo: Ctrl+Z, Redo: Ctrl+Y (trong editor)                │
+│ • Select All: Ctrl+A (trong editor)                         │
+│ • Find: Ctrl+F (trong editor)                               │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ ⚠️ LƯU Ý (IMPORTANT)                                         │
+├─────────────────────────────────────────────────────────────┤
+│ • Auto-save KHÔNG tạo version history                       │
+│ • Chỉ Manual Save (Ctrl+S) mới tạo version                  │
+│ • Đóng tab có confirm nếu có thay đổi chưa lưu              │
+│ • Ảnh lớn hơn 5MB có thể gây chậm                           │
+│ • Version history giới hạn 50 versions gần nhất             │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🚀 WORKFLOW ĐỀ XUẤT                                          │
+├─────────────────────────────────────────────────────────────┤
+│ 1. Ctrl+N để tạo note mới                                   │
+│ 2. Nhập tiêu đề và nội dung                                 │
+│ 3. Định dạng text (Ctrl+B, Ctrl+I, colors)                  │
+│ 4. Chèn ảnh, links nếu cần                                  │
+│ 5. Auto-save tự động lưu (sau 3s)                           │
+│ 6. Ctrl+S để tạo version checkpoint quan trọng              │
+│ 7. Tiếp tục chỉnh sửa, auto-save tiếp                       │
+│ 8. Ctrl+W để đóng khi xong                                  │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🔥 PRO TIPS                                                  │
+├─────────────────────────────────────────────────────────────┤
+│ • Sử dụng Tables cho layout phức tạp                        │
+│ • Combine Bold + Color để highlight quan trọng              │
+│ • Version History = Time machine cho notes                  │
+│ • Mở nhiều tabs để so sánh/tham khảo notes                  │
+│ • ColorPicker nền vàng = Classic highlight                  │
+└─────────────────────────────────────────────────────────────┘
+
+╔═══════════════════════════════════════════════════════════════╗
+║  Happy Note-Taking! 📝✨                                      ║
+║  SmartNotebook Team © 2026                                    ║
+╚═══════════════════════════════════════════════════════════════╝

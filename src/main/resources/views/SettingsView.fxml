@@ -1,128 +1,161 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.dat.notebook.controller.SettingsController"
-            stylesheets="@../css/style.css"
-            styleClass="settings-dialog"
-            prefWidth="700" prefHeight="500">
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.dat.notebook.controller.SettingsController"
+      styleClass="content-area"
+      stylesheets="@../css/fresh-candy.css"
+      spacing="20"
+      prefWidth="700"
+      prefHeight="600">
     
-    <!-- HEADER -->
-    <top>
-        <HBox styleClass="settings-header" alignment="CENTER_LEFT" spacing="12">
-            <padding><Insets top="20" right="25" bottom="20" left="25"/></padding>
-            <Text text="⚙️" styleClass="settings-icon"/>
-            <Label text="Cài đặt ứng dụng" styleClass="settings-title"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="✕" onAction="#handleClose" styleClass="btn-close-settings"/>
-        </HBox>
-    </top>
-
-    <!-- MAIN CONTENT -->
-    <center>
-        <TabPane fx:id="tabPane" styleClass="settings-tabs" tabClosingPolicy="UNAVAILABLE">
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+    
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <Label text="⚙️" style="-fx-font-size: 32px;"/>
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Cài đặt tài khoản" styleClass="content-title"/>
+            <Label text="Cập nhật thông tin cá nhân của bạn" styleClass="content-subtitle"/>
+        </VBox>
+    </HBox>
+    
+    <!-- Success/Error Notification -->
+    <HBox fx:id="notificationBox" managed="false" visible="false" 
+          styleClass="notification-box" alignment="CENTER_LEFT" spacing="10">
+        <Label fx:id="notificationIcon" style="-fx-font-size: 18px;"/>
+        <Label fx:id="notificationLabel" wrapText="true" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-background: transparent;">
+        <VBox spacing="25">
             
-            <!-- TAB 1: APPEARANCE -->
-            <Tab text="🎨  Giao diện">
-                <VBox spacing="20" styleClass="settings-content">
-                    <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
-                    
-                    <Label text="Tùy chỉnh giao diện" styleClass="section-header"/>
-                    
-                    <VBox spacing="12">
-                        <Label text="Kích thước chữ" styleClass="field-label"/>
-                        <HBox spacing="15" alignment="CENTER_LEFT">
-                            <Slider fx:id="sliderFontSize" min="12" max="20" value="13" 
-                                    showTickLabels="true" showTickMarks="true" 
-                                    majorTickUnit="2" minorTickCount="1" 
-                                    prefWidth="300"/>
-                            <Label fx:id="lblFontSize" text="13px" styleClass="slider-value"/>
-                        </HBox>
-                    </VBox>
-                    
-                    <VBox spacing="12">
-                        <Label text="Theme" styleClass="field-label"/>
-                        <ComboBox fx:id="cmbTheme" promptText="Chọn theme" 
-                                  styleClass="settings-combo" prefWidth="250"/>
-                    </VBox>
-                    
-                    <Separator styleClass="settings-separator"/>
-                    
-                    <Label text="💡 Gợi ý: Các tùy chọn theme và màu sắc sẽ được bổ sung trong phiên bản tiếp theo." 
-                           styleClass="hint-text" wrapText="true"/>
+            <!-- Profile Info Section -->
+            <VBox styleClass="settings-container" spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="👤" styleClass="settings-section-icon"/>
+                    <Label text="Thông tin cá nhân" styleClass="settings-section-title"/>
+                </HBox>
+                
+                <!-- Display Name Field -->
+                <VBox spacing="8">
+                    <Label text="Tên hiển thị" styleClass="settings-item-label"/>
+                    <TextField fx:id="txtDisplayName" 
+                              promptText="Nhập tên hiển thị của bạn"
+                              styleClass="text-field-fresh"
+                              prefWidth="400"/>
+                    <Label text="Tên này sẽ hiển thị trong ứng dụng" 
+                           style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
                 </VBox>
-            </Tab>
+                
+                <!-- Email Field -->
+                <VBox spacing="8">
+                    <Label text="Email" styleClass="settings-item-label"/>
+                    <TextField fx:id="txtEmail" 
+                              promptText="email@example.com"
+                              styleClass="text-field-fresh"
+                              prefWidth="400"/>
+                    <Label text="Email dùng cho khôi phục tài khoản" 
+                           style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
+                </VBox>
+                
+                <!-- Username (Read-only) -->
+                <VBox spacing="8">
+                    <Label text="Tên đăng nhập" styleClass="settings-item-label"/>
+                    <TextField fx:id="txtUsername" 
+                              editable="false"
+                              styleClass="text-field-fresh"
+                              prefWidth="400"
+                              style="-fx-opacity: 0.6;"/>
+                    <Label text="Tên đăng nhập không thể thay đổi" 
+                           style="-fx-font-size: 12px; -fx-text-fill: #a0aec0;"/>
+                </VBox>
+                
+                <!-- Save Profile Button -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="💾 Lưu thay đổi" 
+                            styleClass="btn-primary"
+                            onAction="#handleUpdateProfile"/>
+                    <Label fx:id="profileStatusLabel" 
+                           style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
+                </HBox>
+            </VBox>
             
-            <!-- TAB 2: PREFERENCES -->
-            <Tab text="⚙️  Tùy chọn">
-                <VBox spacing="20" styleClass="settings-content">
-                    <padding><Insets top="25" right="30" bottom="25" left="30"/></padding>
-                    
-                    <Label text="Cài đặt chung" styleClass="section-header"/>
-                    
-                    <VBox spacing="15">
-                        <CheckBox fx:id="chkAutoSave" text="Tự động lưu khi chỉnh sửa" 
-                                  styleClass="checkbox-setting" selected="true"/>
-                        <Label text="Ghi chú sẽ được lưu tự động sau khi bạn ngừng gõ 2 giây" 
-                               styleClass="hint-text" wrapText="true"/>
-                    </VBox>
-                    
-                    <Separator styleClass="settings-separator"/>
-                    
-                    <VBox spacing="15">
-                        <CheckBox fx:id="chkShowNotifications" text="Hiển thị thông báo" 
-                                  styleClass="checkbox-setting" selected="true"/>
-                        <Label text="Nhận thông báo khi có nhắc nhở hoặc cập nhật quan trọng" 
-                               styleClass="hint-text" wrapText="true"/>
-                    </VBox>
-                    
-                    <Separator styleClass="settings-separator"/>
-                    
-                    <VBox spacing="15">
-                        <CheckBox fx:id="chkConfirmDelete" text="Xác nhận trước khi xóa" 
-                                  styleClass="checkbox-setting" selected="true"/>
-                        <Label text="Hiển thị hộp thoại xác nhận khi xóa ghi chú hoặc danh mục" 
-                               styleClass="hint-text" wrapText="true"/>
-                    </VBox>
-                    
-                    <Region VBox.vgrow="ALWAYS"/>
-                    
-                    <HBox spacing="10" alignment="CENTER_RIGHT">
-                        <Button text="Đặt lại mặc định" onAction="#handleResetDefaults" styleClass="btn-secondary"/>
-                    </HBox>
+            <!-- Change Password Section -->
+            <VBox styleClass="settings-container" spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🔑" styleClass="settings-section-icon"/>
+                    <Label text="Đổi mật khẩu" styleClass="settings-section-title"/>
+                </HBox>
+                
+                <!-- Old Password -->
+                <VBox spacing="8">
+                    <Label text="Mật khẩu hiện tại" styleClass="settings-item-label"/>
+                    <PasswordField fx:id="txtOldPassword" 
+                                  promptText="Nhập mật khẩu hiện tại"
+                                  styleClass="text-field-fresh"
+                                  prefWidth="400"/>
                 </VBox>
-            </Tab>
+                
+                <!-- New Password -->
+                <VBox spacing="8">
+                    <Label text="Mật khẩu mới" styleClass="settings-item-label"/>
+                    <PasswordField fx:id="txtNewPassword" 
+                                  promptText="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
+                                  styleClass="text-field-fresh"
+                                  prefWidth="400"/>
+                </VBox>
+                
+                <!-- Confirm New Password -->
+                <VBox spacing="8">
+                    <Label text="Xác nhận mật khẩu mới" styleClass="settings-item-label"/>
+                    <PasswordField fx:id="txtConfirmPassword" 
+                                  promptText="Nhập lại mật khẩu mới"
+                                  styleClass="text-field-fresh"
+                                  prefWidth="400"/>
+                </VBox>
+                
+                <!-- Change Password Button -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="🔒 Đổi mật khẩu" 
+                            styleClass="btn-warning"
+                            onAction="#handleChangePassword"/>
+                    <Label fx:id="passwordStatusLabel" 
+                           style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
+                </HBox>
+            </VBox>
             
-            <!-- TAB 3: ABOUT -->
-            <Tab text="ℹ️  Thông tin">
-                <VBox spacing="25" alignment="CENTER" styleClass="settings-content">
-                    <padding><Insets top="40" right="30" bottom="40" left="30"/></padding>
-                    
-                    <Text text="📓" styleClass="about-icon"/>
-                    <Label text="Smart Notebook" styleClass="about-title"/>
-                    <Label text="Phiên bản 1.0.0" styleClass="about-version"/>
-                    
-                    <Separator prefWidth="400" styleClass="settings-separator"/>
-                    
-                    <VBox spacing="8" alignment="CENTER">
-                        <Label text="Ứng dụng ghi chú thông minh" styleClass="about-desc"/>
-                        <Label text="Xây dựng với JavaFX 21 và SQL Server" styleClass="about-desc"/>
-                    </VBox>
-                    
-                    <VBox spacing="8" alignment="CENTER">
-                        <Label text="📧 Email: contact@smartnotebook.com" styleClass="about-contact"/>
-                        <Label text="🌐 GitHub: @trantaidat7388-dot" styleClass="about-contact"/>
-                    </VBox>
-                    
-                    <Region VBox.vgrow="ALWAYS"/>
-                    
-                    <Label text="© 2026 Smart Notebook. All rights reserved." 
-                           styleClass="about-copyright"/>
+            <!-- Account Actions Section -->
+            <VBox styleClass="settings-container" spacing="15">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🚪" styleClass="settings-section-icon"/>
+                    <Label text="Hành động tài khoản" styleClass="settings-section-title"/>
+                </HBox>
+                
+                <VBox spacing="12">
+                    <Button text="🚪 Đăng xuất" 
+                            styleClass="btn-danger" 
+                            maxWidth="250" 
+                            onAction="#handleLogout"/>
                 </VBox>
-            </Tab>
-        </TabPane>
-    </center>
-</BorderPane>
+            </VBox>
+            
+            <!-- About Section -->
+            <VBox styleClass="settings-container" spacing="10" alignment="CENTER">
+                <Label text="📓 Smart Notebook" 
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4a5568;"/>
+                <Label text="Version 1.0.0 - Fresh Candy Theme" 
+                       style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
+                <Label text="Made with 💜 for your ideas" 
+                       style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+</VBox>

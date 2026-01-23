@@ -23,20 +23,7 @@ public class NoteDAO {
     private static int nextId = 1;
 
     static {
-        // Dữ liệu mẫu
-        Note note1 = new Note();
-        note1.setId(nextId++);
-        note1.setTitle("Ghi chú đầu tiên");
-        note1.setContent("Đây là nội dung ghi chú mẫu.");
-        note1.setCreatedAt(LocalDateTime.now());
-        notes.add(note1);
-
-        Note note2 = new Note();
-        note2.setId(nextId++);
-        note2.setTitle("Danh sách việc cần làm");
-        note2.setContent("1. Học Java\n2. Làm project\n3. Review code");
-        note2.setCreatedAt(LocalDateTime.now());
-        notes.add(note2);
+        // Dữ liệu mẫu được khởi tạo khi cần thiết
     }
 
     /**
@@ -48,7 +35,7 @@ public class NoteDAO {
                 return new ArrayList<>(notes);
             }
 
-            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+            String sql = "SELECT NoteID, Title, Content, HtmlContent, CategoryID, Status, CreatedAt, UpdatedAt " +
                     "FROM Notes ORDER BY UpdatedAt DESC, NoteID DESC";
             try (PreparedStatement ps = conn.prepareStatement(sql);
                  ResultSet rs = ps.executeQuery()) {
@@ -80,10 +67,10 @@ public class NoteDAO {
 
             String sql;
             if (categoryId == 0) {
-                sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+                sql = "SELECT NoteID, Title, Content, HtmlContent, CategoryID, Status, CreatedAt, UpdatedAt " +
                         "FROM Notes WHERE CategoryID IS NULL ORDER BY UpdatedAt DESC, NoteID DESC";
             } else {
-                sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+                sql = "SELECT NoteID, Title, Content, HtmlContent, CategoryID, Status, CreatedAt, UpdatedAt " +
                         "FROM Notes WHERE CategoryID = ? ORDER BY UpdatedAt DESC, NoteID DESC";
             }
 
@@ -124,7 +111,7 @@ public class NoteDAO {
                 return null;
             }
 
-            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt FROM Notes WHERE NoteID = ?";
+            String sql = "SELECT NoteID, Title, Content, HtmlContent, CategoryID, Status, CreatedAt, UpdatedAt FROM Notes WHERE NoteID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, id);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -151,20 +138,28 @@ public class NoteDAO {
         try (Connection conn = DBConnection.tryGetConnection()) {
             if (conn == null) {
                 note.setId(nextId++);
-                note.setCreatedAt(LocalDateTime.now());
-                note.setUpdatedAt(LocalDateTime.now());
+                if (note.getCreatedAt() == null) {
+                    note.setCreatedAt(LocalDateTime.now());
+                }
+                if (note.getUpdatedAt() == null) {
+                    note.setUpdatedAt(LocalDateTime.now());
+                }
                 return notes.add(note);
             }
 
-            String sql = "INSERT INTO Notes (Title, Content, CategoryID, CreatedAt, UpdatedAt) VALUES (?, ?, ?, GETDATE(), GETDATE())";
+            String sql = "INSERT INTO Notes (Title, Content, HtmlContent, CategoryID, Status, IsFavorite, Color, CreatedAt, UpdatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, GETDATE(), GETDATE())";
             try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, note.getTitle());
-                ps.setString(2, note.getContent());
+                ps.setString(2, note.getContent()); // Plain text content
+                ps.setString(3, note.getHtmlContent()); // HTML content
                 if (note.getCategoryId() <= 0) {
-                    ps.setNull(3, java.sql.Types.INTEGER);
+                    ps.setNull(4, java.sql.Types.INTEGER);
                 } else {
-                    ps.setInt(3, note.getCategoryId());
+                    ps.setInt(4, note.getCategoryId());
                 }
+                ps.setString(5, note.getStatus() != null ? note.getStatus() : "REGULAR");
+                ps.setBoolean(6, note.isFavorite());
+                ps.setString(7, note.getColor() != null ? note.getColor() : "#ffffff");
 
                 int affected = ps.executeUpdate();
                 if (affected <= 0) {
@@ -203,16 +198,20 @@ public class NoteDAO {
                 return false;
             }
 
-            String sql = "UPDATE Notes SET Title = ?, Content = ?, CategoryID = ?, UpdatedAt = GETDATE() WHERE NoteID = ?";
+            String sql = "UPDATE Notes SET Title = ?, Content = ?, HtmlContent = ?, CategoryID = ?, Status = ?, IsFavorite = ?, Color = ?, UpdatedAt = GETDATE() WHERE NoteID = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updatedNote.getTitle());
-                ps.setString(2, updatedNote.getContent());
+                ps.setString(2, updatedNote.getContent()); // Plain text
+                ps.setString(3, updatedNote.getHtmlContent()); // HTML content
                 if (updatedNote.getCategoryId() <= 0) {
-                    ps.setNull(3, java.sql.Types.INTEGER);
+                    ps.setNull(4, java.sql.Types.INTEGER);
                 } else {
-                    ps.setInt(3, updatedNote.getCategoryId());
+                    ps.setInt(4, updatedNote.getCategoryId());
                 }
-                ps.setInt(4, updatedNote.getId());
+                ps.setString(5, updatedNote.getStatus() != null ? updatedNote.getStatus() : "REGULAR");
+                ps.setBoolean(6, updatedNote.isFavorite());
+                ps.setString(7, updatedNote.getColor() != null ? updatedNote.getColor() : "#ffffff");
+                ps.setInt(8, updatedNote.getId());
                 int affected = ps.executeUpdate();
                 updatedNote.setUpdatedAt(LocalDateTime.now());
                 return affected > 0;
@@ -264,7 +263,7 @@ public class NoteDAO {
                 return results;
             }
 
-            String sql = "SELECT NoteID, Title, Content, CategoryID, CreatedAt, UpdatedAt " +
+            String sql = "SELECT NoteID, Title, Content, HtmlContent, CategoryID, Status, CreatedAt, UpdatedAt " +
                     "FROM Notes " +
                     "WHERE Title LIKE ? OR Content LIKE ? " +
                     "ORDER BY UpdatedAt DESC, NoteID DESC";
@@ -298,12 +297,21 @@ public class NoteDAO {
         note.setId(rs.getInt("NoteID"));
         note.setTitle(rs.getString("Title"));
         note.setContent(rs.getString("Content"));
+        
+        // Load HTML content nếu có
+        String htmlContent = rs.getString("HtmlContent");
+        if (htmlContent != null && !htmlContent.isEmpty()) {
+            note.setHtmlContent(htmlContent);
+        }
 
         int catId = rs.getInt("CategoryID");
         if (rs.wasNull()) {
             catId = 0;
         }
         note.setCategoryId(catId);
+        
+        String status = rs.getString("Status");
+        note.setStatus(status != null ? status : "REGULAR");
 
         Timestamp created = rs.getTimestamp("CreatedAt");
         if (created != null) {

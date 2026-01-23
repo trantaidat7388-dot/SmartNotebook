@@ -32,12 +32,19 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+        
+        <!-- JavaFX Web for HTMLEditor -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
 
-        <!-- SQL Server JDBC Driver -->
+        <!-- SQL Server JDBC Driver - version 7.4.1 hỗ trợ tốt TLS 1.0/1.2 -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>12.4.2.jre11</version>
+            <version>7.4.1.jre8</version>
         </dependency>
     </dependencies>
 

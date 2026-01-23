@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.dat.notebook.controller.NewNoteDialogController"
+           stylesheets="@../css/fresh-candy.css"
+           style="-fx-background-color: rgba(0,0,0,0.5);"
+           prefWidth="600" prefHeight="500">
+    
+    <!-- Dialog Card -->
+    <VBox styleClass="new-note-dialog" alignment="CENTER" spacing="20" maxWidth="480" maxHeight="450">
+        
+        <!-- Header -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="✨" styleClass="dialog-header-icon"/>
+            <Label text="Tạo ghi chú mới" styleClass="dialog-title"/>
+            <Label text="Ghi lại ý tưởng của bạn" styleClass="dialog-subtitle"/>
+        </VBox>
+        
+        <!-- Form -->
+        <VBox spacing="15" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets top="10"/>
+            </padding>
+            
+            <!-- Title -->
+            <VBox spacing="8">
+                <Label text="Tiêu đề *" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <TextField fx:id="titleField" 
+                           promptText="Nhập tiêu đề ghi chú..." 
+                           styleClass="text-field-styled"/>
+            </VBox>
+            
+            <!-- Category -->
+            <VBox spacing="8">
+                <Label text="Danh mục" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <ComboBox fx:id="categoryCombo" styleClass="combo-box-fresh" maxWidth="Infinity" promptText="Chọn danh mục..."/>
+            </VBox>
+            
+            <!-- Color -->
+            <VBox spacing="8">
+                <Label text="Màu ghi chú" style="-fx-text-fill: #4a5568; -fx-font-weight: bold; -fx-font-size: 13px;"/>
+                <HBox spacing="10">
+                    <Button fx:id="colorMint" style="-fx-background-color: #a8edea; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                    <Button fx:id="colorPurple" style="-fx-background-color: #c3b1e1; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                    <Button fx:id="colorPink" style="-fx-background-color: #fed7e2; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                    <Button fx:id="colorPeach" style="-fx-background-color: #fed7aa; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                    <Button fx:id="colorSky" style="-fx-background-color: #bae6fd; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                    <Button fx:id="colorLime" style="-fx-background-color: #d9f99d; -fx-background-radius: 20; -fx-pref-width: 40; -fx-pref-height: 40; -fx-cursor: hand;"/>
+                </HBox>
+            </VBox>
+            
+            <!-- Favorite -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <CheckBox fx:id="favoriteCheck" styleClass="check-box-fresh"/>
+                <Label text="⭐ Đánh dấu yêu thích" style="-fx-text-fill: #4a5568; -fx-font-size: 14px;"/>
+            </HBox>
+        </VBox>
+        
+        <!-- Buttons -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="✨  Tạo ghi chú" 
+                    styleClass="btn-primary" 
+                    onAction="#handleCreate"
+                    prefWidth="160"/>
+            <Button text="Hủy" 
+                    styleClass="btn-ghost" 
+                    onAction="#handleCancel"
+                    prefWidth="100"/>
+        </HBox>
+    </VBox>
+</StackPane>
