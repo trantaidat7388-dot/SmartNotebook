@@ -4,13 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.dat.notebook.controller.MainController"
-            styleClass="main-root"
-            stylesheets="@../css/fresh-candy.css"
-            prefWidth="1200" prefHeight="700" 
-            minWidth="900" minHeight="500">
-    
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dat.notebook.controller.MainController" styleClass="main-root" stylesheets="@../css/soft-peach.css" prefWidth="1200" prefHeight="700" minWidth="900" minHeight="500">
+
     <!-- Sidebar -->
     <left>
         <VBox styleClass="sidebar" prefWidth="240" minWidth="200" maxWidth="300">
@@ -24,61 +19,45 @@
                     </VBox>
                 </HBox>
             </VBox>
-            
+
             <!-- Search -->
-            <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="10" 
-                  style="-fx-background-color: rgba(255,255,255,0.2); -fx-border-color: transparent;">
-                <Label text="🔍" style="-fx-font-size: 16px; -fx-text-fill: white;"/>
-                <TextField fx:id="txtSearch" 
-                           promptText="Tìm kiếm..." 
-                           style="-fx-background-color: transparent; -fx-text-fill: white; -fx-prompt-text-fill: rgba(255,255,255,0.7);"
-                           HBox.hgrow="ALWAYS"/>
+            <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="10">
+                <Label text="🔍" styleClass="search-icon"/>
+                <TextField fx:id="txtSearch" promptText="Tìm kiếm..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
             </HBox>
-            
+
             <!-- Menu Section -->
             <Label text="KHÔNG GIAN LÀM VIỆC" styleClass="sidebar-section-title"/>
-            
+
             <VBox spacing="8">
-                <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" 
-                        styleClass="sidebar-btn, sidebar-btn-active"
-                        onAction="#handleShowAllNotes" maxWidth="Infinity"/>
-                
-                <Button fx:id="btnFavorites" text="⭐  Yêu thích" 
-                        styleClass="sidebar-btn"
-                        onAction="#handleShowFavorites" maxWidth="Infinity"/>
-                
-                <Button fx:id="btnShared" text="🔗  Đã chia sẻ" 
-                        styleClass="sidebar-btn"
-                        onAction="#handleShowShared" maxWidth="Infinity"/>
-                
-                <Button fx:id="btnTrash" text="🗑️  Thùng rác" 
-                        styleClass="sidebar-btn"
-                        onAction="#handleShowTrash" maxWidth="Infinity"/>
+                <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" styleClass="sidebar-btn, sidebar-btn-active" onAction="#handleShowAllNotes" maxWidth="Infinity"/>
+
+                <Button fx:id="btnFavorites" text="⭐  Yêu thích" styleClass="sidebar-btn" onAction="#handleShowFavorites" maxWidth="Infinity"/>
+
+                <Button fx:id="btnShared" text="🔗  Đã chia sẻ" styleClass="sidebar-btn" onAction="#handleShowShared" maxWidth="Infinity"/>
+
+                <Button fx:id="btnTrash" text="🗑️  Thùng rác" styleClass="sidebar-btn" onAction="#handleShowTrash" maxWidth="Infinity"/>
             </VBox>
-            
+
             <!-- Categories Section -->
             <Label text="DỰ ÁN" styleClass="sidebar-section-title"/>
-            
+
             <VBox fx:id="categoriesContainer" spacing="5">
                 <!-- Dynamic categories will be added here -->
             </VBox>
-            
+
             <HBox alignment="CENTER_LEFT" spacing="5" style="-fx-padding: 5 0 0 15;">
-                <Button text="+" 
-                        style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 14px; -fx-padding: 5 12;"
-                        onAction="#handleAddCategory"/>
+                <Button text="+" style="-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 8; -fx-font-size: 14px; -fx-padding: 5 12;" onAction="#handleAddCategory"/>
                 <Label text="Thêm danh mục" style="-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 13px;"/>
             </HBox>
-            
+
             <!-- Spacer -->
             <Region VBox.vgrow="ALWAYS"/>
-            
+
             <!-- Bottom Section -->
             <VBox spacing="8">
-                <Button fx:id="btnSettings" text="⚙️  Cài đặt" 
-                        styleClass="sidebar-btn"
-                        onAction="#handleShowSettings" maxWidth="Infinity"/>
-                
+                <Button fx:id="btnSettings" text="⚙️  Cài đặt" styleClass="sidebar-btn" onAction="#handleShowSettings" maxWidth="Infinity"/>
+
                 <!-- User Info -->
                 <HBox styleClass="sidebar-user-info" alignment="CENTER_LEFT" spacing="12">
                     <Label text="👤" style="-fx-font-size: 24px;"/>
@@ -90,7 +69,7 @@
             </VBox>
         </VBox>
     </left>
-    
+
     <!-- Main Content -->
     <center>
         <VBox styleClass="content-area">
@@ -100,63 +79,54 @@
                     <Label fx:id="contentTitle" text="Ghi chú" styleClass="content-title"/>
                     <Label fx:id="noteCountLabel" text="0 ghi chú" styleClass="content-subtitle"/>
                 </VBox>
-                
+
                 <!-- Sort ComboBox -->
                 <HBox spacing="10" alignment="CENTER">
                     <Label text="Sắp xếp:" style="-fx-text-fill: #64748b; -fx-font-size: 13px;"/>
-                    <ComboBox fx:id="sortComboBox" 
-                              promptText="Sắp xếp" 
-                              styleClass="combo-box"
-                              style="-fx-pref-width: 140px;"/>
+                    <ComboBox fx:id="sortComboBox" promptText="Sắp xếp" styleClass="combo-box" style="-fx-pref-width: 140px;"/>
                 </HBox>
             </HBox>
-            
+
             <!-- Notes Grid / List -->
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" 
-                        style="-fx-background-color: transparent; -fx-background: transparent;">
-                <FlowPane fx:id="notesContainer" hgap="20" vgap="20" 
-                          style="-fx-padding: 20 0;">
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: transparent;">
+                <FlowPane fx:id="notesContainer" hgap="20" vgap="20" style="-fx-padding: 20 0;">
                     <!-- Notes will be loaded here dynamically -->
                 </FlowPane>
             </ScrollPane>
-            
+
             <!-- Empty State (shown when no notes) -->
             <VBox fx:id="emptyState" styleClass="empty-state" visible="false" managed="false">
                 <Label text="📝" styleClass="empty-state-icon"/>
                 <Label text="Chưa có ghi chú nào" styleClass="empty-state-title"/>
                 <Label text="Nhấn '+ Tạo ghi chú mới' để tạo ghi chú đầu tiên" styleClass="empty-state-description"/>
             </VBox>
-            
+
             <!-- Create Note Button -->
             <HBox alignment="CENTER">
                 <padding>
                     <Insets top="15"/>
                 </padding>
-                <Button text="✨  Tạo ghi chú mới" 
-                        styleClass="btn-primary"
-                        onAction="#handleCreateNote"/>
+                <Button text="✨  Tạo ghi chú mới" styleClass="btn-primary" onAction="#handleCreateNote"/>
             </HBox>
         </VBox>
     </center>
-    
+
     <!-- Right Panel - Note Editor -->
     <right>
-        <VBox fx:id="editorPanel" prefWidth="350" minWidth="280" maxWidth="420" 
-              styleClass="content-area" 
-              style="-fx-border-color: #e2e8f0; -fx-border-width: 0 0 0 1;">
-            
+        <VBox fx:id="editorPanel" prefWidth="350" minWidth="280" maxWidth="420" styleClass="content-area" style="-fx-border-color: #e2e8f0; -fx-border-width: 0 0 0 1;">
+
             <!-- Editor Header -->
             <HBox alignment="CENTER_LEFT" spacing="10">
                 <Label text="Chọn ghi chú" styleClass="content-title" style="-fx-font-size: 16px;"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                
+
                 <!-- Toolbar -->
                 <HBox spacing="5">
                     <Button text="📅" styleClass="toolbar-btn"/>
                     <Button text="🔔" styleClass="toolbar-btn"/>
                 </HBox>
             </HBox>
-            
+
             <!-- Editor Toolbar -->
             <HBox styleClass="editor-toolbar" alignment="CENTER_LEFT" spacing="5">
                 <Button text="B" styleClass="toolbar-btn" style="-fx-font-weight: bold;" onAction="#handleFormatBold"/>
@@ -171,18 +141,14 @@
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="btnFavoriteNote" text="⭐" styleClass="toolbar-btn-favorite" onAction="#handleToggleFavorite"/>
             </HBox>
-            
+
             <!-- Note Editor -->
             <VBox VBox.vgrow="ALWAYS" spacing="15">
                 <padding>
                     <Insets top="10"/>
                 </padding>
-                
-                <TextArea fx:id="txtContent" 
-                          promptText="Bắt đầu viết ghi chú của bạn..."
-                          styleClass="editor-content-area"
-                          wrapText="true"
-                          VBox.vgrow="ALWAYS"/>
+
+                <TextArea fx:id="txtContent" promptText="Bắt đầu viết ghi chú của bạn..." styleClass="editor-content-area" wrapText="true" VBox.vgrow="ALWAYS"/>
             </VBox>
         </VBox>
     </right>

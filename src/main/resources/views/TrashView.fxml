@@ -1,97 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.dat.notebook.controller.TrashController"
-      stylesheets="@../css/style.css"
-      spacing="0" prefHeight="900" prefWidth="1400">
+<HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dat.notebook.controller.TrashController" styleClass="main-root" stylesheets="@../css/soft-peach.css" minWidth="900" minHeight="550">
 
-    <!-- Header Bar -->
-    <HBox styleClass="header-bar" alignment="CENTER_LEFT" spacing="20">
-        <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
-        
-        <Button fx:id="btnBack" text="← Quay lại" styleClass="btn-secondary" onAction="#handleBack"/>
-        
-        <Region HBox.hgrow="ALWAYS"/>
-        
-        <Label text="Thùng rác" styleClass="header-title">
-            <font><Font size="20" name="System Bold"/></font>
-        </Label>
-        
-        <Region HBox.hgrow="ALWAYS"/>
-        
-        <Button fx:id="btnEmptyTrash" text="🗑️ Xóa tất cả" styleClass="btn-danger" onAction="#handleEmptyTrash"/>
-    </HBox>
-
-    <!-- Main Content -->
-    <HBox VBox.vgrow="ALWAYS">
-        
-        <!-- Archived Notes List -->
-        <VBox spacing="15" styleClass="notes-sidebar" prefWidth="400">
-            <padding><Insets top="20" right="15" bottom="20" left="20"/></padding>
-            
-            <!-- Stats -->
+    <!-- ==================== LEFT SIDEBAR (1/5) ==================== -->
+    <VBox styleClass="sidebar" minWidth="160" maxWidth="220">
+        <!-- Header -->
+        <VBox styleClass="sidebar-header" spacing="5">
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label fx:id="lblArchivedCount" text="0 ghi chú đã xóa" styleClass="text-muted">
-                    <font><Font size="14"/></font>
-                </Label>
-            </HBox>
-            
-            <Separator/>
-            
-            <!-- Archived Notes Container -->
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="notes-scroll">
-                <VBox fx:id="vboxArchivedNotes" spacing="10">
-                    <padding><Insets top="10"/></padding>
+                <Label text="🗑️" style="-fx-font-size: 28px;"/>
+                <VBox>
+                    <Label text="Thùng rác" styleClass="sidebar-logo"/>
+                    <Label text="Deleted Notes" styleClass="sidebar-version"/>
                 </VBox>
-            </ScrollPane>
-        </VBox>
-        
-        <Separator orientation="VERTICAL"/>
-        
-        <!-- Note Preview Panel -->
-        <VBox spacing="15" HBox.hgrow="ALWAYS" styleClass="note-preview-panel">
-            <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
-            
-            <!-- Note Header -->
-            <HBox alignment="CENTER_LEFT" spacing="20">
-                <Label fx:id="lblNoteTitle" text="Chọn một ghi chú để xem" styleClass="note-title-large">
-                    <font><Font size="24" name="System Bold"/></font>
-                </Label>
-                
-                <Region HBox.hgrow="ALWAYS"/>
-                
-                <!-- Action Buttons -->
-                <Button fx:id="btnRestore" text="↶ Khôi phục" styleClass="btn-primary" onAction="#handleRestore" disable="true"/>
-                <Button fx:id="btnDeletePermanently" text="✕ Xóa vĩnh viễn" styleClass="btn-danger" onAction="#handleDeletePermanently" disable="true"/>
-            </HBox>
-            
-            <Separator/>
-            
-            <!-- Note Metadata -->
-            <HBox spacing="20">
-                <Label fx:id="lblNoteStatus" text="Status: -" styleClass="text-muted"/>
-                <Label fx:id="lblArchivedDate" text="Deleted: -" styleClass="text-muted"/>
-            </HBox>
-            
-            <!-- Note Content Preview -->
-            <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
-                <VBox spacing="10">
-                    <Label fx:id="lblNoteContent" text="Nội dung sẽ hiển thị ở đây..." wrapText="true" styleClass="note-content-preview">
-                        <font><Font size="14"/></font>
-                    </Label>
-                </VBox>
-            </ScrollPane>
-            
-            <!-- Warning Message -->
-            <HBox styleClass="warning-box" spacing="10" alignment="CENTER_LEFT">
-                <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
-                <Label text="⚠️ Lưu ý: Ghi chú bị xóa vĩnh viễn không thể khôi phục!" wrapText="true" styleClass="text-warning"/>
             </HBox>
         </VBox>
-    </HBox>
-</VBox>
+
+        <!-- Quick Actions -->
+        <Label text="HÀNH ĐỘNG" styleClass="sidebar-section-title"/>
+
+        <VBox spacing="8">
+            <Button fx:id="btnBack" text="← Quay lại" styleClass="sidebar-btn, sidebar-btn-active" onAction="#handleBack" maxWidth="Infinity"/>
+
+            <Button fx:id="btnEmptyTrash" text="🗑️ Xóa tất cả" styleClass="sidebar-btn" onAction="#handleEmptyTrash" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Spacer -->
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Info -->
+        <VBox styleClass="sidebar-user-info" spacing="8">
+            <Label text="⚠️ Chú ý" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <Label text="Ghi chú đã xóa vĩnh viễn không thể khôi phục" wrapText="true" style="-fx-text-fill: rgba(255,255,255,0.8); -fx-font-size: 11px;"/>
+        </VBox>
+    </VBox>
+
+    <!-- ==================== CENTER - DELETED NOTES LIST (1/5) ==================== -->
+    <VBox styleClass="content-area" minWidth="200" maxWidth="280">
+        <!-- Header -->
+        <VBox spacing="4" style="-fx-padding: 0 0 15 0;">
+            <Label text="Ghi chú đã xóa" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d3748;"/>
+            <Label fx:id="lblArchivedCount" text="0 ghi chú" style="-fx-font-size: 13px; -fx-text-fill: #64748b;"/>
+        </VBox>
+
+        <!-- Deleted Notes List -->
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <VBox fx:id="vboxArchivedNotes" spacing="10" style="-fx-padding: 10 5;">
+                <!-- Notes will be loaded dynamically -->
+            </VBox>
+        </ScrollPane>
+    </VBox>
+
+    <!-- ==================== RIGHT - NOTE PREVIEW (3/5) ==================== -->
+    <VBox minWidth="450" styleClass="content-area" style="-fx-border-color: #e2e8f0; -fx-border-width: 0 0 0 1;">
+        <HBox.hgrow>ALWAYS</HBox.hgrow>
+
+        <!-- Preview Header -->
+        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 15 0;">
+            <VBox HBox.hgrow="ALWAYS">
+                <Label fx:id="lblNoteTitle" text="Chọn ghi chú để xem" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d3748;"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="lblArchivedDate" text="" style="-fx-text-fill: #64748b; -fx-font-size: 12px;"/>
+                </HBox>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="8" alignment="CENTER">
+                <Button fx:id="btnRestore" text="↶ Khôi phục" styleClass="toolbar-btn-lg" onAction="#handleRestore" disable="true"/>
+                <Button fx:id="btnDeletePermanently" text="✕ Xóa vĩnh viễn" styleClass="toolbar-btn-lg, toolbar-btn-danger" onAction="#handleDeletePermanently" disable="true"/>
+            </HBox>
+        </HBox>
+
+        <!-- Note Metadata -->
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 0 0 15 0;">
+            <Label text="Trạng thái:" style="-fx-font-weight: bold; -fx-text-fill: #374151;"/>
+            <Label fx:id="lblNoteStatus" text="-" styleClass="status-badge"/>
+        </HBox>
+
+        <!-- Note Content Preview -->
+        <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS" style="-fx-background-color: #f9fafb; -fx-border-color: #e5e7eb; -fx-border-radius: 8;">
+            <VBox spacing="10" style="-fx-padding: 15;">
+                <Label fx:id="lblNoteContent" text="Nội dung sẽ hiển thị ở đây..." wrapText="true" style="-fx-text-fill: #64748b; -fx-font-size: 14px;"/>
+            </VBox>
+        </ScrollPane>
+
+        <!-- Warning Message -->
+        <HBox style="-fx-background-color: #fef3c7; -fx-border-color: #fbbf24; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 12; -fx-spacing: 10; -fx-alignment: CENTER_LEFT; -fx-margin: 15 0 0 0;">
+            <Label text="⚠️ Lưu ý: Ghi chú bị xóa vĩnh viễn không thể khôi phục!" wrapText="true" style="-fx-text-fill: #92400e; -fx-font-size: 12px;"/>
+        </HBox>
+    </VBox>
+</HBox>

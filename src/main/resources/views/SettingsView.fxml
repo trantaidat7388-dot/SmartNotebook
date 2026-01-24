@@ -4,18 +4,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.dat.notebook.controller.SettingsController"
-      styleClass="content-area"
-      stylesheets="@../css/fresh-candy.css"
-      spacing="20"
-      prefWidth="700"
-      prefHeight="600">
-    
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dat.notebook.controller.SettingsController" styleClass="content-area" stylesheets="@../css/soft-peach.css" spacing="20" prefWidth="700" prefHeight="600">
+
     <padding>
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
-    
+
     <!-- Header -->
     <HBox alignment="CENTER_LEFT" spacing="15">
         <Label text="⚙️" style="-fx-font-size: 32px;"/>
@@ -24,138 +18,102 @@
             <Label text="Cập nhật thông tin cá nhân của bạn" styleClass="content-subtitle"/>
         </VBox>
     </HBox>
-    
+
     <!-- Success/Error Notification -->
-    <HBox fx:id="notificationBox" managed="false" visible="false" 
-          styleClass="notification-box" alignment="CENTER_LEFT" spacing="10">
+    <HBox fx:id="notificationBox" managed="false" visible="false" styleClass="notification-box" alignment="CENTER_LEFT" spacing="10">
         <Label fx:id="notificationIcon" style="-fx-font-size: 18px;"/>
         <Label fx:id="notificationLabel" wrapText="true" HBox.hgrow="ALWAYS"/>
     </HBox>
-    
-    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-background: transparent;">
         <VBox spacing="25">
-            
+
             <!-- Profile Info Section -->
             <VBox styleClass="settings-container" spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="12">
                     <Label text="👤" styleClass="settings-section-icon"/>
                     <Label text="Thông tin cá nhân" styleClass="settings-section-title"/>
                 </HBox>
-                
+
                 <!-- Display Name Field -->
                 <VBox spacing="8">
                     <Label text="Tên hiển thị" styleClass="settings-item-label"/>
-                    <TextField fx:id="txtDisplayName" 
-                              promptText="Nhập tên hiển thị của bạn"
-                              styleClass="text-field-fresh"
-                              prefWidth="400"/>
-                    <Label text="Tên này sẽ hiển thị trong ứng dụng" 
-                           style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
+                    <TextField fx:id="txtDisplayName" promptText="Nhập tên hiển thị của bạn" styleClass="text-field-fresh" prefWidth="400"/>
+                    <Label text="Tên này sẽ hiển thị trong ứng dụng" style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
                 </VBox>
-                
+
                 <!-- Email Field -->
                 <VBox spacing="8">
                     <Label text="Email" styleClass="settings-item-label"/>
-                    <TextField fx:id="txtEmail" 
-                              promptText="email@example.com"
-                              styleClass="text-field-fresh"
-                              prefWidth="400"/>
-                    <Label text="Email dùng cho khôi phục tài khoản" 
-                           style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
+                    <TextField fx:id="txtEmail" promptText="email@example.com" styleClass="text-field-fresh" prefWidth="400"/>
+                    <Label text="Email dùng cho khôi phục tài khoản" style="-fx-font-size: 12px; -fx-text-fill: #718096;"/>
                 </VBox>
-                
+
                 <!-- Username (Read-only) -->
                 <VBox spacing="8">
                     <Label text="Tên đăng nhập" styleClass="settings-item-label"/>
-                    <TextField fx:id="txtUsername" 
-                              editable="false"
-                              styleClass="text-field-fresh"
-                              prefWidth="400"
-                              style="-fx-opacity: 0.6;"/>
-                    <Label text="Tên đăng nhập không thể thay đổi" 
-                           style="-fx-font-size: 12px; -fx-text-fill: #a0aec0;"/>
+                    <TextField fx:id="txtUsername" editable="false" styleClass="text-field-fresh" prefWidth="400" style="-fx-opacity: 0.6;"/>
+                    <Label text="Tên đăng nhập không thể thay đổi" style="-fx-font-size: 12px; -fx-text-fill: #a0aec0;"/>
                 </VBox>
-                
+
                 <!-- Save Profile Button -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button text="💾 Lưu thay đổi" 
-                            styleClass="btn-primary"
-                            onAction="#handleUpdateProfile"/>
-                    <Label fx:id="profileStatusLabel" 
-                           style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
+                    <Button text="💾 Lưu thay đổi" styleClass="btn-primary" onAction="#handleUpdateProfile"/>
+                    <Label fx:id="profileStatusLabel" style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
                 </HBox>
             </VBox>
-            
+
             <!-- Change Password Section -->
             <VBox styleClass="settings-container" spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="12">
                     <Label text="🔑" styleClass="settings-section-icon"/>
                     <Label text="Đổi mật khẩu" styleClass="settings-section-title"/>
                 </HBox>
-                
+
                 <!-- Old Password -->
                 <VBox spacing="8">
                     <Label text="Mật khẩu hiện tại" styleClass="settings-item-label"/>
-                    <PasswordField fx:id="txtOldPassword" 
-                                  promptText="Nhập mật khẩu hiện tại"
-                                  styleClass="text-field-fresh"
-                                  prefWidth="400"/>
+                    <PasswordField fx:id="txtOldPassword" promptText="Nhập mật khẩu hiện tại" styleClass="text-field-fresh" prefWidth="400"/>
                 </VBox>
-                
+
                 <!-- New Password -->
                 <VBox spacing="8">
                     <Label text="Mật khẩu mới" styleClass="settings-item-label"/>
-                    <PasswordField fx:id="txtNewPassword" 
-                                  promptText="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
-                                  styleClass="text-field-fresh"
-                                  prefWidth="400"/>
+                    <PasswordField fx:id="txtNewPassword" promptText="Nhập mật khẩu mới (tối thiểu 6 ký tự)" styleClass="text-field-fresh" prefWidth="400"/>
                 </VBox>
-                
+
                 <!-- Confirm New Password -->
                 <VBox spacing="8">
                     <Label text="Xác nhận mật khẩu mới" styleClass="settings-item-label"/>
-                    <PasswordField fx:id="txtConfirmPassword" 
-                                  promptText="Nhập lại mật khẩu mới"
-                                  styleClass="text-field-fresh"
-                                  prefWidth="400"/>
+                    <PasswordField fx:id="txtConfirmPassword" promptText="Nhập lại mật khẩu mới" styleClass="text-field-fresh" prefWidth="400"/>
                 </VBox>
-                
+
                 <!-- Change Password Button -->
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button text="🔒 Đổi mật khẩu" 
-                            styleClass="btn-warning"
-                            onAction="#handleChangePassword"/>
-                    <Label fx:id="passwordStatusLabel" 
-                           style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
+                    <Button text="🔒 Đổi mật khẩu" styleClass="btn-warning" onAction="#handleChangePassword"/>
+                    <Label fx:id="passwordStatusLabel" style="-fx-font-size: 13px; -fx-text-fill: #48bb78;"/>
                 </HBox>
             </VBox>
-            
+
             <!-- Account Actions Section -->
             <VBox styleClass="settings-container" spacing="15">
                 <HBox alignment="CENTER_LEFT" spacing="12">
                     <Label text="🚪" styleClass="settings-section-icon"/>
                     <Label text="Hành động tài khoản" styleClass="settings-section-title"/>
                 </HBox>
-                
+
                 <VBox spacing="12">
-                    <Button text="🚪 Đăng xuất" 
-                            styleClass="btn-danger" 
-                            maxWidth="250" 
-                            onAction="#handleLogout"/>
+                    <Button text="🚪 Đăng xuất" styleClass="btn-danger" maxWidth="250" onAction="#handleLogout"/>
                 </VBox>
             </VBox>
-            
+
             <!-- About Section -->
             <VBox styleClass="settings-container" spacing="10" alignment="CENTER">
-                <Label text="📓 Smart Notebook" 
-                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4a5568;"/>
-                <Label text="Version 1.0.0 - Fresh Candy Theme" 
-                       style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
-                <Label text="Made with 💜 for your ideas" 
-                       style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
+                <Label text="📓 Smart Notebook" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4a5568;"/>
+                <Label text="Version 1.0.0 - Fresh Candy Theme" style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
+                <Label text="Made with 💜 for your ideas" style="-fx-font-size: 13px; -fx-text-fill: #a0aec0;"/>
             </VBox>
-            
+
         </VBox>
     </ScrollPane>
 </VBox>
