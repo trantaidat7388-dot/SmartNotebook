@@ -18,46 +18,46 @@ import java.util.Objects;
  * @version 1.0
  */
 public class Note {
-    
+
     // ==================== CONSTANTS ====================
-    
+
     /** Các trạng thái của ghi chú */
     public static final String STATUS_REGULAR = "REGULAR";
     public static final String STATUS_URGENT = "URGENT";
     public static final String STATUS_IDEAS = "IDEAS";
     public static final String STATUS_COMPLETED = "COMPLETED";
-    
+
     /** Màu mặc định */
     public static final String DEFAULT_COLOR = "#ffffff";
-    
+
     // ==================== FIELDS ====================
-    
-    private int id;                     // NoteID - Primary Key
-    private int userId;                 // UserID - Foreign Key
-    private Integer categoryId;         // CategoryID - Foreign Key (nullable)
-    private String title;               // Tiêu đề ghi chú
-    private String content;             // Nội dung ghi chú (plain text - backward compatibility)
-    private String htmlContent;         // Nội dung HTML (Rich Text Editor)
-    private String summary;             // Tóm tắt tự động (Smart feature)
-    private String status;              // Trạng thái: REGULAR, URGENT, IDEAS, COMPLETED
-    private boolean isFavorite;         // Đánh dấu yêu thích
-    private boolean isArchived;         // Đã lưu trữ
-    private String color;               // Màu nền ghi chú
-    private int viewCount;              // Số lần xem
-    private LocalDateTime createdAt;    // Thời điểm tạo
-    private LocalDateTime updatedAt;    // Thời điểm cập nhật
-    
+
+    private int id; // NoteID - Primary Key
+    private int userId; // UserID - Foreign Key
+    private Integer categoryId; // CategoryID - Foreign Key (nullable)
+    private String title; // Tiêu đề ghi chú
+    private String content; // Nội dung ghi chú (plain text - backward compatibility)
+    private String htmlContent; // Nội dung HTML (Rich Text Editor)
+    private String summary; // Tóm tắt tự động (Smart feature)
+    private String status; // Trạng thái: REGULAR, URGENT, IDEAS, COMPLETED
+    private boolean isFavorite; // Đánh dấu yêu thích
+    private boolean isArchived; // Đã lưu trữ
+    private String color; // Màu nền ghi chú
+    private int viewCount; // Số lần xem
+    private LocalDateTime createdAt; // Thời điểm tạo
+    private LocalDateTime updatedAt; // Thời điểm cập nhật
+
     // Quan hệ
-    private List<Tag> tags;             // Danh sách tags
-    private Category category;          // Danh mục (optional)
-    private User user;                  // Người tạo
-    
+    private List<Tag> tags; // Danh sách tags
+    private Category category; // Danh mục (optional)
+    private User user; // Người tạo
+
     // Version history (optional - load when needed)
-    private Integer versionCount;       // Số lượng versions
-    private Integer latestVersion;      // Version number mới nhất
-    
+    private Integer versionCount; // Số lượng versions
+    private Integer latestVersion; // Version number mới nhất
+
     // ==================== CONSTRUCTORS ====================
-    
+
     /**
      * Constructor mặc định
      */
@@ -71,7 +71,7 @@ public class Note {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-    
+
     /**
      * Constructor với tiêu đề
      * 
@@ -81,36 +81,36 @@ public class Note {
         this();
         this.title = title;
     }
-    
+
     /**
      * Constructor với tiêu đề và nội dung
      * 
-     * @param title Tiêu đề
+     * @param title   Tiêu đề
      * @param content Nội dung
      */
     public Note(String title, String content) {
         this(title);
         this.content = content;
     }
-    
+
     /**
      * Constructor với user
      * 
-     * @param userId ID người dùng
-     * @param title Tiêu đề
+     * @param userId  ID người dùng
+     * @param title   Tiêu đề
      * @param content Nội dung
      */
     public Note(int userId, String title, String content) {
         this(title, content);
         this.userId = userId;
     }
-    
+
     /**
      * Constructor đầy đủ từ database
      */
     public Note(int id, int userId, Integer categoryId, String title, String content,
-                String summary, String status, boolean isFavorite, boolean isArchived,
-                String color, int viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+            String summary, String status, boolean isFavorite, boolean isArchived,
+            String color, int viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -126,10 +126,10 @@ public class Note {
         this.updatedAt = updatedAt;
         this.tags = new ArrayList<>();
     }
-    
+
     // Constructor cũ để tương thích ngược
-    public Note(int id, String title, String content, int categoryId, 
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Note(int id, String title, String content, int categoryId,
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this();
         this.id = id;
         this.title = title;
@@ -138,60 +138,60 @@ public class Note {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
-    
+
     public Note(int id, String title, String content, int categoryId, String status,
-                LocalDateTime createdAt, LocalDateTime updatedAt) {
+            LocalDateTime createdAt, LocalDateTime updatedAt) {
         this(id, title, content, categoryId, createdAt, updatedAt);
         this.status = status != null ? status : STATUS_REGULAR;
     }
-    
+
     // ==================== GETTERS & SETTERS ====================
-    
+
     public int getId() {
         return id;
     }
-    
+
     public void setId(int id) {
         this.id = id;
     }
-    
+
     public int getUserId() {
         return userId;
     }
-    
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
+
     public Integer getCategoryId() {
         return categoryId;
     }
-    
+
     public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
-    
+
     // Backward compatibility
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId > 0 ? categoryId : null;
     }
-    
+
     public String getTitle() {
         return title;
     }
-    
+
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public String getContent() {
         return content;
     }
-    
+
     public void setContent(String content) {
         this.content = content;
     }
-    
+
     /**
      * Lấy HTML content (ưu tiên htmlContent, fallback về content)
      */
@@ -204,9 +204,9 @@ public class Note {
         if (content != null && !content.trim().isEmpty()) {
             return convertPlainToHtml(content);
         }
-        return "<p>Bắt đầu viết ghi chú của bạn...</p>";
+        return "";
     }
-    
+
     /**
      * Set HTML content và auto-update plain content
      */
@@ -215,7 +215,7 @@ public class Note {
         // Auto-sync plain content từ HTML
         this.content = stripHtmlTags(htmlContent);
     }
-    
+
     /**
      * Convert plain text sang HTML đơn giản
      */
@@ -233,132 +233,133 @@ public class Note {
         }
         return html.toString();
     }
-    
+
     /**
      * Escape HTML special characters
      */
     private String escapeHtml(String text) {
         return text.replace("&", "&amp;")
-                   .replace("<", "&lt;")
-                   .replace(">", "&gt;")
-                   .replace("\"", "&quot;")
-                   .replace("'", "&#39;");
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
     }
-    
+
     /**
      * Strip HTML tags để lấy plain text
      */
     private String stripHtmlTags(String html) {
-        if (html == null) return "";
+        if (html == null)
+            return "";
         return html.replaceAll("<[^>]*>", " ")
-                   .replaceAll("&nbsp;", " ")
-                   .replaceAll("&amp;", "&")
-                   .replaceAll("&lt;", "<")
-                   .replaceAll("&gt;", ">")
-                   .replaceAll("&quot;", "\"")
-                   .replaceAll("&#39;", "'")
-                   .replaceAll("\\s+", " ")
-                   .trim();
+                .replaceAll("&nbsp;", " ")
+                .replaceAll("&amp;", "&")
+                .replaceAll("&lt;", "<")
+                .replaceAll("&gt;", ">")
+                .replaceAll("&quot;", "\"")
+                .replaceAll("&#39;", "'")
+                .replaceAll("\\s+", " ")
+                .trim();
     }
-    
+
     public String getSummary() {
         return summary;
     }
-    
+
     public void setSummary(String summary) {
         this.summary = summary;
     }
-    
+
     public String getStatus() {
         return status;
     }
-    
+
     public void setStatus(String status) {
         if (isValidStatus(status)) {
             this.status = status;
         }
     }
-    
+
     public boolean isFavorite() {
         return isFavorite;
     }
-    
+
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-    
+
     public boolean isArchived() {
         return isArchived;
     }
-    
+
     public void setArchived(boolean archived) {
         isArchived = archived;
     }
-    
+
     public String getColor() {
         return color;
     }
-    
+
     public void setColor(String color) {
         this.color = color != null ? color : DEFAULT_COLOR;
     }
-    
+
     public int getViewCount() {
         return viewCount;
     }
-    
+
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
     }
-    
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    
+
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    
+
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
+
     public List<Tag> getTags() {
         return tags;
     }
-    
+
     public void setTags(List<Tag> tags) {
         this.tags = tags != null ? tags : new ArrayList<>();
     }
-    
+
     public Category getCategory() {
         return category;
     }
-    
+
     public void setCategory(Category category) {
         this.category = category;
         if (category != null) {
             this.categoryId = category.getId();
         }
     }
-    
+
     public User getUser() {
         return user;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
         if (user != null) {
             this.userId = user.getId();
         }
     }
-    
+
     // ==================== UTILITY METHODS ====================
-    
+
     /**
      * Kiểm tra trạng thái hợp lệ
      * 
@@ -367,11 +368,11 @@ public class Note {
      */
     public static boolean isValidStatus(String status) {
         return STATUS_REGULAR.equals(status) ||
-               STATUS_URGENT.equals(status) ||
-               STATUS_IDEAS.equals(status) ||
-               STATUS_COMPLETED.equals(status);
+                STATUS_URGENT.equals(status) ||
+                STATUS_IDEAS.equals(status) ||
+                STATUS_COMPLETED.equals(status);
     }
-    
+
     /**
      * Lấy preview nội dung (50 ký tự đầu)
      * 
@@ -380,7 +381,7 @@ public class Note {
     public String getPreview() {
         return getPreview(100);
     }
-    
+
     /**
      * Lấy preview nội dung với độ dài tùy chỉnh
      * 
@@ -399,7 +400,7 @@ public class Note {
         }
         return cleaned.substring(0, maxLength) + "...";
     }
-    
+
     /**
      * Lấy số từ trong nội dung
      * 
@@ -412,7 +413,7 @@ public class Note {
         }
         return text.trim().split("\\s+").length;
     }
-    
+
     /**
      * Lấy số ký tự trong nội dung
      * 
@@ -422,30 +423,30 @@ public class Note {
         String text = (content != null && !content.isEmpty()) ? content : stripHtmlTags(htmlContent);
         return text != null ? text.length() : 0;
     }
-    
+
     /**
      * Kiểm tra có version history không
      */
     public boolean hasVersionHistory() {
         return versionCount != null && versionCount > 0;
     }
-    
+
     public Integer getVersionCount() {
         return versionCount;
     }
-    
+
     public void setVersionCount(Integer versionCount) {
         this.versionCount = versionCount;
     }
-    
+
     public Integer getLatestVersion() {
         return latestVersion;
     }
-    
+
     public void setLatestVersion(Integer latestVersion) {
         this.latestVersion = latestVersion;
     }
-    
+
     /**
      * Thêm tag vào ghi chú
      * 
@@ -456,7 +457,7 @@ public class Note {
             tags.add(tag);
         }
     }
-    
+
     /**
      * Xóa tag khỏi ghi chú
      * 
@@ -465,14 +466,14 @@ public class Note {
     public void removeTag(Tag tag) {
         tags.remove(tag);
     }
-    
+
     /**
      * Tăng số lần xem
      */
     public void incrementViewCount() {
         this.viewCount++;
     }
-    
+
     /**
      * Kiểm tra ghi chú có trống không
      * 
@@ -480,9 +481,9 @@ public class Note {
      */
     public boolean isEmpty() {
         return (title == null || title.trim().isEmpty()) &&
-               (content == null || content.trim().isEmpty());
+                (content == null || content.trim().isEmpty());
     }
-    
+
     /**
      * Đánh dấu hoàn thành
      */
@@ -490,7 +491,7 @@ public class Note {
         this.status = STATUS_COMPLETED;
         this.updatedAt = LocalDateTime.now();
     }
-    
+
     /**
      * Đánh dấu quan trọng
      */
@@ -498,7 +499,7 @@ public class Note {
         this.status = STATUS_URGENT;
         this.updatedAt = LocalDateTime.now();
     }
-    
+
     /**
      * Toggle yêu thích
      */
@@ -506,22 +507,24 @@ public class Note {
         this.isFavorite = !this.isFavorite;
         this.updatedAt = LocalDateTime.now();
     }
-    
+
     // ==================== OBJECT METHODS ====================
-    
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Note note = (Note) o;
         return id == note.id;
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
-    
+
     @Override
     public String toString() {
         return "Note{" +
