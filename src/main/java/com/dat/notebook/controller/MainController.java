@@ -1179,28 +1179,49 @@ public class MainController {
         }
     }
 
-    // ===== EVENT HANDLERS - AI CHAT =====
+    // ===== EVENT HANDLERS - AI ASSISTANT =====
 
+    /**
+     * Mở AI Assistant Dialog - THIẾT KẾ MỚI
+     * 
+     * NGUYÊN TẮC:
+     * - KHÔNG tạo Stage/Window mới
+     * - CHỈ hiển thị dialog modal nhẹ
+     * - AI chỉ là công cụ hỗ trợ, KHÔNG phải tab độc lập
+     * - Kết quả được copy để dùng trong editor hiện tại
+     */
     @FXML
     private void handleOpenAiChat() {
+        // Kiểm tra ghi chú đã được chọn chưa
+        if (selectedNote == null) {
+            showWarningNotification("Vui lòng chọn ghi chú trước khi sử dụng AI.");
+            return;
+        }
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AiChatView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AIAssistantDialog.fxml"));
             Parent root = loader.load();
 
-            // Get controller and set current note
-            AiChatController aiController = loader.getController();
-            if (selectedNote != null) {
-                aiController.setCurrentNote(selectedNote);
-            }
+            // Set note hiện tại cho AI
+            AIAssistantDialogController aiController = loader.getController();
+            aiController.setNote(selectedNote);
 
-            Stage aiChatStage = new Stage();
-            aiChatStage.setTitle("AI Assistant - SmartNote");
-            aiChatStage.initModality(Modality.NONE);
-            aiChatStage.setScene(new Scene(root));
-            aiChatStage.setResizable(true);
-            aiChatStage.show();
+            // Tạo dialog modal (KHÔNG phải Stage độc lập)
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("AI Assistant");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.initStyle(StageStyle.UNDECORATED);
+            
+            Scene scene = new Scene(root);
+            scene.setFill(javafx.scene.paint.Color.TRANSPARENT);
+            dialogStage.setScene(scene);
+            dialogStage.initStyle(StageStyle.TRANSPARENT);
+            
+            dialogStage.centerOnScreen();
+            dialogStage.showAndWait();
+            
         } catch (IOException e) {
-            showAlert("Error", "Cannot open AI Chat: " + e.getMessage());
+            showErrorNotification("Không thể mở AI Assistant: " + e.getMessage());
         }
     }
 
@@ -1245,17 +1266,8 @@ public class MainController {
 
     @FXML
     private void handleAIChat() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AiChatView.fxml"));
-            Parent root = loader.load();
-
-            Stage aiStage = new Stage();
-            aiStage.setTitle("AI Assistant");
-            aiStage.setScene(new Scene(root, 800, 600));
-            aiStage.show();
-        } catch (IOException e) {
-            showAlert("Lỗi", "Không thể mở AI Chat: " + e.getMessage());
-        }
+        // Gọi cùng method với handleOpenAiChat
+        handleOpenAiChat();
     }
 
     @FXML

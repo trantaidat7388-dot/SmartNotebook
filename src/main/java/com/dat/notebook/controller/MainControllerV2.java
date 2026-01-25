@@ -27,6 +27,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -71,6 +72,8 @@ public class MainControllerV2 {
     @FXML
     private Button btnFavorites;
     @FXML
+    private Button btnAIAssistant;
+    @FXML
     private Button btnTrash;
     @FXML
     private Button btnFilterRegular;
@@ -114,6 +117,8 @@ public class MainControllerV2 {
     private Button btnFavorite;
     @FXML
     private Button btnDelete;
+    @FXML
+    private Button btnAiAssistant; // Nút robot để mở AI Assistant
 
     // ==================== SERVICES (MVC) ====================
 
@@ -125,6 +130,7 @@ public class MainControllerV2 {
     private User currentUser;
     private ObservableList<Note> allNotes = FXCollections.observableArrayList();
     private Note selectedNote = null;
+    private AIAssistantViewController currentAIController = null;
     private boolean isCreateMode = false;
     private String currentFilter = "ALL";
     private boolean showFavoritesOnly = false;
@@ -724,6 +730,11 @@ public class MainControllerV2 {
 
         // Display note content
         displayNoteInEditor(note);
+        
+        // Update AI view if it's currently visible
+        if (currentAIController != null) {
+            currentAIController.setNote(note);
+        }
 
         // Refresh list to show selection
         displayNotesList();
@@ -791,6 +802,9 @@ public class MainControllerV2 {
         lblContentTitle.setText("Tất cả ghi chú");
         setActiveNavButton(btnAllNotes);
         displayNotesList();
+        
+        // Show editor panel if AI view is showing
+        showEditorPanel();
     }
 
     @FXML
@@ -800,6 +814,9 @@ public class MainControllerV2 {
         lblContentTitle.setText("Yêu thích");
         setActiveNavButton(btnFavorites);
         displayNotesList();
+        
+        // Show editor panel if AI view is showing
+        showEditorPanel();
     }
 
     @FXML
@@ -852,7 +869,7 @@ public class MainControllerV2 {
 
     private void setActiveNavButton(Button activeBtn) {
         // Remove active class from all
-        for (Button btn : new Button[] { btnAllNotes, btnFavorites, btnTrash }) {
+        for (Button btn : new Button[] { btnAllNotes, btnFavorites, btnAIAssistant, btnTrash }) {
             if (btn != null) {
                 btn.getStyleClass().remove("sidebar-btn-active");
             }
@@ -861,6 +878,34 @@ public class MainControllerV2 {
         if (activeBtn != null && !activeBtn.getStyleClass().contains("sidebar-btn-active")) {
             activeBtn.getStyleClass().add("sidebar-btn-active");
         }
+    }
+    
+    /**
+     * Show editor panel and hide AI view
+     */
+    private void showEditorPanel() {
+        HBox parent = (HBox) editorPanel.getParent();
+        
+        // Remove AI view if exists (only remove nodes with ai-view-panel class)
+        parent.getChildren().removeIf(node -> 
+            node instanceof VBox && node.getStyleClass().contains("ai-view-panel"));
+        
+        // Show editor panel
+        editorPanel.setVisible(true);
+        editorPanel.setManaged(true);
+        
+        // Clear AI controller reference
+        currentAIController = null;
+        
+        // Update navigation button state to All Notes (default)
+        updateSidebarButtonStates(btnAllNotes);
+    }
+    
+    /**
+     * Update sidebar button states
+     */
+    private void updateSidebarButtonStates(Button activeBtn) {
+        setActiveNavButton(activeBtn);
     }
 
     // ==================== EVENT HANDLERS - NOTES ====================
@@ -1095,6 +1140,62 @@ public class MainControllerV2 {
         }
     }
 
+    // ==================== EVENT HANDLERS - AI ASSISTANT ====================
+
+    @FXML
+    private void handleShowAIAssistant() {
+        try {
+            // Load AI Assistant View
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AIAssistantView.fxml"));
+            VBox aiView = loader.load();
+            AIAssistantViewController aiController = loader.getController();
+            
+            // Store controller reference
+            currentAIController = aiController;
+            
+            // Set back callback
+            aiController.setOnBack(() -> {
+                showEditorPanel();
+                currentAIController = null;
+            });
+            
+            // Pass current note to AI Assistant
+            if (selectedNote != null) {
+                aiController.setNote(selectedNote);
+            }
+            
+            // Replace editor panel with AI view
+            HBox parent = (HBox) editorPanel.getParent();
+            int index = parent.getChildren().indexOf(editorPanel);
+            
+            editorPanel.setVisible(false);
+            editorPanel.setManaged(false);
+            
+            aiView.setMinWidth(450);
+            HBox.setHgrow(aiView, Priority.ALWAYS);
+            
+            parent.getChildren().add(index + 1, aiView);
+            
+            // Update button states
+            updateSidebarButtonStates(btnAIAssistant);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+            showErrorAlert("Lỗi khi mở AI Assistant: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Show error alert
+     */
+    private void showErrorAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Lỗi");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
     // ==================== EVENT HANDLERS - SETTINGS ====================
 
     @FXML
@@ -1149,6 +1250,11 @@ public class MainControllerV2 {
         }
     }
 
+    // ==================== AI ASSISTANT ====================
+
+    /**
+     * Mở cửa sổ AI Assistant
+     */
     @FXML
     private Button btnLogout;
 

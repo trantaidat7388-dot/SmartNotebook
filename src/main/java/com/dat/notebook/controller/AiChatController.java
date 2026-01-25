@@ -1,182 +1,369 @@
 package com.dat.notebook.controller;
 
 import com.dat.notebook.model.Note;
+import com.dat.notebook.service.SummaryService;
+import com.dat.notebook.service.TagSuggestionService;
+import com.dat.notebook.service.TitleSuggestionService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+/**
+ * AiChatController - Controller cho màn hình AI Assistant với 3 chức năng NLP.
+ * 
+ * @author SmartNotebook Team
+ */
 public class AiChatController {
 
-    @FXML private Label lblCurrentNoteTitle;
-    @FXML private Label lblAiSummary;
-    @FXML private VBox vboxChatMessages;
-    @FXML private TextField txtAiPrompt;
+    @FXML
+    private ScrollPane chatScrollPane;
+    @FXML
+    private VBox chatContainer;
+    @FXML
+    private TextField messageInput;
+    @FXML
+    private Button sendButton;
+    @FXML
+    private ProgressIndicator loadingIndicator;
+
+    private SummaryService summaryService;
+    private TitleSuggestionService titleService;
+    private TagSuggestionService tagService;
 
     private Note currentNote;
+    private String lastSummary;
+    private String lastSuggestedTitle;
+    private List<String> lastSuggestedTags;
+
     private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     @FXML
     public void initialize() {
-        // Add welcome message
-        addAiMessage("👋 Hi! I'm your AI assistant. I can help you analyze, summarize, and improve your notes. What would you like to do?");
+        try {
+            System.out.println("AiChatController: Initializing...");
+
+            // Initialize NLP services with error handling
+            try {
+                summaryService = SummaryService.getInstance();
+                titleService = TitleSuggestionService.getInstance();
+                tagService = TagSuggestionService.getInstance();
+                System.out.println("NLP Services initialized");
+            } catch (Exception e) {
+                System.err.println("Error initializing NLP services: " + e.getMessage());
+                e.printStackTrace();
+                addAiMessage("⚠️ Lỗi khởi động AI: " + e.getMessage());
+            }
+
+            // Welcome message
+            addAiMessage("👋 Xin chào! Tôi là AI Assistant của Smart Notebook.\n\n" +
+                    "Tôi có thể giúp bạn:\n" +
+                    "📝 Tóm tắt ghi chú dài\n" +
+                    "💡 Gợi ý tiêu đề phù hợp\n" +
+                    "🏷️ Gợi ý tags tự động\n\n" +
+                    "Hãy chọn một ghi chú và nhấn các nút bên dưới!");
+
+        } catch (Exception e) {
+            System.err.println("AiChatController initialization failed: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Set note hiện tại để phân tích
+     */
     public void setCurrentNote(Note note) {
         this.currentNote = note;
         if (note != null) {
-            lblCurrentNoteTitle.setText(note.getTitle());
-            generateSummary();
+            addAiMessage("📌 Đã chọn ghi chú: \"" + note.getTitle() + "\"\n" +
+                    "Bạn muốn tôi làm gì với ghi chú này?");
         }
     }
 
-    private void generateSummary() {
-        if (currentNote == null || currentNote.getContent() == null || currentNote.getContent().trim().isEmpty()) {
-            lblAiSummary.setText("No content to summarize.");
-            return;
-        }
-
-        String content = currentNote.getContent().trim();
-        String summary;
-        
-        int firstPeriod = content.indexOf('.');
-        if (firstPeriod > 0 && firstPeriod < 150) {
-            summary = content.substring(0, firstPeriod + 1);
-        } else if (content.length() > 120) {
-            summary = content.substring(0, 120) + "...";
-        } else {
-            summary = content;
-        }
-
-        lblAiSummary.setText(summary);
-    }
-
+    /**
+     * Xử lý khi người dùng nhấn nút "Tóm tắt"
+     */
     @FXML
-    private void handleExtractTasks() {
+    private void handleSummarize() {
         if (currentNote == null) {
-            addAiMessage("⚠️ Please select a note first.");
+            addAiMessage("⚠️ Vui lòng chọn một ghi chú trước.");
             return;
         }
-        
-        addUserMessage("Extract tasks from this note");
-        
-        // Simulate AI response
-        String response = "📋 I found the following tasks in your note:\n\n" +
-                "1. Sync with design team about mobile assets\n" +
-                "2. Review Q4 roadmap\n" +
-                "3. Investigate AI latency issues\n" +
-                "4. Implement dark mode for mobile app\n\n" +
-                "Would you like me to create a task list from these?";
-        
-        addAiMessage(response);
+
+        String content = currentNote.getContent();
+        if (content == null || content.trim().isEmpty()) {
+            addAiMessage("⚠️ Ghi chú này không có nội dung để tóm tắt.");
+            return;
+        }
+
+        addUserMessage("📝 Tóm tắt ghi chú này");
+        showLoading(true);
+
+        CompletableFuture.runAsync(() -> {
+            String summary = summaryService.summarize(content);
+            lastSummary = summary;
+
+            Platform.runLater(() -> {
+                showLoading(false);
+                addSummaryResult(summary);
+            });
+        });
     }
 
-    @FXML
-    private void handleChangeTone() {
-        if (currentNote == null) {
-            addAiMessage("⚠️ Please select a note first.");
-            return;
-        }
-        
-        addUserMessage("Change the tone of this note");
-        
-        String response = "🎨 I can change the tone to:\n\n" +
-                "• Professional\n" +
-                "• Casual\n" +
-                "• Formal\n" +
-                "• Friendly\n\n" +
-                "Which tone would you prefer?";
-        
-        addAiMessage(response);
+    /**
+     * Hiển thị kết quả tóm tắt với nút Copy
+     */
+    private void addSummaryResult(String summary) {
+        VBox resultBox = new VBox(10);
+        resultBox.setAlignment(Pos.TOP_LEFT);
+        resultBox.setPadding(new Insets(0, 50, 0, 0));
+        resultBox.getStyleClass().add("ai-result-box");
+
+        Label headerLabel = new Label("📝 Tóm tắt ghi chú:");
+        headerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        Label summaryLabel = new Label(summary);
+        summaryLabel.setWrapText(true);
+        summaryLabel.getStyleClass().add("chat-message-ai");
+        summaryLabel.setMaxWidth(380);
+
+        // Action buttons
+        HBox actionButtons = new HBox(10);
+        actionButtons.setAlignment(Pos.CENTER_LEFT);
+
+        Button copyBtn = new Button("📋 Copy");
+        copyBtn.getStyleClass().add("ai-action-btn");
+        copyBtn.setOnAction(e -> copyToClipboard(summary));
+
+        Button applyBtn = new Button("✅ Áp dụng");
+        applyBtn.getStyleClass().add("ai-action-btn-primary");
+        applyBtn.setOnAction(e -> {
+            addAiMessage("✅ Đã lưu tóm tắt! Bạn có thể paste vào ghi chú.");
+            copyToClipboard(summary);
+        });
+
+        actionButtons.getChildren().addAll(copyBtn, applyBtn);
+
+        Label timeLabel = new Label(TIME_FORMAT.format(LocalDateTime.now()));
+        timeLabel.getStyleClass().add("chat-time");
+
+        resultBox.getChildren().addAll(headerLabel, summaryLabel, actionButtons, timeLabel);
+        chatContainer.getChildren().add(resultBox);
+        scrollToBottom();
     }
 
+    /**
+     * Xử lý khi người dùng nhấn nút "Gợi ý tiêu đề"
+     */
     @FXML
-    private void handleImproveClarity() {
+    private void handleSuggestTitle() {
         if (currentNote == null) {
-            addAiMessage("⚠️ Please select a note first.");
+            addAiMessage("⚠️ Vui lòng chọn một ghi chú trước.");
             return;
         }
-        
-        addUserMessage("Improve the clarity of this note");
-        
-        String response = "✨ I can help improve clarity by:\n\n" +
-                "• Simplifying complex sentences\n" +
-                "• Adding structure with headings\n" +
-                "• Breaking down long paragraphs\n" +
-                "• Making action items more explicit\n\n" +
-                "Shall I proceed with these improvements?";
-        
-        addAiMessage(response);
+
+        String content = currentNote.getContent();
+        if (content == null || content.trim().isEmpty()) {
+            addAiMessage("⚠️ Ghi chú này không có nội dung để phân tích.");
+            return;
+        }
+
+        addUserMessage("💡 Gợi ý tiêu đề cho ghi chú");
+        showLoading(true);
+
+        CompletableFuture.runAsync(() -> {
+            List<String> suggestions = titleService.suggestMultipleTitles(content, 3);
+            lastSuggestedTitle = suggestions.isEmpty() ? null : suggestions.get(0);
+
+            Platform.runLater(() -> {
+                showLoading(false);
+                addTitleSuggestions(suggestions);
+            });
+        });
     }
 
+    /**
+     * Hiển thị các gợi ý tiêu đề
+     */
+    private void addTitleSuggestions(List<String> suggestions) {
+        VBox resultBox = new VBox(10);
+        resultBox.setAlignment(Pos.TOP_LEFT);
+        resultBox.setPadding(new Insets(0, 50, 0, 0));
+
+        Label headerLabel = new Label("💡 Gợi ý tiêu đề:");
+        headerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        resultBox.getChildren().add(headerLabel);
+
+        for (int i = 0; i < suggestions.size(); i++) {
+            String title = suggestions.get(i);
+            HBox suggestionRow = new HBox(10);
+            suggestionRow.setAlignment(Pos.CENTER_LEFT);
+
+            Label numLabel = new Label((i + 1) + ".");
+            numLabel.setStyle("-fx-font-weight: bold;");
+
+            Label titleLabel = new Label(title);
+            titleLabel.setWrapText(true);
+            titleLabel.getStyleClass().add("chat-message-ai");
+            titleLabel.setMaxWidth(280);
+
+            Button useBtn = new Button("Dùng");
+            useBtn.getStyleClass().add("ai-action-btn");
+            final String selectedTitle = title;
+            useBtn.setOnAction(e -> {
+                copyToClipboard(selectedTitle);
+                addAiMessage("✅ Đã copy tiêu đề: \"" + selectedTitle + "\"");
+            });
+
+            suggestionRow.getChildren().addAll(numLabel, titleLabel, useBtn);
+            resultBox.getChildren().add(suggestionRow);
+        }
+
+        Label timeLabel = new Label(TIME_FORMAT.format(LocalDateTime.now()));
+        timeLabel.getStyleClass().add("chat-time");
+        resultBox.getChildren().add(timeLabel);
+
+        chatContainer.getChildren().add(resultBox);
+        scrollToBottom();
+    }
+
+    /**
+     * Xử lý khi người dùng nhấn nút "Gợi ý tag"
+     */
     @FXML
-    private void handleGenerateSummary() {
+    private void handleSuggestTags() {
         if (currentNote == null) {
-            addAiMessage("⚠️ Please select a note first.");
+            addAiMessage("⚠️ Vui lòng chọn một ghi chú trước.");
             return;
         }
-        
-        addUserMessage("Generate a detailed summary");
-        
-        String response = "📝 Here's a comprehensive summary:\n\n" +
-                "This note covers the Q4 roadmap discussion with key focus areas:\n\n" +
-                "Main Points:\n" +
-                "• UI refinement needed based on user feedback\n" +
-                "• AI performance optimization (targeting <3s response time)\n" +
-                "• Dark mode is high priority for mobile release\n\n" +
-                "Next Steps: Coordinate with design team and schedule follow-up meeting.";
-        
-        addAiMessage(response);
+
+        String content = currentNote.getContent();
+        if (content == null || content.trim().isEmpty()) {
+            addAiMessage("⚠️ Ghi chú này không có nội dung để phân tích.");
+            return;
+        }
+
+        addUserMessage("🏷️ Gợi ý tags cho ghi chú");
+        showLoading(true);
+
+        CompletableFuture.runAsync(() -> {
+            List<String> tags = tagService.suggestTags(content);
+            lastSuggestedTags = tags;
+
+            Platform.runLater(() -> {
+                showLoading(false);
+                addTagSuggestions(tags);
+            });
+        });
+    }
+
+    /**
+     * Hiển thị các gợi ý tag
+     */
+    private void addTagSuggestions(List<String> tags) {
+        VBox resultBox = new VBox(10);
+        resultBox.setAlignment(Pos.TOP_LEFT);
+        resultBox.setPadding(new Insets(0, 50, 0, 0));
+
+        Label headerLabel = new Label("🏷️ Gợi ý tags:");
+        headerLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        // Tags container (horizontal wrap)
+        HBox tagsBox = new HBox(8);
+        tagsBox.setAlignment(Pos.CENTER_LEFT);
+        tagsBox.setStyle("-fx-wrap-text: true;");
+
+        for (String tag : tags) {
+            Label tagLabel = new Label("#" + tag);
+            tagLabel.getStyleClass().add("tag-chip");
+            tagLabel.setStyle("-fx-background-color: #e2e8f0; -fx-padding: 4 10; " +
+                    "-fx-background-radius: 12; -fx-font-size: 12px; -fx-cursor: hand;");
+            tagLabel.setOnMouseClicked(e -> {
+                copyToClipboard(tag);
+                addAiMessage("📋 Đã copy tag: #" + tag);
+            });
+            tagsBox.getChildren().add(tagLabel);
+        }
+
+        // Copy all button
+        Button copyAllBtn = new Button("📋 Copy tất cả");
+        copyAllBtn.getStyleClass().add("ai-action-btn");
+        copyAllBtn.setOnAction(e -> {
+            String allTags = String.join(", ", tags.stream().map(t -> "#" + t).toArray(String[]::new));
+            copyToClipboard(allTags);
+            addAiMessage("✅ Đã copy tất cả tags!");
+        });
+
+        Label timeLabel = new Label(TIME_FORMAT.format(LocalDateTime.now()));
+        timeLabel.getStyleClass().add("chat-time");
+
+        resultBox.getChildren().addAll(headerLabel, tagsBox, copyAllBtn, timeLabel);
+        chatContainer.getChildren().add(resultBox);
+        scrollToBottom();
     }
 
     @FXML
     private void handleSendMessage() {
-        String message = txtAiPrompt.getText().trim();
+        String message = messageInput.getText().trim();
         if (message.isEmpty()) {
             return;
         }
 
         addUserMessage(message);
-        txtAiPrompt.clear();
+        messageInput.clear();
 
-        // Simulate AI response
+        // Process message with NLP
         String response = processUserMessage(message);
         addAiMessage(response);
     }
 
+    /**
+     * Xử lý tin nhắn từ người dùng
+     */
     private String processUserMessage(String message) {
         String lower = message.toLowerCase();
-        
-        if (lower.contains("summarize") || lower.contains("summary")) {
-            return "📝 Based on your note, here's a quick summary:\n\n" +
-                   "The note discusses Q4 planning with emphasis on UX improvements and AI optimization. " +
-                   "Key action items include UI refinement and performance enhancements.";
-        } else if (lower.contains("task") || lower.contains("action")) {
-            return "✅ I found these action items:\n" +
-                   "1. Refine UI based on feedback\n" +
-                   "2. Optimize AI response time\n" +
-                   "3. Implement dark mode";
-        } else if (lower.contains("improve") || lower.contains("better")) {
-            return "✨ I can help improve your note by:\n" +
-                   "• Adding clear section headings\n" +
-                   "• Highlighting key takeaways\n" +
-                   "• Organizing action items\n" +
-                   "Would you like me to apply these improvements?";
-        } else {
-            return "🤔 I understand you're asking: \"" + message + "\"\n\n" +
-                   "I can help with:\n" +
-                   "• Summarizing your notes\n" +
-                   "• Extracting tasks\n" +
-                   "• Improving clarity\n" +
-                   "• Changing tone\n\n" +
-                   "Try asking me to do one of these!";
+
+        if (lower.contains("tóm tắt") || lower.contains("summary") || lower.contains("summarize")) {
+            if (currentNote != null && currentNote.getContent() != null) {
+                lastSummary = summaryService.summarize(currentNote.getContent());
+                return "📝 Đây là bản tóm tắt:\n\n" + lastSummary;
+            }
+            return "⚠️ Vui lòng chọn một ghi chú trước.";
         }
+
+        if (lower.contains("tiêu đề") || lower.contains("title")) {
+            if (currentNote != null && currentNote.getContent() != null) {
+                lastSuggestedTitle = titleService.suggestTitle(currentNote.getContent());
+                return "💡 Gợi ý tiêu đề: \"" + lastSuggestedTitle + "\"";
+            }
+            return "⚠️ Vui lòng chọn một ghi chú trước.";
+        }
+
+        if (lower.contains("tag") || lower.contains("phân loại")) {
+            if (currentNote != null && currentNote.getContent() != null) {
+                lastSuggestedTags = tagService.suggestTags(currentNote.getContent());
+                return "🏷️ Gợi ý tags: " + String.join(", ",
+                        lastSuggestedTags.stream().map(t -> "#" + t).toArray(String[]::new));
+            }
+            return "⚠️ Vui lòng chọn một ghi chú trước.";
+        }
+
+        return "🤔 Tôi có thể giúp bạn:\n\n" +
+                "• Nhập \"tóm tắt\" để tóm tắt ghi chú\n" +
+                "• Nhập \"tiêu đề\" để gợi ý tiêu đề\n" +
+                "• Nhập \"tag\" để gợi ý tags\n\n" +
+                "Hoặc nhấn các nút bên trên!";
     }
 
     private void addUserMessage(String message) {
@@ -187,7 +374,7 @@ public class AiChatController {
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
         messageLabel.getStyleClass().add("chat-message-user");
-        messageLabel.setMaxWidth(400);
+        messageLabel.setMaxWidth(350);
 
         Label timeLabel = new Label(TIME_FORMAT.format(LocalDateTime.now()));
         timeLabel.getStyleClass().add("chat-time");
@@ -196,10 +383,8 @@ public class AiChatController {
         timeBox.setAlignment(Pos.CENTER_RIGHT);
 
         messageBox.getChildren().addAll(messageLabel, timeBox);
-        vboxChatMessages.getChildren().add(messageBox);
-
-        // Scroll to bottom
-        vboxChatMessages.layout();
+        chatContainer.getChildren().add(messageBox);
+        scrollToBottom();
     }
 
     private void addAiMessage(String message) {
@@ -210,21 +395,55 @@ public class AiChatController {
         Label messageLabel = new Label(message);
         messageLabel.setWrapText(true);
         messageLabel.getStyleClass().add("chat-message-ai");
-        messageLabel.setMaxWidth(400);
+        messageLabel.setMaxWidth(380);
 
         Label timeLabel = new Label(TIME_FORMAT.format(LocalDateTime.now()));
         timeLabel.getStyleClass().add("chat-time");
 
         messageBox.getChildren().addAll(messageLabel, timeLabel);
-        vboxChatMessages.getChildren().add(messageBox);
+        chatContainer.getChildren().add(messageBox);
+        scrollToBottom();
+    }
 
-        // Scroll to bottom
-        vboxChatMessages.layout();
+    private void showLoading(boolean show) {
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisible(show);
+        }
+        if (sendButton != null) {
+            sendButton.setDisable(show);
+        }
+    }
+
+    private void scrollToBottom() {
+        Platform.runLater(() -> {
+            chatContainer.layout();
+            if (chatScrollPane != null) {
+                chatScrollPane.setVvalue(1.0);
+            }
+        });
+    }
+
+    private void copyToClipboard(String text) {
+        ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        Clipboard.getSystemClipboard().setContent(content);
     }
 
     @FXML
     private void handleClose() {
-        Stage stage = (Stage) txtAiPrompt.getScene().getWindow();
+        Stage stage = (Stage) chatContainer.getScene().getWindow();
         stage.close();
+    }
+
+    public String getLastSummary() {
+        return lastSummary;
+    }
+
+    public String getLastSuggestedTitle() {
+        return lastSuggestedTitle;
+    }
+
+    public List<String> getLastSuggestedTags() {
+        return lastSuggestedTags;
     }
 }

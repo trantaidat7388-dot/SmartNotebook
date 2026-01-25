@@ -1,0 +1,199 @@
+/* ==========================================
+   AI ASSISTANT DIALOG - ISOLATED STYLES
+   CHỈ ÁP DỤNG CHO CỬA SỔ AI ASSISTANT
+   ========================================== */
+
+/* ============ ROOT ============ */
+.ai-dialog-root {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);
+}
+
+/* ============ HEADER ============ */
+.ai-header {
+    -fx-background-color: linear-gradient(to bottom right, #F0E7FF, #FFE7F0, #FFF4E6);
+    -fx-background-radius: 16px 16px 0 0;
+    -fx-padding: 20px 24px;
+    -fx-border-color: #E8D5FF;
+    -fx-border-width: 0 0 1 0;
+}
+
+.ai-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B46C1;
+}
+
+.ai-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #7C7C8A;
+}
+
+/* ============ ACTION BUTTONS ============ */
+.ai-actions-container {
+    -fx-padding: 24px;
+    -fx-spacing: 12px;
+    -fx-background-color: #FAFBFC;
+}
+
+.ai-action-button {
+    -fx-min-width: 110px;
+    -fx-pref-width: -1;
+    -fx-max-width: -1;
+    -fx-min-height: 50px;
+    -fx-padding: 14px 28px;
+    -fx-background-radius: 12px;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);
+}
+
+.ai-action-button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 12, 0, 0, 4);
+    -fx-scale-y: 1.02;
+    -fx-scale-x: 1.02;
+}
+
+.ai-action-button:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 4, 0, 0, 1);
+    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.98;
+}
+
+/* Button Colors - Vibrant & Modern */
+.ai-btn-summary {
+    -fx-background-color: linear-gradient(to bottom right, #A78BFA, #8B5CF6);
+}
+
+.ai-btn-title {
+    -fx-background-color: linear-gradient(to bottom right, #FB923C, #F97316);
+}
+
+.ai-btn-tags {
+    -fx-background-color: linear-gradient(to bottom right, #FBBF24, #F59E0B);
+}
+
+.ai-btn-all {
+    -fx-background-color: linear-gradient(to bottom right, #34D399, #10B981);
+}
+
+/* ============ RESULT BOXES ============ */
+.ai-results-container {
+    -fx-padding: 0 24px 24px 24px;
+    -fx-spacing: 16px;
+    -fx-background-color: #FFFFFF;
+}
+
+.ai-result-box {
+    -fx-background-radius: 12px;
+    -fx-padding: 16px;
+    -fx-border-radius: 12px;
+    -fx-border-width: 1;
+}
+
+.ai-result-header {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 0 0 8 0;
+}
+
+.ai-result-content {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 8px;
+    -fx-font-size: 13px;
+    -fx-text-fill: #2C2541;
+    -fx-prompt-text-fill: #A0A0B0;
+}
+
+/* Summary Box - Tím nhạt */
+.ai-summary-box {
+    -fx-background-color: #F3F0FF;
+    -fx-border-color: #D8D0FF;
+}
+
+.ai-summary-header {
+    -fx-text-fill: #7E69E0;
+}
+
+/* Title Box - Cam nhạt */
+.ai-title-box {
+    -fx-background-color: #FFF4E6;
+    -fx-border-color: #FFE0B2;
+}
+
+.ai-title-header {
+    -fx-text-fill: #F08D5C;
+}
+
+/* Tags Box - Cam vàng nhạt */
+.ai-tags-box {
+    -fx-background-color: #FFF9E6;
+    -fx-border-color: #FFEDB2;
+}
+
+.ai-tags-header {
+    -fx-text-fill: #F59E1F;
+}
+
+/* ============ COPY BUTTONS ============ */
+.ai-copy-button {
+    -fx-background-color: #FFE5CC;
+    -fx-text-fill: #D97706;
+    -fx-font-size: 12px;
+    -fx-padding: 6px 14px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+}
+
+.ai-copy-button:hover {
+    -fx-background-color: #FFD4A8;
+}
+
+.ai-copy-button:pressed {
+    -fx-background-color: #FFC485;
+}
+
+/* ============ FOOTER TIP ============ */
+.ai-footer-tip {
+    -fx-padding: 16px 24px;
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 0 0 16px 16px;
+}
+
+.ai-tip-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-style: italic;
+}
+
+/* ============ LOADING STATE ============ */
+.ai-loading {
+    -fx-text-fill: #9B87F5;
+    -fx-font-size: 13px;
+    -fx-font-style: italic;
+}
+
+/* ============ SCROLLBAR ============ */
+.ai-result-content .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.ai-result-content .scroll-bar:vertical .track {
+    -fx-background-color: #F0F0F5;
+    -fx-background-radius: 4px;
+}
+
+.ai-result-content .scroll-bar:vertical .thumb {
+    -fx-background-color: #D0D0E0;
+    -fx-background-radius: 4px;
+}
+
+.ai-result-content .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #B0B0C8;
+}
