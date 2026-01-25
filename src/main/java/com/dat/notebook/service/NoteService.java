@@ -16,6 +16,20 @@ import java.util.stream.Collectors;
  * 
  * Chức năng:
  * - CRUD operations với validation
+ * - Tự động tạo summary (Smart feature) - sử dụng SummaryService
+ * - Gợi ý tiêu đề (Smart feature) - sử dụng TitleSuggestionService
+ * - Tìm kiếm nâng cao
+ * - Quản lý tags
+ * 
+ * @author SmartNotebook Team
+ * @version 1.0
+ */
+
+/**
+ * Service class xử lý logic nghiệp vụ cho Ghi chú.
+ * 
+ * Chức năng:
+ * - CRUD operations với validation
  * - Tự động tạo summary (Smart feature)
  * - Gợi ý tiêu đề (Smart feature)
  * - Tìm kiếm nâng cao
@@ -25,46 +39,55 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class NoteService {
-    
+
     // ==================== DEPENDENCIES ====================
-    
+
     private final NoteRepository noteRepository;
     private final TagRepository tagRepository;
     private final AuthService authService;
-    
+    private final SummaryService summaryService;
+    private final TitleSuggestionService titleSuggestionService;
+    private final TagSuggestionService tagSuggestionService;
+
     // ==================== CONSTRUCTOR ====================
-    
+
     public NoteService() {
         this.noteRepository = new NoteRepository();
         this.tagRepository = new TagRepository();
         this.authService = AuthService.getInstance();
+        this.summaryService = SummaryService.getInstance();
+        this.titleSuggestionService = TitleSuggestionService.getInstance();
+        this.tagSuggestionService = TagSuggestionService.getInstance();
     }
-    
+
     public NoteService(NoteRepository noteRepository, TagRepository tagRepository) {
         this.noteRepository = noteRepository;
         this.tagRepository = tagRepository;
         this.authService = AuthService.getInstance();
+        this.summaryService = SummaryService.getInstance();
+        this.titleSuggestionService = TitleSuggestionService.getInstance();
+        this.tagSuggestionService = TagSuggestionService.getInstance();
     }
-    
+
     // ==================== CREATE ====================
-    
+
     /**
      * Tạo ghi chú mới với các tính năng Smart
      * 
-     * @param title Tiêu đề (có thể để trống - sẽ tự gợi ý)
+     * @param title   Tiêu đề (có thể để trống - sẽ tự gợi ý)
      * @param content Nội dung
      * @return Note mới tạo hoặc null nếu thất bại
      */
     public Note createNote(String title, String content) {
         return createNote(title, content, Note.STATUS_REGULAR, null);
     }
-    
+
     /**
      * Tạo ghi chú mới với đầy đủ options
      * 
-     * @param title Tiêu đề
-     * @param content Nội dung
-     * @param status Trạng thái
+     * @param title      Tiêu đề
+     * @param content    Nội dung
+     * @param status     Trạng thái
      * @param categoryId ID danh mục (nullable)
      * @return Note mới tạo hoặc null
      */
@@ -74,36 +97,36 @@ public class NoteService {
             System.err.println("Chưa đăng nhập, không thể tạo ghi chú");
             return null;
         }
-        
+
         Note note = new Note();
         note.setUserId(userId);
         note.setCategoryId(categoryId);
         note.setContent(content);
         note.setStatus(status != null ? status : Note.STATUS_REGULAR);
-        
+
         // ===== SMART FEATURE: Auto-suggest title =====
         if (title == null || title.trim().isEmpty()) {
-            title = SmartTextUtil.suggestTitle(content);
+            title = titleSuggestionService.suggestTitle(content);
         }
         note.setTitle(title);
-        
+
         // ===== SMART FEATURE: Auto-generate summary =====
-        String summary = SmartTextUtil.generateSummary(content);
+        String summary = summaryService.summarize(content);
         note.setSummary(summary);
-        
+
         // Timestamps
         note.setCreatedAt(LocalDateTime.now());
         note.setUpdatedAt(LocalDateTime.now());
-        
+
         if (noteRepository.insert(note)) {
             System.out.println("Tạo ghi chú thành công: " + note.getTitle());
             return note;
         }
-        
+
         System.err.println("Không thể tạo ghi chú");
         return null;
     }
-    
+
     /**
      * Tạo ghi chú nhanh chỉ với nội dung
      * 
@@ -113,7 +136,7 @@ public class NoteService {
     public Note quickNote(String content) {
         return createNote(null, content);
     }
-    
+
     /**
      * Tạo ghi chú từ đối tượng Note
      * (Dùng cho trường hợp cần custom nhiều thuộc tính)
@@ -125,7 +148,7 @@ public class NoteService {
         if (note == null) {
             return null;
         }
-        
+
         // Đảm bảo có userId
         if (note.getUserId() <= 0) {
             int userId = authService.getCurrentUserId();
@@ -135,17 +158,17 @@ public class NoteService {
             }
             note.setUserId(userId);
         }
-        
+
         // Smart feature: Auto-suggest title nếu chưa có
         if (note.getTitle() == null || note.getTitle().trim().isEmpty()) {
-            String title = SmartTextUtil.suggestTitle(note.getContent());
+            String title = titleSuggestionService.suggestTitle(note.getContent());
             note.setTitle(title);
         }
-        
+
         // Smart feature: Auto-generate summary
-        String summary = SmartTextUtil.generateSummary(note.getContent());
+        String summary = summaryService.summarize(note.getContent());
         note.setSummary(summary);
-        
+
         // Timestamps
         if (note.getCreatedAt() == null) {
             note.setCreatedAt(LocalDateTime.now());
@@ -153,18 +176,18 @@ public class NoteService {
         if (note.getUpdatedAt() == null) {
             note.setUpdatedAt(LocalDateTime.now());
         }
-        
+
         if (noteRepository.insert(note)) {
             System.out.println("Tạo ghi chú thành công: " + note.getTitle());
             return note;
         }
-        
+
         System.err.println("Không thể tạo ghi chú");
         return null;
     }
-    
+
     // ==================== READ ====================
-    
+
     /**
      * Lấy ghi chú theo ID
      * 
@@ -173,7 +196,7 @@ public class NoteService {
      */
     public Optional<Note> getNoteById(int noteId) {
         Optional<Note> noteOpt = noteRepository.findById(noteId);
-        
+
         if (noteOpt.isPresent()) {
             Note note = noteOpt.get();
             // Load tags
@@ -181,10 +204,10 @@ public class NoteService {
             // Increment view count
             noteRepository.incrementViewCount(noteId);
         }
-        
+
         return noteOpt;
     }
-    
+
     /**
      * Lấy tất cả ghi chú của người dùng hiện tại
      * 
@@ -195,17 +218,17 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         List<Note> notes = noteRepository.findByUser(userId);
-        
+
         // Load tags for each note
         for (Note note : notes) {
             note.setTags(tagRepository.findByNote(note.getId()));
         }
-        
+
         return notes;
     }
-    
+
     /**
      * Lấy tất cả ghi chú của user chỉ định
      * 
@@ -216,17 +239,17 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         List<Note> notes = noteRepository.findByUser(userId);
-        
+
         // Load tags for each note
         for (Note note : notes) {
             note.setTags(tagRepository.findByNote(note.getId()));
         }
-        
+
         return notes;
     }
-    
+
     /**
      * Lấy ghi chú theo status
      * 
@@ -238,10 +261,10 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         return noteRepository.findByUserAndStatus(userId, status);
     }
-    
+
     /**
      * Lấy ghi chú yêu thích
      * 
@@ -252,10 +275,10 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         return noteRepository.findFavorites(userId);
     }
-    
+
     /**
      * Lấy ghi chú theo danh mục
      * 
@@ -267,12 +290,12 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         return noteRepository.findByUserAndCategory(userId, categoryId);
     }
-    
+
     // ==================== UPDATE ====================
-    
+
     /**
      * Cập nhật ghi chú
      * 
@@ -283,31 +306,31 @@ public class NoteService {
         if (note == null || note.getId() <= 0) {
             return false;
         }
-        
+
         // ===== SMART FEATURE: Re-generate summary =====
-        String newSummary = SmartTextUtil.generateSummary(note.getContent());
+        String newSummary = summaryService.summarize(note.getContent());
         note.setSummary(newSummary);
-        
+
         note.setUpdatedAt(LocalDateTime.now());
-        
+
         return noteRepository.update(note);
     }
-    
+
     /**
      * Cập nhật nội dung ghi chú
      * 
-     * @param noteId ID ghi chú
-     * @param title Tiêu đề mới
+     * @param noteId  ID ghi chú
+     * @param title   Tiêu đề mới
      * @param content Nội dung mới
      * @return true nếu thành công
      */
     public boolean updateNoteContent(int noteId, String title, String content) {
         // Auto-generate summary
-        String summary = SmartTextUtil.generateSummary(content);
-        
+        String summary = summaryService.summarize(content);
+
         return noteRepository.updateContent(noteId, title, content, summary);
     }
-    
+
     /**
      * Toggle yêu thích
      * 
@@ -317,7 +340,7 @@ public class NoteService {
     public boolean toggleFavorite(int noteId) {
         return noteRepository.toggleFavorite(noteId);
     }
-    
+
     /**
      * Cập nhật status
      * 
@@ -331,7 +354,7 @@ public class NoteService {
         }
         return noteRepository.updateStatus(noteId, status);
     }
-    
+
     /**
      * Đánh dấu hoàn thành
      * 
@@ -341,9 +364,9 @@ public class NoteService {
     public boolean markAsCompleted(int noteId) {
         return updateStatus(noteId, Note.STATUS_COMPLETED);
     }
-    
+
     // ==================== DELETE ====================
-    
+
     /**
      * Archive ghi chú (soft delete)
      * 
@@ -353,7 +376,7 @@ public class NoteService {
     public boolean archiveNote(int noteId) {
         return noteRepository.archive(noteId);
     }
-    
+
     /**
      * Xóa ghi chú vĩnh viễn
      * 
@@ -364,7 +387,7 @@ public class NoteService {
         // Soft delete - move to trash
         return noteRepository.delete(noteId);
     }
-    
+
     /**
      * Restore archived note
      * 
@@ -374,7 +397,7 @@ public class NoteService {
     public boolean restoreNote(int noteId) {
         return noteRepository.restore(noteId);
     }
-    
+
     /**
      * Get all archived notes for user (trash)
      * 
@@ -384,7 +407,7 @@ public class NoteService {
     public List<Note> getArchivedNotes(int userId) {
         return noteRepository.getArchivedNotes(userId);
     }
-    
+
     /**
      * Permanently delete note (cannot be undone)
      * 
@@ -397,9 +420,9 @@ public class NoteService {
         // Permanently delete
         return noteRepository.deletePermanently(noteId);
     }
-    
+
     // ==================== SEARCH ====================
-    
+
     /**
      * Tìm kiếm ghi chú theo từ khóa
      * 
@@ -411,49 +434,49 @@ public class NoteService {
         if (userId <= 0 || keyword == null || keyword.trim().isEmpty()) {
             return List.of();
         }
-        
+
         return noteRepository.search(userId, keyword.trim());
     }
-    
+
     /**
      * Tìm kiếm nâng cao với nhiều filter
      * 
-     * @param keyword Từ khóa
-     * @param status Status filter
-     * @param categoryId Category filter
+     * @param keyword      Từ khóa
+     * @param status       Status filter
+     * @param categoryId   Category filter
      * @param favoriteOnly Chỉ lấy yêu thích
      * @return Danh sách ghi chú
      */
-    public List<Note> searchAdvanced(String keyword, String status, 
-                                      Integer categoryId, Boolean favoriteOnly) {
+    public List<Note> searchAdvanced(String keyword, String status,
+            Integer categoryId, Boolean favoriteOnly) {
         int userId = authService.getCurrentUserId();
         if (userId <= 0) {
             return List.of();
         }
-        
+
         return noteRepository.searchAdvanced(userId, keyword, status, categoryId, favoriteOnly);
     }
-    
+
     /**
      * ===== SMART FEATURE: Highlight từ khóa trong text =====
      * 
-     * @param text Text gốc
-     * @param keyword Từ khóa cần highlight
+     * @param text           Text gốc
+     * @param keyword        Từ khóa cần highlight
      * @param highlightStart Tag mở (ví dụ: "<mark>")
-     * @param highlightEnd Tag đóng (ví dụ: "</mark>")
+     * @param highlightEnd   Tag đóng (ví dụ: "</mark>")
      * @return Text với từ khóa đã được highlight
      */
-    public String highlightKeyword(String text, String keyword, 
-                                   String highlightStart, String highlightEnd) {
+    public String highlightKeyword(String text, String keyword,
+            String highlightStart, String highlightEnd) {
         return SmartTextUtil.highlightKeywords(text, keyword, highlightStart, highlightEnd);
     }
-    
+
     // ==================== TAGS ====================
-    
+
     /**
      * Thêm tag vào ghi chú
      * 
-     * @param noteId ID ghi chú
+     * @param noteId  ID ghi chú
      * @param tagName Tên tag
      * @return true nếu thành công
      */
@@ -462,26 +485,26 @@ public class NoteService {
         if (userId <= 0) {
             return false;
         }
-        
+
         Tag tag = tagRepository.findOrCreate(userId, tagName);
         if (tag == null) {
             return false;
         }
-        
+
         return tagRepository.addTagToNote(noteId, tag.getId());
     }
-    
+
     /**
      * Xóa tag khỏi ghi chú
      * 
      * @param noteId ID ghi chú
-     * @param tagId ID tag
+     * @param tagId  ID tag
      * @return true nếu thành công
      */
     public boolean removeTagFromNote(int noteId, int tagId) {
         return tagRepository.removeTagFromNote(noteId, tagId);
     }
-    
+
     /**
      * Lấy tags phổ biến
      * 
@@ -493,10 +516,10 @@ public class NoteService {
         if (userId <= 0) {
             return List.of();
         }
-        
+
         return tagRepository.findPopular(userId, limit);
     }
-    
+
     /**
      * ===== SMART FEATURE: Gợi ý tags dựa trên nội dung =====
      * 
@@ -504,11 +527,11 @@ public class NoteService {
      * @return Danh sách tên tags gợi ý
      */
     public List<String> suggestTags(String content) {
-        return SmartTextUtil.extractKeywords(content);
+        return tagSuggestionService.suggestTags(content);
     }
-    
+
     // ==================== STATISTICS ====================
-    
+
     /**
      * Lấy thống kê ghi chú
      * 
@@ -519,10 +542,10 @@ public class NoteService {
         if (userId <= 0) {
             return new int[6];
         }
-        
+
         return noteRepository.getStatistics(userId);
     }
-    
+
     /**
      * Đếm tổng số ghi chú
      * 
@@ -533,12 +556,12 @@ public class NoteService {
         if (userId <= 0) {
             return 0;
         }
-        
+
         return noteRepository.countByUser(userId);
     }
-    
+
     // ==================== SMART UTILITIES ====================
-    
+
     /**
      * ===== SMART FEATURE: Tạo summary cho nội dung =====
      * 
@@ -546,9 +569,9 @@ public class NoteService {
      * @return Summary
      */
     public String generateSummary(String content) {
-        return SmartTextUtil.generateSummary(content);
+        return summaryService.summarize(content);
     }
-    
+
     /**
      * ===== SMART FEATURE: Gợi ý tiêu đề =====
      * 
@@ -556,9 +579,9 @@ public class NoteService {
      * @return Tiêu đề gợi ý
      */
     public String suggestTitle(String content) {
-        return SmartTextUtil.suggestTitle(content);
+        return titleSuggestionService.suggestTitle(content);
     }
-    
+
     /**
      * Lấy ghi chú gần đây
      * 
@@ -567,7 +590,7 @@ public class NoteService {
      */
     public List<Note> getRecentNotes(int limit) {
         return getAllNotes().stream()
-            .limit(limit)
-            .collect(Collectors.toList());
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 }

@@ -4,5 +4,9 @@
     ],
     "java.project.outputPath": "target/classes",
     "java.configuration.updateBuildConfiguration": "automatic",
-    "terminal.integrated.cursorStyle": "line"
+    "terminal.integrated.cursorStyle": "line",
+    
+    // CSS Settings - Disable vendor prefix warnings for JavaFX CSS
+    "css.lint.vendorPrefix": "ignore",
+    "css.lint.unknownProperties": "ignore"
 }

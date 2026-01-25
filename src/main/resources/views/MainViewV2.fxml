@@ -22,7 +22,7 @@
 
         <!-- Search -->
         <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="10">
-            <Label text="�" styleClass="search-icon"/>
+            <Label text="🔍" styleClass="search-icon"/>
             <TextField fx:id="txtSearch" promptText="Tìm kiếm..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
         </HBox>
 
@@ -34,7 +34,7 @@
 
             <Button fx:id="btnFavorites" text="⭐  Yêu thích" styleClass="sidebar-btn" onAction="#handleShowFavorites" maxWidth="Infinity"/>
 
-            <Button fx:id="btnTrash" text="🗑️  Thùng rác" styleClass="sidebar-btn" onAction="#handleShowTrash" maxWidth="Infinity"/>
+            <Button fx:id="btnTrash" text="🗑  Thùng rác" styleClass="sidebar-btn" onAction="#handleShowTrash" maxWidth="Infinity"/>
         </VBox>
 
         <!-- Filter by Status -->
@@ -42,7 +42,7 @@
 
         <VBox spacing="5">
             <Button fx:id="btnFilterRegular" text="📝 Thường" styleClass="sidebar-btn-small" onAction="#handleFilterRegular" maxWidth="Infinity"/>
-            <Button fx:id="btnFilterUrgent" text="🔥 Khẩn cấp" styleClass="sidebar-btn-small" onAction="#handleFilterUrgent" maxWidth="Infinity"/>
+            <Button fx:id="btnFilterUrgent" text="🔴 Khẩn cấp" styleClass="sidebar-btn-small" onAction="#handleFilterUrgent" maxWidth="Infinity"/>
             <Button fx:id="btnFilterIdeas" text="💡 Ý tưởng" styleClass="sidebar-btn-small" onAction="#handleFilterIdeas" maxWidth="Infinity"/>
             <Button fx:id="btnFilterCompleted" text="✅ Hoàn thành" styleClass="sidebar-btn-small" onAction="#handleFilterCompleted" maxWidth="Infinity"/>
         </VBox>
@@ -52,7 +52,7 @@
 
         <!-- Bottom Section -->
         <VBox spacing="8">
-            <Button fx:id="btnSettings" text="⚙️  Cài đặt" styleClass="sidebar-btn" onAction="#handleShowSettings" maxWidth="Infinity"/>
+            <Button fx:id="btnSettings" text="⚙  Cài đặt" styleClass="sidebar-btn" onAction="#handleShowSettings" maxWidth="Infinity"/>
 
             <Button fx:id="btnLogout" text="🚪  Đăng xuất" styleClass="sidebar-btn" onAction="#handleLogout" maxWidth="Infinity"/>
 
@@ -102,9 +102,12 @@
 
             <!-- Action Buttons -->
             <HBox spacing="8" alignment="CENTER">
+                <Button fx:id="btnAiAssistant" text="🤖" styleClass="toolbar-btn-lg" onAction="#handleShowAIAssistant">
+                    <tooltip><Tooltip text="AI Assistant: Tóm tắt, Tiêu đề, Tag"/></tooltip>
+                </Button>
                 <Button fx:id="btnFavorite" text="☆" styleClass="toolbar-btn-lg" onAction="#handleToggleFavorite" style="-fx-font-size: 18px;"/>
                 <Button fx:id="btnChangeStatus" text="📊" styleClass="toolbar-btn-lg" onAction="#handleChangeStatus"/>
-                <Button fx:id="btnDelete" text="🗑️" styleClass="toolbar-btn-lg, toolbar-btn-danger" onAction="#handleDeleteNote"/>
+                <Button fx:id="btnDelete" text="❌" styleClass="toolbar-btn-lg, toolbar-btn-danger" onAction="#handleDeleteNote"/>
             </HBox>
         </HBox>
 
@@ -131,6 +134,7 @@
 
         <!-- Quick Actions -->
         <HBox spacing="15" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+            <Button text="🤖 Trợ lý" styleClass="btn-primary" onAction="#handleShowAIAssistant" prefWidth="150" prefHeight="38" style="-fx-background-color: linear-gradient(to right, #805ad5, #718096);"/>
             <Button text="💾 Lưu ngay" styleClass="btn-outline" onAction="#handleSaveNote" prefWidth="130" prefHeight="38"/>
             <Button text="📋 Sao chép" styleClass="btn-outline" onAction="#handleCopyContent" prefWidth="130" prefHeight="38"/>
             <Button text="📤 Xuất file" styleClass="btn-outline" onAction="#handleExportNote" prefWidth="130" prefHeight="38"/>

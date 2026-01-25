@@ -1,0 +1,439 @@
+/*
+ * WARM ORANGE THEME - SmartNotebook
+ * Cam nhạt - Ấm - Loang mềm - Sáng - Dễ nhìn
+ * Version: 2.0
+ */
+
+/* ==================== COLOR VARIABLES ==================== */
+* {
+    /* Primary Colors - Cam nhạt ấm */
+    -fx-primary: #FFB86C;
+    -fx-primary-dark: #FFA94D;
+    -fx-secondary: #FFD8A8;
+    
+    /* Background Colors - Sáng, ấm */
+    -fx-bg-main: #FFFFFF;
+    -fx-bg-light: #FFF6EC;
+    -fx-bg-sidebar: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    
+    /* Text Colors - Nâu ấm */
+    -fx-text-primary: #3A2A1A;
+    -fx-text-secondary: #6B5A45;
+    -fx-text-muted: #B5A89A;
+    
+    /* Border & Input */
+    -fx-border-color: #FFC98B;
+    -fx-border-focus: #FF9F43;
+    
+    /* Status Colors - Pastel */
+    -fx-urgent: #FFB3A8;
+    -fx-ideas: #D9C8FF;
+    -fx-completed: #B8EAD5;
+    
+    /* AI Assistant Colors */
+    -fx-ai-summary: #E8F2FF;
+    -fx-ai-title: #F1E9FF;
+    -fx-ai-tags: #FFE6E0;
+    
+    /* Semantic Colors */
+    -fx-success: #B8EAD5;
+    -fx-warning: #FFE4A8;
+    -fx-error: #FFB3A8;
+    -fx-info: #C9E4FF;
+}
+
+/* ==================== ROOT ==================== */
+.root {
+    -fx-font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-bg-main;
+}
+
+/* ==================== LOGIN & REGISTER ==================== */
+
+/* Login Container */
+.login-container {
+    -fx-background-color: -fx-bg-main;
+}
+
+/* Sidebar trái với gradient cam nhạt */
+.login-sidebar {
+    -fx-background-color: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    -fx-effect: dropshadow(gaussian, rgba(255, 184, 108, 0.3), 12, 0, 0, 4);
+}
+
+.login-logo {
+    -fx-font-size: 48px;
+    -fx-effect: dropshadow(gaussian, rgba(58, 42, 26, 0.2), 8, 0, 0, 2);
+}
+
+.login-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: 700;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(58, 42, 26, 0.15), 6, 0, 0, 2);
+}
+
+.login-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(255, 255, 255, 0.95);
+}
+
+/* Input Fields - Bo tròn, border cam nhạt */
+.login-field,
+.register-field {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-border-color: #FFC98B;
+    -fx-border-radius: 14px;
+    -fx-border-width: 2px;
+    -fx-padding: 14px 16px;
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-primary;
+    -fx-prompt-text-fill: #B5A89A;
+}
+
+.login-field:focused,
+.register-field:focused {
+    -fx-border-color: #FF9F43;
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(255, 159, 67, 0.25), 8, 0, 0, 2);
+}
+
+/* Button Đăng nhập chính */
+.login-button {
+    -fx-background-color: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    -fx-background-radius: 14px;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-padding: 14px 32px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 169, 77, 0.3), 8, 0, 0, 3);
+    -fx-min-height: 48px;
+}
+
+.login-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
+    -fx-effect: dropshadow(gaussian, rgba(255, 169, 77, 0.4), 10, 0, 0, 4);
+}
+
+.login-button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #FFA94D, #FF9434);
+    -fx-translate-y: 1px;
+}
+
+/* Button Demo - Outline style */
+.demo-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #FFB86C;
+    -fx-border-width: 2px;
+    -fx-border-radius: 14px;
+    -fx-background-radius: 14px;
+    -fx-text-fill: #FFB86C;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-padding: 12px 28px;
+    -fx-cursor: hand;
+    -fx-min-height: 48px;
+}
+
+.demo-button:hover {
+    -fx-background-color: rgba(255, 184, 108, 0.1);
+    -fx-border-color: #FF9F43;
+    -fx-text-fill: #FF9F43;
+}
+
+/* ==================== AI ASSISTANT DIALOG ==================== */
+
+/* Container chính */
+.ai-dialog-root {
+    -fx-background-color: white;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(58, 42, 26, 0.12), 24, 0, 0, 8);
+    -fx-padding: 0;
+}
+
+/* Header AI */
+.ai-header {
+    -fx-background-color: linear-gradient(to right, #F8FAFF, #FFF6F8);
+    -fx-background-radius: 20px 20px 0 0;
+    -fx-padding: 20px 24px;
+    -fx-border-color: transparent transparent #F0E8E0 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.ai-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #3A2A1A;
+}
+
+.ai-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B5A45;
+}
+
+.ai-note-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #8B7355;
+    -fx-font-style: italic;
+}
+
+/* Nút đóng */
+.ai-close-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #B5A89A;
+    -fx-font-size: 20px;
+    -fx-padding: 6px 12px;
+    -fx-cursor: hand;
+    -fx-background-radius: 8px;
+}
+
+.ai-close-btn:hover {
+    -fx-background-color: rgba(255, 179, 168, 0.15);
+    -fx-text-fill: #FFB3A8;
+}
+
+/* Action Buttons - 4 nút chức năng */
+.ai-action-button {
+    -fx-background-radius: 12px;
+    -fx-padding: 12px 20px;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-min-width: -1;
+    -fx-pref-width: -1;
+    -fx-max-width: -1;
+    -fx-min-height: 44px;
+    -fx-alignment: center;
+}
+
+.ai-action-button:hover {
+    -fx-opacity: 0.92;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.ai-action-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Button Tóm tắt - Xanh dương */
+.ai-btn-summary {
+    -fx-background-color: linear-gradient(to bottom right, #5BA4FC, #4A8FE7);
+}
+
+/* Button Tiêu đề - Tím */
+.ai-btn-title {
+    -fx-background-color: linear-gradient(to bottom right, #A78BFA, #8B5CF6);
+}
+
+/* Button Tags - Cam nhạt */
+.ai-btn-tags {
+    -fx-background-color: linear-gradient(to bottom right, #FFB86C, #FFA94D);
+}
+
+/* Button Tất cả - Xanh lá */
+.ai-btn-all {
+    -fx-background-color: linear-gradient(to bottom right, #6EE7B7, #34D399);
+}
+
+/* Result Boxes */
+.ai-result-box {
+    -fx-background-radius: 14px;
+    -fx-padding: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 6, 0, 0, 2);
+}
+
+.ai-result-summary {
+    -fx-background-color: #E8F2FF;
+    -fx-border-color: #C9E4FF;
+    -fx-border-width: 1px;
+    -fx-border-radius: 14px;
+}
+
+.ai-result-title {
+    -fx-background-color: #F1E9FF;
+    -fx-border-color: #E5D9FF;
+    -fx-border-width: 1px;
+    -fx-border-radius: 14px;
+}
+
+.ai-result-tags {
+    -fx-background-color: #FFE6E0;
+    -fx-border-color: #FFD4C8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 14px;
+}
+
+/* Result Header */
+.ai-result-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #3A2A1A;
+}
+
+/* Result Text */
+.ai-result-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4A3A2A;
+    -fx-line-spacing: 1.6;
+    -fx-wrap-text: true;
+}
+
+/* Copy Button */
+.ai-copy-btn {
+    -fx-background-color: rgba(255, 184, 108, 0.15);
+    -fx-background-radius: 8px;
+    -fx-text-fill: #FFB86C;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 8px 14px;
+    -fx-cursor: hand;
+    -fx-min-width: -1;
+}
+
+.ai-copy-btn:hover {
+    -fx-background-color: rgba(255, 184, 108, 0.25);
+    -fx-text-fill: #FF9F43;
+}
+
+/* Loading Indicator */
+.ai-loading {
+    -fx-progress-color: #FFB86C;
+}
+
+/* Tip Text */
+.ai-tip {
+    -fx-font-size: 12px;
+    -fx-text-fill: #B5A89A;
+    -fx-font-style: italic;
+}
+
+/* ==================== MAIN APP ==================== */
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #FFB86C 0%, #FFA94D 100%);
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.9);
+    -fx-font-size: 14px;
+    -fx-padding: 12px 16px;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-alignment: center-left;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-btn-active {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+}
+
+/* Status Labels */
+.status-regular {
+    -fx-background-color: #E8E8E8;
+    -fx-text-fill: #6B5A45;
+}
+
+.status-urgent {
+    -fx-background-color: #FFB3A8;
+    -fx-text-fill: #8B2500;
+}
+
+.status-ideas {
+    -fx-background-color: #D9C8FF;
+    -fx-text-fill: #5B21B6;
+}
+
+.status-completed {
+    -fx-background-color: #B8EAD5;
+    -fx-text-fill: #065F46;
+}
+
+/* Buttons chung */
+.btn-primary {
+    -fx-background-color: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+    -fx-background-radius: 10px;
+    -fx-padding: 10px 18px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
+}
+
+.btn-outline {
+    -fx-background-color: transparent;
+    -fx-border-color: #FFB86C;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #FFB86C;
+    -fx-font-weight: 600;
+    -fx-padding: 10px 18px;
+    -fx-cursor: hand;
+}
+
+.btn-outline:hover {
+    -fx-background-color: rgba(255, 184, 108, 0.1);
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 184, 108, 0.3);
+    -fx-background-radius: 4px;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(255, 184, 108, 0.5);
+}
+
+/* ==================== UTILITY CLASSES ==================== */
+
+.text-primary { -fx-text-fill: -fx-text-primary; }
+.text-secondary { -fx-text-fill: -fx-text-secondary; }
+.text-muted { -fx-text-fill: -fx-text-muted; }
+
+.bg-light { -fx-background-color: -fx-bg-light; }
+.bg-white { -fx-background-color: white; }
+
+.rounded-lg { -fx-background-radius: 12px; }
+.rounded-xl { -fx-background-radius: 16px; }
+
+.shadow-sm {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 4, 0, 0, 2);
+}
+
+.shadow-md {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 4);
+}
+
+.shadow-lg {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 16, 0, 0, 6);
+}

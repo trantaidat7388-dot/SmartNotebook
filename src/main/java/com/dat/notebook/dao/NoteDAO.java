@@ -108,15 +108,25 @@ public class NoteDAO {
             return false;
         }
         
+        // Trim title and summary to prevent truncation
+        String title = note.getTitle();
+        if (title != null && title.length() > 1000) {
+            title = title.substring(0, 997) + "...";
+        }
+        String summary = note.getSummary();
+        if (summary != null && summary.length() > 2000) {
+            summary = summary.substring(0, 1997) + "...";
+        }
+        
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             
             ps.setInt(1, note.getUserId());
             ps.setObject(2, note.getCategoryId(), Types.INTEGER);
-            ps.setString(3, note.getTitle());
+            ps.setString(3, title);
             ps.setString(4, note.getContent());
             ps.setString(5, note.getHtmlContent());
-            ps.setString(6, note.getSummary());
+            ps.setString(6, summary);
             ps.setString(7, note.getStatus() != null ? note.getStatus() : Note.STATUS_REGULAR);
             ps.setBoolean(8, note.isFavorite());
             ps.setString(9, note.getColor() != null ? note.getColor() : Note.DEFAULT_COLOR);
@@ -315,14 +325,24 @@ public class NoteDAO {
             return false;
         }
         
+        // Trim title and summary to prevent truncation
+        String title = note.getTitle();
+        if (title != null && title.length() > 1000) {
+            title = title.substring(0, 997) + "...";
+        }
+        String summary = note.getSummary();
+        if (summary != null && summary.length() > 2000) {
+            summary = summary.substring(0, 1997) + "...";
+        }
+        
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
             
             ps.setObject(1, note.getCategoryId(), Types.INTEGER);
-            ps.setString(2, note.getTitle());
+            ps.setString(2, title);
             ps.setString(3, note.getContent());
             ps.setString(4, note.getHtmlContent());
-            ps.setString(5, note.getSummary());
+            ps.setString(5, summary);
             ps.setString(6, note.getStatus());
             ps.setBoolean(7, note.isFavorite());
             ps.setBoolean(8, note.isArchived());
@@ -355,6 +375,14 @@ public class NoteDAO {
      */
     public boolean updateContent(int noteId, int userId, String title, String content, 
                                   String htmlContent, String summary) {
+        // Trim to prevent truncation
+        if (title != null && title.length() > 1000) {
+            title = title.substring(0, 997) + "...";
+        }
+        if (summary != null && summary.length() > 2000) {
+            summary = summary.substring(0, 1997) + "...";
+        }
+        
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement ps = conn.prepareStatement(SQL_UPDATE_CONTENT)) {
             

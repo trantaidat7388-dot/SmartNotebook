@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.dat.notebook.controller.AIAssistantDialogController"
+    styleClass="ai-dialog-root"
+    stylesheets="@../css/ai-assistant.css"
+    spacing="0"
+    prefWidth="520"
+    prefHeight="640">
+    
+    <!-- Header -->
+    <HBox styleClass="ai-header" spacing="16" alignment="CENTER_LEFT">
+        <Label text="✨" style="-fx-font-size: 36px;"/>
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="AI Assistant" styleClass="ai-title"/>
+            <Label text="Tóm tắt • Gợi ý tiêu đề • Phân loại tags" styleClass="ai-subtitle"/>
+        </VBox>
+        <Button fx:id="btnClose" text="✕" onAction="#handleClose" 
+            style="-fx-background-color: transparent; -fx-text-fill: #9CA3AF; -fx-font-size: 20px; -fx-cursor: hand;"/>
+    </HBox>
+    
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 20px 24px 0px 24px;">
+        <Button text="📄 Tóm tắt" onAction="#handleSummarize"
+            styleClass="ai-action-button, ai-btn-summary">
+            <tooltip><Tooltip text="Tóm tắt nội dung thành 3-5 điểm chính"/></tooltip>
+        </Button>
+        
+        <Button text="💭 Tiêu đề" onAction="#handleSuggestTitle"
+            styleClass="ai-action-button, ai-btn-title">
+            <tooltip><Tooltip text="Gợi ý tiêu đề phù hợp cho ghi chú"/></tooltip>
+        </Button>
+        
+        <Button text="🏷️ Tags" onAction="#handleSuggestTags"
+            styleClass="ai-action-button, ai-btn-tags">
+            <tooltip><Tooltip text="Gợi ý tags để phân loại ghi chú"/></tooltip>
+        </Button>
+        
+        <Button text="⚡ Tất cả" onAction="#handleAnalyzeAll"
+            styleClass="ai-action-button, ai-btn-all">
+            <tooltip><Tooltip text="Phân tích toàn diện một lượt"/></tooltip>
+        </Button>
+    </HBox>
+    
+    <!-- Loading Indicator -->
+    <HBox alignment="CENTER" style="-fx-padding: 16px;">
+        <ProgressIndicator fx:id="loadingIndicator" visible="false" 
+            prefWidth="36" prefHeight="36" styleClass="ai-loading"/>
+    </HBox>
+    
+    <!-- Results Container -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" 
+        style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0 24px 24px 24px;">
+        <VBox fx:id="resultContainer" spacing="16">
+            
+            <!-- Summary Result -->
+            <VBox fx:id="summaryBox" spacing="12" visible="false" styleClass="ai-result-box, ai-summary-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📄 TÓM TẮT" styleClass="ai-result-header, ai-summary-header" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopySummary" text="📋 Copy" onAction="#handleCopySummary"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="summaryLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="4" promptText="Kết quả tóm tắt sẽ hiển thị ở đây..."/>
+            </VBox>
+            
+            <!-- Title Result -->
+            <VBox fx:id="titleBox" spacing="12" visible="false" styleClass="ai-result-box, ai-title-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="💭 TIÊU ĐỀ GỢI Ý" styleClass="ai-result-header, ai-title-header" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopyTitle" text="📋 Copy" onAction="#handleCopyTitle"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="titleLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="2" promptText="Gợi ý tiêu đề sẽ hiển thị ở đây..."
+                    style="-fx-font-size: 15px; -fx-font-weight: 600;"/>
+            </VBox>
+            
+            <!-- Tags Result -->
+            <VBox fx:id="tagsBox" spacing="12" visible="false" styleClass="ai-result-box, ai-tags-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🏷️ TAGS GỢI Ý" styleClass="ai-result-header, ai-tags-header" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopyTags" text="📋 Copy" onAction="#handleCopyTags"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="tagsLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="2" promptText="Gợi ý tags sẽ hiển thị ở đây..."
+                    style="-fx-font-weight: 600;"/>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+    <!-- Footer Tip -->
+    <HBox alignment="CENTER" styleClass="ai-footer-tip">
+        <Label text="✨ Tip: Bấm nút để phân tích, sau đó copy kết quả vào ghi chú của bạn" 
+            styleClass="ai-tip-text" wrapText="true"/>
+    </HBox>
+        
+</VBox>

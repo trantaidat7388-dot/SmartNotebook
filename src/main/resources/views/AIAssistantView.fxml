@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.dat.notebook.controller.AIAssistantViewController"
+    styleClass="content-area, ai-view-panel"
+    stylesheets="@../css/ai-assistant.css"
+    spacing="0">
+    
+    <!-- Header -->
+    <VBox styleClass="ai-header" spacing="8" style="-fx-padding: 20px 30px;">
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <Button text="← Quay lại" onAction="#handleBack"
+                style="-fx-background-color: linear-gradient(to right, #f97316, #ea580c); -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: 600; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(249, 115, 22, 0.3), 8, 0, 0, 2);">
+                <tooltip><Tooltip text="Quay lại trình soạn thảo"/></tooltip>
+            </Button>
+            <Label text="✨" style="-fx-font-size: 48px;"/>
+            <VBox spacing="6" HBox.hgrow="ALWAYS">
+                <Label text="AI Assistant" styleClass="ai-title" style="-fx-font-size: 28px;"/>
+                <Label text="Tóm tắt • Gợi ý tiêu đề • Phân loại tags • Phân tích nội dung" styleClass="ai-subtitle" style="-fx-font-size: 14px;"/>
+            </VBox>
+        </HBox>
+    </VBox>
+    
+    <!-- Action Buttons -->
+    <HBox spacing="12" alignment="CENTER" style="-fx-padding: 20px 30px;">
+        <Button text="📄 Tóm tắt" onAction="#handleSummarize"
+            styleClass="ai-action-button, ai-btn-summary"
+            style="-fx-pref-width: 140; -fx-pref-height: 50; -fx-font-size: 15px;">
+            <tooltip><Tooltip text="Tóm tắt nội dung thành 3-5 điểm chính"/></tooltip>
+        </Button>
+        
+        <Button text="💭 Tiêu đề" onAction="#handleSuggestTitle"
+            styleClass="ai-action-button, ai-btn-title"
+            style="-fx-pref-width: 140; -fx-pref-height: 50; -fx-font-size: 15px;">
+            <tooltip><Tooltip text="Gợi ý tiêu đề phù hợp cho ghi chú"/></tooltip>
+        </Button>
+        
+        <Button text="🏷️ Tags" onAction="#handleSuggestTags"
+            styleClass="ai-action-button, ai-btn-tags"
+            style="-fx-pref-width: 140; -fx-pref-height: 50; -fx-font-size: 15px;">
+            <tooltip><Tooltip text="Gợi ý tags để phân loại ghi chú"/></tooltip>
+        </Button>
+        
+        <Button text="⚡ Tất cả" onAction="#handleAnalyzeAll"
+            styleClass="ai-action-button, ai-btn-all"
+            style="-fx-pref-width: 140; -fx-pref-height: 50; -fx-font-size: 15px;">
+            <tooltip><Tooltip text="Phân tích toàn diện một lượt"/></tooltip>
+        </Button>
+    </HBox>
+    
+    <!-- Info Banner -->
+    <HBox alignment="CENTER_LEFT" spacing="12" 
+        style="-fx-background-color: #FFF3E0; -fx-padding: 16px 30px; -fx-background-radius: 8; -fx-margin: 0 30px;">
+        <Label text="ℹ️" style="-fx-font-size: 20px;"/>
+        <Label text="Chọn một ghi chú từ danh sách bên trái, sau đó sử dụng các nút phân tích bên trên" 
+            wrapText="true" style="-fx-text-fill: #E65100; -fx-font-size: 13px;" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    
+    <!-- Loading Indicator -->
+    <HBox alignment="CENTER" style="-fx-padding: 20px;">
+        <ProgressIndicator fx:id="loadingIndicator" visible="false" 
+            prefWidth="48" prefHeight="48" styleClass="ai-loading"/>
+    </HBox>
+    
+    <!-- Results Container -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" 
+        style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0 30px 30px 30px;">
+        <VBox fx:id="resultContainer" spacing="20">
+            
+            <!-- Summary Result -->
+            <VBox fx:id="summaryBox" spacing="12" visible="false" styleClass="ai-result-box, ai-summary-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="📄 TÓM TẮT NỘI DUNG" styleClass="ai-result-header, ai-summary-header" 
+                        style="-fx-font-size: 18px;" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopySummary" text="📋 Copy" onAction="#handleCopySummary"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="summaryLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="6" promptText="Kết quả tóm tắt sẽ hiển thị ở đây..."
+                    style="-fx-font-size: 14px;"/>
+            </VBox>
+            
+            <!-- Title Result -->
+            <VBox fx:id="titleBox" spacing="12" visible="false" styleClass="ai-result-box, ai-title-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="💭 TIÊU ĐỀ GỢI Ý" styleClass="ai-result-header, ai-title-header" 
+                        style="-fx-font-size: 18px;" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopyTitle" text="📋 Copy" onAction="#handleCopyTitle"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="titleLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="3" promptText="Gợi ý tiêu đề sẽ hiển thị ở đây..."
+                    style="-fx-font-size: 16px; -fx-font-weight: 600;"/>
+            </VBox>
+            
+            <!-- Tags Result -->
+            <VBox fx:id="tagsBox" spacing="12" visible="false" styleClass="ai-result-box, ai-tags-box">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="🏷️ TAGS GỢI Ý" styleClass="ai-result-header, ai-tags-header" 
+                        style="-fx-font-size: 18px;" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnCopyTags" text="📋 Copy" onAction="#handleCopyTags"
+                        styleClass="ai-copy-button"/>
+                </HBox>
+                <TextArea fx:id="tagsLabel" wrapText="true" editable="false" styleClass="ai-result-content"
+                    prefRowCount="2" promptText="Gợi ý tags sẽ hiển thị ở đây..."
+                    style="-fx-font-size: 14px; -fx-font-weight: 600;"/>
+            </VBox>
+            
+        </VBox>
+    </ScrollPane>
+    
+    <!-- Footer Tip -->
+    <HBox alignment="CENTER" styleClass="ai-footer-tip" style="-fx-padding: 16px 30px;">
+        <Label text="✨ Tip: Bấm nút để phân tích, sau đó copy kết quả vào ghi chú của bạn" 
+            styleClass="ai-tip-text" wrapText="true" style="-fx-font-size: 13px;"/>
+    </HBox>
+        
+</VBox>
