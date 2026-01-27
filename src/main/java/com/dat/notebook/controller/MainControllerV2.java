@@ -4,6 +4,7 @@ import com.dat.notebook.model.Note;
 import com.dat.notebook.model.User;
 import com.dat.notebook.service.AuthService;
 import com.dat.notebook.service.NoteServiceV2;
+import com.dat.notebook.util.RichTextStyleManager;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -29,6 +31,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import netscape.javascript.JSObject;
+import javafx.concurrent.Worker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -92,6 +96,8 @@ public class MainControllerV2 {
     @FXML
     private Label lblNotesCount;
     @FXML
+    private Button btnCreateNote;
+    @FXML
     private ComboBox<String> cmbSort;
     @FXML
     private VBox vboxNotesList;
@@ -137,6 +143,8 @@ public class MainControllerV2 {
     private String currentSort = "NEWEST";
     private String selectedColor = "#ffffff";
 
+    // ==================== EDITOR TOOLBAR ====================
+
     // ==================== AUTO-SAVE ====================
 
     private final ScheduledExecutorService autoSaveExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -179,13 +187,35 @@ public class MainControllerV2 {
         setupSearchListener();
         setupAutoSave();
         setupKeyboardShortcuts();
+        setupButtonAnimations();
 
         // Load notes
         loadAllNotes();
         displayNotesList();
 
+        // Set default active button
+        setActiveNavButton(btnAllNotes);
+
         // Show empty editor state
         showEmptyEditorState();
+
+        // Patch default toolbar buttons
+        Platform.runLater(() -> {
+            applyDefaultToolbarPatch();
+
+            // Setup font protection observer
+            if (htmlEditor != null) {
+                WebView webView = (WebView) htmlEditor.lookup(".web-view");
+                if (webView != null) {
+                    // Wait for WebView to load
+                    webView.getEngine().getLoadWorker().stateProperty().addListener((obs, old, state) -> {
+                        if (state == javafx.concurrent.Worker.State.SUCCEEDED) {
+                            RichTextStyleManager.setupFontProtection(webView);
+                        }
+                    });
+                }
+            }
+        });
 
         System.out.println("MainControllerV2: Initialization complete");
     }
@@ -407,9 +437,160 @@ public class MainControllerV2 {
                         new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN),
                         () -> handleCreateNote());
 
-                // Note: Ctrl+S đã bị xóa vì đã có auto-save tự động
+                // Ctrl+B = Bold (Safe)
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.B, KeyCombination.CONTROL_DOWN),
+                        () -> {
+                            RichTextStyleManager.toggleBold((WebView) htmlEditor.lookup(".web-view"));
+                        });
+
+                // Ctrl+I = Italic (Safe)
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN),
+                        () -> {
+                            RichTextStyleManager.toggleItalic((WebView) htmlEditor.lookup(".web-view"));
+                        });
+
+                // Ctrl+U = Underline (Safe)
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.U, KeyCombination.CONTROL_DOWN),
+                        () -> {
+                            RichTextStyleManager.toggleUnderline((WebView) htmlEditor.lookup(".web-view"));
+                        });
+
             }
         });
+    }
+
+    /**
+     * Setup animations for buttons
+     */
+    private void setupButtonAnimations() {
+        setupHoverAnimation(btnAllNotes);
+        setupHoverAnimation(btnFavorites);
+        setupHoverAnimation(btnTrash);
+        setupHoverAnimation(btnCreateNote);
+        setupHoverAnimation(btnAiAssistant); // Note: check variable name matching FXML
+    }
+
+    private void setupHoverAnimation(Button btn) {
+        if (btn == null)
+            return;
+
+        // Scale Transition
+        javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(
+                javafx.util.Duration.millis(200), btn);
+        scaleIn.setToX(1.05);
+        scaleIn.setToY(1.05);
+
+        javafx.animation.ScaleTransition scaleOut = new javafx.animation.ScaleTransition(
+                javafx.util.Duration.millis(200), btn);
+        scaleOut.setToX(1.0);
+        scaleOut.setToY(1.0);
+
+        btn.setOnMouseEntered(e -> {
+            scaleOut.stop();
+            scaleIn.playFromStart();
+        });
+
+        btn.setOnMouseExited(e -> {
+            scaleIn.stop();
+            scaleOut.playFromStart();
+        });
+    }
+
+    /**
+     * Patch default toolbar buttons to fix Bold/Italic bugs
+     */
+    private void applyDefaultToolbarPatch() {
+        if (htmlEditor == null)
+            return;
+
+        WebView webView = (WebView) htmlEditor.lookup(".web-view");
+        if (webView == null)
+            return;
+
+        // Capture buttons references for the bridge
+        ToggleButton boldBtn = null;
+        ToggleButton italicBtn = null;
+        ToggleButton underlineBtn = null;
+
+        // 1. Override Toggle Buttons (Bold, Italic, Underline)
+        Node boldNode = htmlEditor.lookup(".html-editor-bold");
+        if (boldNode instanceof ToggleButton) {
+            boldBtn = (ToggleButton) boldNode;
+            boldBtn.setOnAction(e -> RichTextStyleManager.toggleBold(webView));
+            boldBtn.setFocusTraversable(false);
+        }
+
+        Node italicNode = htmlEditor.lookup(".html-editor-italic");
+        if (italicNode instanceof ToggleButton) {
+            italicBtn = (ToggleButton) italicNode;
+            italicBtn.setOnAction(e -> RichTextStyleManager.toggleItalic(webView));
+            italicBtn.setFocusTraversable(false);
+        }
+
+        Node underlineNode = htmlEditor.lookup(".html-editor-underline");
+        if (underlineNode instanceof ToggleButton) {
+            underlineBtn = (ToggleButton) underlineNode;
+            underlineBtn.setOnAction(e -> RichTextStyleManager.toggleUnderline(webView));
+            underlineBtn.setFocusTraversable(false);
+        }
+
+        // 2. Override Font Family & Size ComboBoxes
+        for (Node node : htmlEditor.lookupAll(".combo-box")) {
+            if (node instanceof ComboBox) {
+                ComboBox<?> combo = (ComboBox<?>) node;
+                combo.setFocusTraversable(false);
+
+                // Identify Font Family Picker vs Size Picker
+                // Font picker usually has String items (Arial, etc.)
+                // This is a heuristic, but typically effective for default HTMLEditor
+                if (!combo.getItems().isEmpty() && combo.getItems().get(0) instanceof String) {
+
+                    @SuppressWarnings("unchecked")
+                    ComboBox<String> fontCombo = (ComboBox<String>) combo;
+
+                    // HIJACK: Override action (This replaces default HTMLEditor listener)
+                    fontCombo.setOnAction(e -> {
+                        String selectedFont = fontCombo.getValue();
+                        if (selectedFont != null) {
+                            // Use SAFE method to preserve bold/italic
+                            RichTextStyleManager.applyFontFamily(webView, selectedFont);
+
+                            // Important: Force focus back
+                            Platform.runLater(webView::requestFocus);
+                        }
+                    });
+                }
+            }
+        }
+
+        // 3. Setup JS Bridge to sync button states (Bold/Italic/Underline)
+        if (boldBtn != null || italicBtn != null || underlineBtn != null) {
+            final EditorBridge bridge = new EditorBridge(boldBtn, italicBtn, underlineBtn);
+
+            // Listen for load completion to inject JS
+            webView.getEngine().getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == Worker.State.SUCCEEDED) {
+                    try {
+                        JSObject window = (JSObject) webView.getEngine().executeScript("window");
+                        window.setMember("javaBridge", bridge);
+
+                        // Listen to selection changes in JS
+                        webView.getEngine().executeScript(
+                                "document.addEventListener('selectionchange', function() {" +
+                                        "    var b = document.queryCommandState('bold');" +
+                                        "    var i = document.queryCommandState('italic');" +
+                                        "    var u = document.queryCommandState('underline');" +
+                                        "    if (window.javaBridge) window.javaBridge.updateState(b, i, u);" +
+                                        "});");
+                    } catch (Exception e) {
+                        System.err.println("Error setting up JS Bridge: " + e.getMessage());
+                    }
+                }
+            });
+        }
     }
 
     // ==================== LOAD & DISPLAY ====================
@@ -649,8 +830,10 @@ public class MainControllerV2 {
             lblSaveStatus.setText("");
         if (lblStatus != null)
             lblStatus.setText("");
-        if (btnFavorite != null)
+        if (btnFavorite != null) {
             btnFavorite.setText("☆");
+            btnFavorite.getStyleClass().remove("favorite-active");
+        }
         if (btnDelete != null)
             btnDelete.setDisable(true);
     }
@@ -730,7 +913,7 @@ public class MainControllerV2 {
 
         // Display note content
         displayNoteInEditor(note);
-        
+
         // Update AI view if it's currently visible
         if (currentAIController != null) {
             currentAIController.setNote(note);
@@ -783,6 +966,13 @@ public class MainControllerV2 {
 
         if (btnFavorite != null) {
             btnFavorite.setText(note.isFavorite() ? "⭐" : "☆");
+            if (note.isFavorite()) {
+                if (!btnFavorite.getStyleClass().contains("favorite-active")) {
+                    btnFavorite.getStyleClass().add("favorite-active");
+                }
+            } else {
+                btnFavorite.getStyleClass().remove("favorite-active");
+            }
         }
 
         // Update color selection
@@ -802,19 +992,21 @@ public class MainControllerV2 {
         lblContentTitle.setText("Tất cả ghi chú");
         setActiveNavButton(btnAllNotes);
         displayNotesList();
-        
+
         // Show editor panel if AI view is showing
         showEditorPanel();
     }
 
     @FXML
     private void handleShowFavorites() {
+        System.out.println("=== handleShowFavorites called ===");
+        System.out.println("btnFavorites is null? " + (btnFavorites == null));
         currentFilter = "ALL";
         showFavoritesOnly = true;
         lblContentTitle.setText("Yêu thích");
         setActiveNavButton(btnFavorites);
         displayNotesList();
-        
+
         // Show editor panel if AI view is showing
         showEditorPanel();
     }
@@ -867,40 +1059,60 @@ public class MainControllerV2 {
         displayNotesList();
     }
 
+    // Default and active background styles
+    private static final String DEFAULT_BTN_STYLE = "-fx-background-color: #FFE0B2; -fx-text-fill: #3E2723; -fx-background-radius: 12; -fx-border-color: #FFB74D; -fx-border-width: 1; -fx-border-radius: 12;";
+    private static final String ACTIVE_BTN_STYLE = "-fx-background-color: #FFA000; -fx-text-fill: white; -fx-font-weight: bold; -fx-border-color: #F57C00; -fx-border-width: 0 0 0 4; -fx-background-radius: 0 12 12 0;";
+
     private void setActiveNavButton(Button activeBtn) {
-        // Remove active class from all
-        for (Button btn : new Button[] { btnAllNotes, btnFavorites, btnAIAssistant, btnTrash }) {
+        System.out.println("=== setActiveNavButton called ===");
+        System.out.println("Active button: " + (activeBtn != null ? activeBtn.getText() : "null"));
+
+        Button[] allButtons = new Button[] { btnAllNotes, btnFavorites, btnAIAssistant, btnTrash };
+
+        // Reset all buttons to default style logic
+        for (Button btn : allButtons) {
             if (btn != null) {
+                // Remove active class
                 btn.getStyleClass().remove("sidebar-btn-active");
+
+                // Ensure default class exists
+                if (!btn.getStyleClass().contains("sidebar-btn")) {
+                    btn.getStyleClass().add("sidebar-btn");
+                }
+
+                // Remove any inline styles that might interfere
+                btn.setStyle("");
             }
         }
-        // Add to active
-        if (activeBtn != null && !activeBtn.getStyleClass().contains("sidebar-btn-active")) {
-            activeBtn.getStyleClass().add("sidebar-btn-active");
+
+        // Apply active style to selected button
+        if (activeBtn != null) {
+            if (!activeBtn.getStyleClass().contains("sidebar-btn-active")) {
+                activeBtn.getStyleClass().add("sidebar-btn-active");
+            }
+            System.out.println("Applied active style to: " + activeBtn.getText());
         }
     }
-    
+
     /**
      * Show editor panel and hide AI view
      */
     private void showEditorPanel() {
         HBox parent = (HBox) editorPanel.getParent();
-        
+
         // Remove AI view if exists (only remove nodes with ai-view-panel class)
-        parent.getChildren().removeIf(node -> 
-            node instanceof VBox && node.getStyleClass().contains("ai-view-panel"));
-        
+        parent.getChildren().removeIf(node -> node instanceof VBox && node.getStyleClass().contains("ai-view-panel"));
+
         // Show editor panel
         editorPanel.setVisible(true);
         editorPanel.setManaged(true);
-        
+
         // Clear AI controller reference
         currentAIController = null;
-        
-        // Update navigation button state to All Notes (default)
-        updateSidebarButtonStates(btnAllNotes);
+        // NOTE: Do NOT reset active button state here - it should be controlled by
+        // handleShowAllNotes/handleShowFavorites
     }
-    
+
     /**
      * Update sidebar button states
      */
@@ -945,8 +1157,10 @@ public class MainControllerV2 {
             lblSaveStatus.setText("");
         if (lblStatus != null)
             lblStatus.setText("REGULAR");
-        if (btnFavorite != null)
+        if (btnFavorite != null) {
             btnFavorite.setText("☆");
+            btnFavorite.getStyleClass().remove("favorite-active");
+        }
         if (btnDelete != null)
             btnDelete.setDisable(true);
 
@@ -1046,7 +1260,15 @@ public class MainControllerV2 {
         boolean success = noteService.updateNote(selectedNote);
 
         if (success) {
-            btnFavorite.setText(newState ? "⭐" : "☆");
+            boolean isFav = newState;
+            btnFavorite.setText(isFav ? "⭐" : "☆");
+            if (isFav) {
+                if (!btnFavorite.getStyleClass().contains("favorite-active")) {
+                    btnFavorite.getStyleClass().add("favorite-active");
+                }
+            } else {
+                btnFavorite.getStyleClass().remove("favorite-active");
+            }
             loadAllNotes();
             displayNotesList();
         } else {
@@ -1149,42 +1371,42 @@ public class MainControllerV2 {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AIAssistantView.fxml"));
             VBox aiView = loader.load();
             AIAssistantViewController aiController = loader.getController();
-            
+
             // Store controller reference
             currentAIController = aiController;
-            
+
             // Set back callback
             aiController.setOnBack(() -> {
                 showEditorPanel();
                 currentAIController = null;
             });
-            
+
             // Pass current note to AI Assistant
             if (selectedNote != null) {
                 aiController.setNote(selectedNote);
             }
-            
+
             // Replace editor panel with AI view
             HBox parent = (HBox) editorPanel.getParent();
             int index = parent.getChildren().indexOf(editorPanel);
-            
+
             editorPanel.setVisible(false);
             editorPanel.setManaged(false);
-            
+
             aiView.setMinWidth(450);
             HBox.setHgrow(aiView, Priority.ALWAYS);
-            
+
             parent.getChildren().add(index + 1, aiView);
-            
+
             // Update button states
             updateSidebarButtonStates(btnAIAssistant);
-            
+
         } catch (IOException e) {
             e.printStackTrace();
             showErrorAlert("Lỗi khi mở AI Assistant: " + e.getMessage());
         }
     }
-    
+
     /**
      * Show error alert
      */
@@ -1195,7 +1417,7 @@ public class MainControllerV2 {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    
+
     // ==================== EVENT HANDLERS - SETTINGS ====================
 
     @FXML
@@ -1241,8 +1463,17 @@ public class MainControllerV2 {
                 Parent root = loader.load();
 
                 Stage stage = (Stage) btnLogout.getScene().getWindow();
+
+                // Reset window state
+                stage.setMaximized(false);
                 stage.setScene(new Scene(root));
                 stage.setTitle("SmartNotebook - Đăng nhập");
+
+                // Set fixed size cho login
+                stage.setWidth(1000);
+                stage.setHeight(650);
+                stage.setResizable(true);
+
                 stage.centerOnScreen();
             } catch (IOException e) {
                 showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể đăng xuất: " + e.getMessage());
@@ -1289,4 +1520,32 @@ public class MainControllerV2 {
             }
         }
     }
+
+    /**
+     * Bridge class to receive callbacks from JavaScript
+     * Must be public for JSObject to access
+     */
+    public static class EditorBridge {
+        private final ToggleButton boldBtn;
+        private final ToggleButton italicBtn;
+        private final ToggleButton underlineBtn;
+
+        public EditorBridge(ToggleButton bold, ToggleButton italic, ToggleButton underline) {
+            this.boldBtn = bold;
+            this.italicBtn = italic;
+            this.underlineBtn = underline;
+        }
+
+        public void updateState(boolean bold, boolean italic, boolean underline) {
+            Platform.runLater(() -> {
+                if (boldBtn != null)
+                    boldBtn.setSelected(bold);
+                if (italicBtn != null)
+                    italicBtn.setSelected(italic);
+                if (underlineBtn != null)
+                    underlineBtn.setSelected(underline);
+            });
+        }
+    }
+
 }

@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.SVGPath?>
 
 <HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dat.notebook.controller.TrashController" styleClass="main-root" stylesheets="@../css/soft-peach.css" minWidth="900" minHeight="550">
 
@@ -11,7 +12,7 @@
         <!-- Header -->
         <VBox styleClass="sidebar-header" spacing="5">
             <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="🗑️" style="-fx-font-size: 28px;"/>
+                <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" style="-fx-fill: white;" scaleX="1.5" scaleY="1.5"/>
                 <VBox>
                     <Label text="Thùng rác" styleClass="sidebar-logo"/>
                     <Label text="Deleted Notes" styleClass="sidebar-version"/>
@@ -25,7 +26,14 @@
         <VBox spacing="8">
             <Button fx:id="btnBack" text="← Quay lại" styleClass="sidebar-btn, sidebar-btn-active" onAction="#handleBack" maxWidth="Infinity"/>
 
-            <Button fx:id="btnEmptyTrash" text="🗑️ Xóa tất cả" styleClass="sidebar-btn" onAction="#handleEmptyTrash" maxWidth="Infinity"/>
+            <Button fx:id="btnEmptyTrash" styleClass="sidebar-btn" onAction="#handleEmptyTrash" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" style="-fx-fill: rgba(255,255,255,0.9);" scaleX="1.1" scaleY="1.1"/>
+                        <Label text="Xóa tất cả" style="-fx-text-fill: inherit;"/>
+                    </HBox>
+                </graphic>
+            </Button>
         </VBox>
 
         <!-- Spacer -->

@@ -10,31 +10,31 @@
     -fx-primary: #FFB86C;
     -fx-primary-dark: #FFA94D;
     -fx-secondary: #FFD8A8;
-    
+
     /* Background Colors - Sáng, ấm */
     -fx-bg-main: #FFFFFF;
     -fx-bg-light: #FFF6EC;
     -fx-bg-sidebar: linear-gradient(to bottom, #FFB86C, #FFA94D);
-    
+
     /* Text Colors - Nâu ấm */
     -fx-text-primary: #3A2A1A;
     -fx-text-secondary: #6B5A45;
     -fx-text-muted: #B5A89A;
-    
+
     /* Border & Input */
     -fx-border-color: #FFC98B;
     -fx-border-focus: #FF9F43;
-    
+
     /* Status Colors - Pastel */
     -fx-urgent: #FFB3A8;
     -fx-ideas: #D9C8FF;
     -fx-completed: #B8EAD5;
-    
+
     /* AI Assistant Colors */
     -fx-ai-summary: #E8F2FF;
     -fx-ai-title: #F1E9FF;
     -fx-ai-tags: #FFE6E0;
-    
+
     /* Semantic Colors */
     -fx-success: #B8EAD5;
     -fx-warning: #FFE4A8;
@@ -100,26 +100,26 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 159, 67, 0.25), 8, 0, 0, 2);
 }
 
-/* Button Đăng nhập chính */
+/* Button Đăng nhập chính - TONE NHẠT */
 .login-button {
-    -fx-background-color: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    -fx-background-color: linear-gradient(to bottom, #FFD8A8, #FFC98B);
     -fx-background-radius: 14px;
     -fx-text-fill: white;
     -fx-font-size: 16px;
     -fx-font-weight: 600;
     -fx-padding: 14px 32px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(255, 169, 77, 0.3), 8, 0, 0, 3);
+    -fx-effect: dropshadow(gaussian, rgba(255, 184, 108, 0.3), 8, 0, 0, 3);
     -fx-min-height: 48px;
 }
 
 .login-button:hover {
-    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
-    -fx-effect: dropshadow(gaussian, rgba(255, 169, 77, 0.4), 10, 0, 0, 4);
+    -fx-background-color: linear-gradient(to bottom, #FFE4C4, #FFD8A8);
+    -fx-effect: dropshadow(gaussian, rgba(255, 184, 108, 0.4), 10, 0, 0, 4);
 }
 
 .login-button:pressed {
-    -fx-background-color: linear-gradient(to bottom, #FFA94D, #FF9434);
+    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
     -fx-translate-y: 1px;
 }
 
@@ -363,7 +363,7 @@
 
 /* Buttons chung */
 .btn-primary {
-    -fx-background-color: linear-gradient(to bottom, #FFB86C, #FFA94D);
+    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
     -fx-text-fill: white;
     -fx-font-weight: 600;
     -fx-background-radius: 10px;
@@ -372,7 +372,7 @@
 }
 
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(to bottom, #FFC98B, #FFB86C);
+    -fx-background-color: linear-gradient(to bottom, #FFD8A8, #FFC98B);
 }
 
 .btn-outline {
@@ -416,15 +416,33 @@
 
 /* ==================== UTILITY CLASSES ==================== */
 
-.text-primary { -fx-text-fill: -fx-text-primary; }
-.text-secondary { -fx-text-fill: -fx-text-secondary; }
-.text-muted { -fx-text-fill: -fx-text-muted; }
+.text-primary {
+    -fx-text-fill: -fx-text-primary;
+}
 
-.bg-light { -fx-background-color: -fx-bg-light; }
-.bg-white { -fx-background-color: white; }
+.text-secondary {
+    -fx-text-fill: -fx-text-secondary;
+}
 
-.rounded-lg { -fx-background-radius: 12px; }
-.rounded-xl { -fx-background-radius: 16px; }
+.text-muted {
+    -fx-text-fill: -fx-text-muted;
+}
+
+.bg-light {
+    -fx-background-color: -fx-bg-light;
+}
+
+.bg-white {
+    -fx-background-color: white;
+}
+
+.rounded-lg {
+    -fx-background-radius: 12px;
+}
+
+.rounded-xl {
+    -fx-background-radius: 16px;
+}
 
 .shadow-sm {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.06), 4, 0, 0, 2);
