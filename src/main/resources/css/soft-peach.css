@@ -500,14 +500,17 @@
 
 /* Sidebar Buttons - Soft Style */
 .sidebar-btn {
-    -fx-background-color: rgba(255, 160, 0, 0.15);
-    /* Light orange pill */
+    -fx-background-color: #FFE0B2;
+    /* Light orange/peach */
     -fx-text-fill: #3E2723;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     /* Bold */
     -fx-padding: 14 20 14 20;
     -fx-background-radius: 12px;
+    -fx-border-color: #FFB74D;
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
     -fx-cursor: hand;
     -fx-alignment: CENTER-LEFT;
     -fx-graphic-text-gap: 12;
@@ -520,19 +523,37 @@
     /* Almost black */
 }
 
-.sidebar-btn-active {
-    -fx-background-color: #FFA000;
+.sidebar-btn:selected {
+    -fx-background-color: linear-gradient(to right, #FFA000, #FFB300);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-border-color: #F57C00;
-    -fx-border-width: 0 0 0 4;
-    -fx-border-radius: 0;
-    -fx-background-radius: 0 12 12 0;
-    -fx-effect: dropshadow(gaussian, rgba(245, 124, 0, 0.3), 8, 0, 0, 2);
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(245, 124, 0, 0.35), 10, 0, 0, 3);
+}
+
+.sidebar-btn:selected:hover {
+    -fx-background-color: linear-gradient(to right, #FFB300, #FFC107);
+    -fx-text-fill: white;
+}
+
+/* Active state class - set by Java controller */
+.sidebar-btn-active {
+    -fx-background-color: linear-gradient(to right, #FFA000, #FFB300);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: #F57C00;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(245, 124, 0, 0.35), 10, 0, 0, 3);
 }
 
 .sidebar-btn-active:hover {
-    -fx-background-color: white;
+    -fx-background-color: linear-gradient(to right, #FFB300, #FFC107);
+    -fx-text-fill: white;
 }
 
 .sidebar-section-title {
@@ -711,6 +732,43 @@
     -fx-text-fill: #FFA000;
 }
 
+.favorite-active {
+    -fx-background-color: #FFA000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(255, 160, 0, 0.4), 8, 0, 0, 2);
+    -fx-border-color: #F57C00;
+    -fx-background-radius: 8px;
+    -fx-border-radius: 8px;
+}
+
+.favorite-active:hover {
+    -fx-background-color: #FFB300;
+    -fx-text-fill: white;
+}
+
+.trash-icon-svg {
+    -fx-fill: #7A6B5A;
+    /* Match sidebar text color */
+}
+
+.trash-icon-danger {
+    -fx-fill: #E53E3E;
+    /* Red color */
+}
+
+.sidebar-btn:hover .trash-icon-svg {
+    -fx-fill: #210C07;
+}
+
+.sidebar-btn-active .trash-icon-svg {
+    -fx-fill: white;
+}
+
+.toolbar-btn-danger:hover .trash-icon-danger {
+    -fx-fill: #C53030;
+}
+
 /* ============================================
    SEARCH & FAVORITES
    ============================================ */
@@ -808,12 +866,12 @@
 }
 
 .scroll-bar .thumb {
-    -fx-background-color: #FFA000;
-    -fx-background-radius: 10px;
+    -fx-background-color: #DFCEBB;
+    -fx-background-radius: 6px;
 }
 
 .scroll-bar .thumb:hover {
-    -fx-background-color: #D4C9BD;
+    -fx-background-color: #D4956B;
 }
 
 .scroll-bar .increment-button,
@@ -838,19 +896,20 @@
 
 .empty-state-icon {
     -fx-font-size: 80px;
-    -fx-text-fill: #E0D6CC;
+    -fx-text-fill: #C4A98C;
+    -fx-opacity: 0.9;
 }
 
 .empty-state-title {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-text-fill: #A89F91;
+    -fx-text-fill: #5D4E37;
     -fx-padding: 20 0 10 0;
 }
 
 .empty-state-description {
     -fx-font-size: 15px;
-    -fx-text-fill: #BFAE9F;
+    -fx-text-fill: #7A6B5A;
     -fx-text-alignment: center;
 }
 
@@ -1189,4 +1248,83 @@
     -fx-font-size: 11px;
     -fx-text-fill: #A89F91;
     -fx-padding: 3 0 0 0;
+}
+
+/* ============================================
+   FIND & REPLACE DIALOG
+   ============================================ */
+.dialog-root {
+    -fx-background-color: #FFF9F0;
+}
+
+.dialog-title {
+    -fx-text-fill: #3E2723;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.btn-primary {
+    -fx-background-color: #FFA000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #FFB300;
+}
+
+.btn-warning {
+    -fx-background-color: #FF6F00;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.btn-warning:hover {
+    -fx-background-color: #F57C00;
+}
+
+.btn-secondary {
+    -fx-background-color: #DFCEBB;
+    -fx-text-fill: #3E2723;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #CDB9A4;
+}
+
+/* Font Selector Styles */
+.font-selector,
+.font-size-selector {
+    -fx-background-color: white;
+    -fx-border-color: #DFCEBB;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-size: 13px;
+}
+
+.font-selector:focused,
+.font-size-selector:focused {
+    -fx-border-color: #FFA000;
+    -fx-border-width: 2px;
+}
+
+.font-selector .list-cell,
+.font-size-selector .list-cell {
+    -fx-padding: 8px;
+    -fx-background-color: transparent;
+}
+
+.font-selector .list-cell:hover,
+.font-size-selector .list-cell:hover {
+    -fx-background-color: #FFF3E0;
 }

@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.HTMLEditor?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.SVGPath?>
 
 <HBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dat.notebook.controller.MainControllerV2" styleClass="main-root" stylesheets="@../css/soft-peach.css" minWidth="900" minHeight="550">
 
@@ -22,7 +23,7 @@
 
         <!-- Search -->
         <HBox styleClass="input-container" alignment="CENTER_LEFT" spacing="10">
-            <Label text="🔍" styleClass="search-icon"/>
+            <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" style="-fx-fill: #9ca3af;" scaleX="1.1" scaleY="1.1"/>
             <TextField fx:id="txtSearch" promptText="Tìm kiếm..." styleClass="search-field" HBox.hgrow="ALWAYS"/>
         </HBox>
 
@@ -30,11 +31,27 @@
         <Label text="KHÔNG GIAN LÀM VIỆC" styleClass="sidebar-section-title"/>
 
         <VBox spacing="8">
-            <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" styleClass="sidebar-btn, sidebar-btn-active" onAction="#handleShowAllNotes" maxWidth="Infinity"/>
+            <Button fx:id="btnAllNotes" text="📋  Tất cả ghi chú" styleClass="sidebar-btn" onAction="#handleShowAllNotes" maxWidth="Infinity"/>
 
-            <Button fx:id="btnFavorites" text="⭐  Yêu thích" styleClass="sidebar-btn" onAction="#handleShowFavorites" maxWidth="Infinity"/>
+            <Button fx:id="btnFavorites" styleClass="sidebar-btn" onAction="#handleShowFavorites" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <SVGPath content="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" style="-fx-fill: #FFD700;" scaleX="1.3" scaleY="1.3"/>
+                        <Label text="Yêu thích" style="-fx-text-fill: inherit;"/>
+                    </HBox>
+                </graphic>
+            </Button>
 
-            <Button fx:id="btnTrash" text="🗑  Thùng rác" styleClass="sidebar-btn" onAction="#handleShowTrash" maxWidth="Infinity"/>
+            <Button fx:id="btnTrash" text="   Thùng rác" styleClass="sidebar-btn" onAction="#handleShowTrash" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <!-- Trash Icon -->
+                        <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" styleClass="trash-icon-svg" scaleX="1.1" scaleY="1.1"/>
+                        <!-- Note Icon (Simulating the user's image) -->
+                        <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" styleClass="trash-icon-svg" scaleX="0.9" scaleY="0.9"/>
+                    </HBox>
+                </graphic>
+            </Button>
         </VBox>
 
         <!-- Filter by Status -->
@@ -52,7 +69,14 @@
 
         <!-- Bottom Section -->
         <VBox spacing="8">
-            <Button fx:id="btnSettings" text="⚙  Cài đặt" styleClass="sidebar-btn" onAction="#handleShowSettings" maxWidth="Infinity"/>
+            <Button fx:id="btnSettings" styleClass="sidebar-btn" onAction="#handleShowSettings" maxWidth="Infinity">
+                <graphic>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <SVGPath content="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" style="-fx-fill: #6b7280;" scaleX="1.1" scaleY="1.1"/>
+                        <Label text="Cài đặt" style="-fx-text-fill: inherit;"/>
+                    </HBox>
+                </graphic>
+            </Button>
 
             <Button fx:id="btnLogout" text="🚪  Đăng xuất" styleClass="sidebar-btn" onAction="#handleLogout" maxWidth="Infinity"/>
 
@@ -73,6 +97,9 @@
         <VBox spacing="4" style="-fx-padding: 0 0 15 0;">
             <Label fx:id="lblContentTitle" text="Ghi chú" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2d3748;"/>
             <Label fx:id="lblNotesCount" text="0 ghi chú" style="-fx-font-size: 13px; -fx-text-fill: #64748b;"/>
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <ComboBox fx:id="cmbSort" promptText="Sắp xếp" style="-fx-font-size: 12px;"/>
+            </HBox>
         </VBox>
 
         <!-- Create Note Button -->
@@ -105,9 +132,19 @@
                 <Button fx:id="btnAiAssistant" text="🤖" styleClass="toolbar-btn-lg" onAction="#handleShowAIAssistant">
                     <tooltip><Tooltip text="AI Assistant: Tóm tắt, Tiêu đề, Tag"/></tooltip>
                 </Button>
-                <Button fx:id="btnFavorite" text="☆" styleClass="toolbar-btn-lg" onAction="#handleToggleFavorite" style="-fx-font-size: 18px;"/>
+
+                <Button fx:id="btnFavorite" text="☆" styleClass="toolbar-btn-favorite" onAction="#handleToggleFavorite" style="-fx-font-size: 18px;"/>
                 <Button fx:id="btnChangeStatus" text="📊" styleClass="toolbar-btn-lg" onAction="#handleChangeStatus"/>
-                <Button fx:id="btnDelete" text="❌" styleClass="toolbar-btn-lg, toolbar-btn-danger" onAction="#handleDeleteNote"/>
+                <Button fx:id="btnDelete" text="   " styleClass="toolbar-btn-lg, toolbar-btn-danger" onAction="#handleDeleteNote">
+                   <graphic>
+                        <HBox spacing="3" alignment="CENTER">
+                            <!-- Trash Icon -->
+                            <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" styleClass="trash-icon-danger" scaleX="0.9" scaleY="0.9"/>
+                            <!-- Note Icon -->
+                            <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" styleClass="trash-icon-danger" scaleX="0.75" scaleY="0.75"/>
+                        </HBox>
+                   </graphic>
+                </Button>
             </HBox>
         </HBox>
 
@@ -127,6 +164,8 @@
                 <!-- Color buttons will be added dynamically -->
             </HBox>
         </HBox>
+
+
 
         <!-- ==================== HTML EDITOR ==================== -->
         <!-- Đây là phần quan trọng: HTMLEditor thay cho TextArea -->
