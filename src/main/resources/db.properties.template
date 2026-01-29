@@ -1,0 +1,23 @@
+# SQL Server Connection Configuration - TEMPLATE
+# ⚠️ CHỈ CHO MÔI TRƯỜNG HỌC TẬP - KHÔNG SỬ DỤNG TRONG PRODUCTION
+
+# 📝 HƯỚNG DẪN SỬ DỤNG:
+# 1. Copy file này thành "db.properties" (xóa .template)
+# 2. Sửa username và password thành thông tin SQL Server của bạn
+# 3. File db.properties sẽ KHÔNG được push lên git (đã có trong .gitignore)
+
+db.server=localhost
+db.port=1433
+db.database=SmartNotebook
+
+# ⚠️ SỬA THÔNG TIN ĐĂNG NHẬP Ở ĐÂY
+db.username=YOUR_SQL_USERNAME
+db.password=YOUR_SQL_PASSWORD
+
+# TLS/SSL Configuration
+# encrypt=true: BẮT BUỘC bật encryption cho SQL Server
+# trustServerCertificate=true: Tin tưởng self-signed certificate của SQL Server
+# sslProtocol=TLSv1: ÉP sử dụng TLS 1.0 (khớp với SQL Server cũ)
+db.encrypt=true
+db.trustServerCertificate=true
+db.sslProtocol=TLSv1

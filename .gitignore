@@ -76,3 +76,7 @@ logs/
 
 ## Custom (KHÔNG ignore config.properties để chia sẻ được)
 # config.properties  <- Commented out để có thể share
+
+## Database credentials - BẢO MẬT
+# KHÔNG push file chứa password thật lên GitHub!
+src/main/resources/db.properties
