@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
  */
 public class MainControllerV2 {
 
-
+    // ==================== FXML COMPONENTS ====================
 
     // Sidebar
     @FXML
@@ -126,12 +126,12 @@ public class MainControllerV2 {
     @FXML
     private Button btnAiAssistant; // Nút robot để mở AI Assistant
 
-
+    // ==================== SERVICES (MVC) ====================
 
     private final NoteServiceV2 noteService = new NoteServiceV2();
     private final AuthService authService = AuthService.getInstance();
 
-
+    // ==================== STATE ====================
 
     private User currentUser;
     private ObservableList<Note> allNotes = FXCollections.observableArrayList();
@@ -143,9 +143,9 @@ public class MainControllerV2 {
     private String currentSort = "NEWEST";
     private String selectedColor = "#ffffff";
 
+    // ==================== EDITOR TOOLBAR ====================
 
-
-
+    // ==================== AUTO-SAVE ====================
 
     private final ScheduledExecutorService autoSaveExecutor = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> autoSaveTask = null;
@@ -153,17 +153,17 @@ public class MainControllerV2 {
     private boolean hasUnsavedChanges = false;
     private String lastSavedContent = "";
 
-
+    // ==================== FORMATTERS ====================
 
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-
+    // ==================== COLORS ====================
 
     private static final String[] NOTE_COLORS = {
             "#ffffff", "#fef3c7", "#fed7e2", "#c3b1e1", "#bae6fd", "#d9f99d"
     };
 
-
+    // ==================== INITIALIZATION ====================
 
     @FXML
     public void initialize() {
@@ -220,7 +220,7 @@ public class MainControllerV2 {
         System.out.println("MainControllerV2: Initialization complete");
     }
 
-
+    // ==================== SETUP METHODS ====================
 
     /**
      * Setup sort combo box
@@ -593,7 +593,7 @@ public class MainControllerV2 {
         }
     }
 
-
+    // ==================== LOAD & DISPLAY ====================
 
     /**
      * Load all notes from service
@@ -847,7 +847,7 @@ public class MainControllerV2 {
         }
     }
 
-
+    // ==================== FILTERS ====================
 
     private boolean matchesSearchFilter(Note note) {
         if (txtSearch == null)
@@ -889,7 +889,7 @@ public class MainControllerV2 {
         }
     }
 
-
+    // ==================== NOTE SELECTION ====================
 
     /**
      * Select a note to edit
@@ -983,7 +983,7 @@ public class MainControllerV2 {
         hasUnsavedChanges = false;
     }
 
-
+    // ==================== EVENT HANDLERS - SIDEBAR ====================
 
     @FXML
     private void handleShowAllNotes() {
@@ -1120,7 +1120,7 @@ public class MainControllerV2 {
         setActiveNavButton(activeBtn);
     }
 
-
+    // ==================== EVENT HANDLERS - NOTES ====================
 
     /**
      * Create new note
@@ -1362,7 +1362,7 @@ public class MainControllerV2 {
         }
     }
 
-
+    // ==================== EVENT HANDLERS - AI ASSISTANT ====================
 
     @FXML
     private void handleShowAIAssistant() {
@@ -1418,7 +1418,7 @@ public class MainControllerV2 {
         alert.showAndWait();
     }
 
-
+    // ==================== EVENT HANDLERS - SETTINGS ====================
 
     @FXML
     private void handleShowSettings() {
@@ -1481,7 +1481,7 @@ public class MainControllerV2 {
         }
     }
 
-
+    // ==================== AI ASSISTANT ====================
 
     /**
      * Mở cửa sổ AI Assistant
@@ -1489,7 +1489,7 @@ public class MainControllerV2 {
     @FXML
     private Button btnLogout;
 
-
+    // ==================== UTILITY ====================
 
     private void showAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);

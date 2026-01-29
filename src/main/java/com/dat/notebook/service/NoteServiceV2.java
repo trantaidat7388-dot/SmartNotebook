@@ -24,14 +24,14 @@ import java.util.Optional;
  */
 public class NoteServiceV2 {
 
-
+    // ==================== DEPENDENCIES ====================
 
     private final NoteDAO noteDAO;
     private final AuthService authService;
     private final SummaryService summaryService;
     private final TitleSuggestionService titleSuggestionService;
 
-
+    // ==================== CONSTRUCTOR ====================
 
     public NoteServiceV2() {
         this.noteDAO = new NoteDAO();
@@ -47,7 +47,7 @@ public class NoteServiceV2 {
         this.titleSuggestionService = TitleSuggestionService.getInstance();
     }
 
-
+    // ==================== CREATE ====================
 
     /**
      * Tạo ghi chú mới với các tính năng Smart
@@ -70,7 +70,7 @@ public class NoteServiceV2 {
         note.setHtmlContent(htmlContent);
         note.setStatus(Note.STATUS_REGULAR);
 
-
+        // ===== SMART FEATURE: Auto-suggest title =====
         if (title == null || title.trim().isEmpty()) {
             // Extract text từ HTML nếu có
             String textContent = htmlContent != null ? SmartTextUtil.stripHtml(htmlContent) : content;
@@ -78,7 +78,7 @@ public class NoteServiceV2 {
         }
         note.setTitle(title);
 
-
+        // ===== SMART FEATURE: Auto-generate summary =====
         String textContent = htmlContent != null ? SmartTextUtil.stripHtml(htmlContent) : content;
         note.setSummary(summaryService.summarize(textContent));
 
@@ -149,7 +149,7 @@ public class NoteServiceV2 {
         return createNote(null, content, null);
     }
 
-
+    // ==================== READ ====================
 
     /**
      * Lấy ghi chú theo ID (kiểm tra ownership)
@@ -266,7 +266,7 @@ public class NoteServiceV2 {
         return noteDAO.search(userId, keyword.trim());
     }
 
-
+    // ==================== UPDATE ====================
 
     /**
      * Cập nhật ghi chú
@@ -357,7 +357,7 @@ public class NoteServiceV2 {
         return updateStatus(noteId, Note.STATUS_COMPLETED);
     }
 
-
+    // ==================== DELETE ====================
 
     /**
      * Xóa ghi chú (soft delete - vào thùng rác)
@@ -404,7 +404,7 @@ public class NoteServiceV2 {
         return noteDAO.deletePermanently(noteId, userId);
     }
 
-
+    // ==================== UTILITY ====================
 
     /**
      * Đếm số ghi chú của user hiện tại

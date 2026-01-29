@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class LoginController {
 
-
+    // ==================== FXML COMPONENTS - LOGIN ====================
 
     @FXML
     private VBox loginFormPanel;
@@ -42,7 +42,7 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-
+    // ==================== FXML COMPONENTS - REGISTER ====================
 
     @FXML
     private javafx.scene.control.ScrollPane registerScrollPane;
@@ -65,11 +65,11 @@ public class LoginController {
     @FXML
     private Label registerSuccessLabel;
 
-
+    // ==================== SERVICES ====================
 
     private final AuthService authService = AuthService.getInstance();
 
-
+    // ==================== INITIALIZATION ====================
 
     @FXML
     public void initialize() {
@@ -93,7 +93,7 @@ public class LoginController {
         }
     }
 
-
+    // ==================== EVENT HANDLERS ====================
 
     /**
      * Xử lý đăng nhập
@@ -261,7 +261,7 @@ public class LoginController {
         }
     }
 
-
+    // ==================== UI HELPERS - REGISTER ====================
 
     private void showRegisterError(String message) {
         registerErrorLabel.setText(message);
@@ -367,7 +367,7 @@ public class LoginController {
                 "Hoặc sử dụng chế độ Demo để trải nghiệm ứng dụng.");
     }
 
-
+    // ==================== NAVIGATION ====================
 
     /**
      * Chuyển đến màn hình chính
@@ -404,7 +404,7 @@ public class LoginController {
         }
     }
 
-
+    // ==================== UTILITY METHODS ====================
 
     /**
      * Hiển thị thông báo lỗi

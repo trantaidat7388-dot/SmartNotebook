@@ -180,7 +180,7 @@ public class TrashController {
         lblArchivedCount.setText(count + " ghi chú đã xóa");
     }
 
-
+    // ===== EVENT HANDLERS =====
 
     @FXML
     private void handleBack() {
@@ -313,7 +313,7 @@ public class TrashController {
         }
     }
 
-
+    // ===== UTILITY METHODS =====
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

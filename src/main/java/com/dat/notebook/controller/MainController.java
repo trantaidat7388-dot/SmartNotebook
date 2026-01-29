@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 public class MainController {
 
-
+    // ===== LEFT SIDEBAR CONTROLS =====
     @FXML
     private TextField txtSearch;
     @FXML
@@ -53,7 +53,7 @@ public class MainController {
     @FXML
     private Button btnClientSyncs;
 
-
+    // ===== MIDDLE PANEL CONTROLS =====
     @FXML
     private Button btnFilterAll;
     @FXML
@@ -75,7 +75,7 @@ public class MainController {
     @FXML
     private Label noteCountLabel;
 
-
+    // ===== RIGHT PANEL CONTROLS =====
     @FXML
     private Label lblNoteTitle;
     @FXML
@@ -95,7 +95,7 @@ public class MainController {
     @FXML
     private VBox editorPanel;
 
-
+    // ===== DATA =====
     private NoteService noteService = new NoteService();
     private AuthService authService = AuthService.getInstance();
     private User currentUser;
@@ -105,7 +105,7 @@ public class MainController {
     private boolean showFavoritesOnly = false;
     private String currentSort = "NEWEST"; // NEWEST, OLDEST
 
-
+    // ===== CREATE MODE CONTROLS =====
     private boolean isCreateMode = false;
     private TextField txtNewTitle;
     private CheckBox chkNewFavorite;
@@ -145,14 +145,14 @@ public class MainController {
         }
     }
 
-
+    // ===== SETUP =====
 
     /**
      * Thiết lập các event handlers cho UI controls
      * Bao gồm: search listener, auto-save với debounce, sort listener
      */
     private void setupEventHandlers() {
-
+        // ===== Search functionality =====
         // Tìm kiếm realtime khi user nhập vào search field
         if (txtSearch != null) {
             txtSearch.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -160,7 +160,7 @@ public class MainController {
             });
         }
 
-
+        // ===== Auto-save với debounce =====
         // Chỉ save sau khi user ngừng gõ 1 giây để tránh save liên tục
         if (txtContent != null) {
             txtContent.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -181,7 +181,7 @@ public class MainController {
             });
         }
 
-
+        // ===== Sort ComboBox =====
         // Thiết lập sort options và listener
         if (sortComboBox != null) {
             sortComboBox.setItems(FXCollections.observableArrayList("Mới nhất", "Cũ nhất"));
@@ -219,7 +219,7 @@ public class MainController {
             List<Note> notes = noteService.getNotesByUser(currentUser.getId());
             System.out.println("loadAllNotes: Found " + notes.size() + " notes from database");
 
-
+            // ===== DEMO ONLY: Create sample notes =====
             // TODO: Remove this in production - users should create their own notes
             if (notes.isEmpty()) {
                 System.out.println("loadAllNotes: No notes found, creating sample notes...");
@@ -300,7 +300,7 @@ public class MainController {
         noteService.createNote(note4);
     }
 
-
+    // ===== NOTES LIST DISPLAY =====
 
     /**
      * Lọc và hiển thị danh sách ghi chú
@@ -587,7 +587,7 @@ public class MainController {
         return DATE_FORMAT.format(dateTime);
     }
 
-
+    // ===== NOTE SELECTION & DISPLAY =====
 
     private void selectNote(Note note) {
         selectedNote = note;
@@ -710,7 +710,7 @@ public class MainController {
         }
     }
 
-
+    // ===== FAVORITE HANDLING =====
 
     /**
      * Toggle trạng thái yêu thích (favorite/pin) của note
@@ -764,7 +764,7 @@ public class MainController {
         }
     }
 
-
+    // ===== EVENT HANDLERS - LEFT SIDEBAR =====
 
     @FXML
     private void handleShowAllNotes() {
@@ -833,7 +833,7 @@ public class MainController {
         }
     }
 
-
+    // ===== EVENT HANDLERS - FILTER BUTTONS =====
 
     @FXML
     private void handleFilterAll() {
@@ -884,7 +884,7 @@ public class MainController {
         }
     }
 
-
+    // ===== EVENT HANDLERS - NEW NOTE =====
 
     @FXML
     private void handleAddNewNote() {
@@ -989,7 +989,7 @@ public class MainController {
         });
     }
 
-
+    // ===== DELETE NOTE =====
 
     @FXML
     private void handleDeleteNote() {
@@ -1032,7 +1032,7 @@ public class MainController {
         }
     }
 
-
+    // ===== EDIT TITLE =====
 
     @FXML
     private void handleEditTitle() {
@@ -1070,7 +1070,7 @@ public class MainController {
         });
     }
 
-
+    // ===== CHANGE STATUS =====
 
     @FXML
     private void handleChangeStatus() {
@@ -1105,7 +1105,7 @@ public class MainController {
         });
     }
 
-
+    // ===== EVENT HANDLERS - EDITOR TOOLBAR =====
 
     @FXML
     private void handleBold() {
@@ -1179,7 +1179,7 @@ public class MainController {
         }
     }
 
-
+    // ===== EVENT HANDLERS - AI ASSISTANT =====
 
     /**
      * Mở AI Assistant Dialog - THIẾT KẾ MỚI
@@ -1225,7 +1225,7 @@ public class MainController {
         }
     }
 
-
+    // ===== SETTINGS =====
 
     @FXML
     private void handleOpenSettings() {
@@ -1302,7 +1302,7 @@ public class MainController {
         }
     }
 
-
+    // ===== UTILITY =====
 
     private void insertFormattedText(String prefix, String suffix) {
         if (txtContent == null)
@@ -1409,9 +1409,9 @@ public class MainController {
         }
     }
 
+    // ===== CLEANUP =====
 
-
-
+    // ===== FORMAT HANDLERS =====
 
     /**
      * Format text as bold (wrap với **text**)
@@ -1493,7 +1493,7 @@ public class MainController {
         txtContent.positionCaret(caretPos + text.length());
     }
 
-
+    // ==================== CREATE MODE (TAB-BASED EDITOR) ====================
 
     /**
      * Switches the right panel to CREATE MODE for creating a new note.
@@ -1799,9 +1799,9 @@ public class MainController {
         tt.play();
     }
 
+    // ==================== END CREATE MODE ====================
 
-
-
+    // ===== CLEANUP =====
 
     /**
      * Cleanup method được gọi khi controller bị destroy

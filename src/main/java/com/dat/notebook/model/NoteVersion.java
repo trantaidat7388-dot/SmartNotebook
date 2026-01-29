@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class NoteVersion {
     
-
+    // ==================== FIELDS ====================
     
     private int versionId;              // Primary Key
     private int noteId;                 // Foreign Key - Note
@@ -27,7 +27,7 @@ public class NoteVersion {
     // Optional - thông tin người tạo
     private String createdByUsername;
     
-
+    // ==================== CONSTRUCTORS ====================
     
     /**
      * Constructor mặc định
@@ -59,7 +59,7 @@ public class NoteVersion {
         this.plainTextContent = stripHtmlTags(htmlContent);
     }
     
-
+    // ==================== UTILITY METHODS ====================
     
     /**
      * Loại bỏ HTML tags để tạo plain text
@@ -106,7 +106,7 @@ public class NoteVersion {
         return changeDescription != null && !changeDescription.trim().isEmpty();
     }
     
-
+    // ==================== GETTERS & SETTERS ====================
     
     public int getVersionId() {
         return versionId;
@@ -190,7 +190,7 @@ public class NoteVersion {
         this.createdByUsername = createdByUsername;
     }
     
-
+    // ==================== EQUALS & HASHCODE ====================
     
     @Override
     public boolean equals(Object o) {
@@ -205,7 +205,7 @@ public class NoteVersion {
         return Objects.hash(versionId);
     }
     
-
+    // ==================== TO STRING ====================
     
     @Override
     public String toString() {

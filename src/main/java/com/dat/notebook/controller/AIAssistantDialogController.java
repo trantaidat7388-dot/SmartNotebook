@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AIAssistantDialogController {
 
-
+    // ===== UI Components =====
     @FXML
     private VBox resultContainer;
     @FXML
@@ -59,7 +59,7 @@ public class AIAssistantDialogController {
     @FXML
     private Button btnCopyTags;
 
-
+    // ===== State =====
     private Note currentNote;
     private AIService aiService;
     
@@ -86,7 +86,7 @@ public class AIAssistantDialogController {
         this.currentNote = note;
     }
     
-
+    // ===== CHỨC NĂNG 1: TÓM TẮT =====
     
     @FXML
     private void handleSummarize() {
@@ -118,7 +118,7 @@ public class AIAssistantDialogController {
         }
     }
     
-
+    // ===== CHỨC NĂNG 2: GỢI Ý TIÊU ĐỀ =====
     
     @FXML
     private void handleSuggestTitle() {
@@ -150,7 +150,7 @@ public class AIAssistantDialogController {
         }
     }
     
-
+    // ===== CHỨC NĂNG 3: GỢI Ý TAG =====
     
     @FXML
     private void handleSuggestTags() {
@@ -184,7 +184,7 @@ public class AIAssistantDialogController {
         }
     }
     
-
+    // ===== PHÂN TÍCH TOÀN DIỆN =====
     
     /**
      * Phân tích tất cả cùng lúc
@@ -223,7 +223,7 @@ public class AIAssistantDialogController {
         });
     }
     
-
+    // ===== HELPER METHODS =====
     
     private void showLoading(boolean show) {
         loadingIndicator.setVisible(show);
@@ -268,7 +268,7 @@ public class AIAssistantDialogController {
         stage.close();
     }
     
-
+    // ===== GETTERS (cho MainController) =====
     
     public String getResultSummary() { return resultSummary; }
     public String getResultTitle() { return resultTitle; }

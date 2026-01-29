@@ -24,7 +24,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AIAssistantViewController {
 
-
+    // ===== UI Components =====
     @FXML
     private VBox resultContainer;
     @FXML
@@ -52,7 +52,7 @@ public class AIAssistantViewController {
     @FXML
     private Button btnCopyTags;
 
-
+    // ===== State =====
     private Note currentNote;
     private AIService aiService;
     private Runnable onBackCallback;
@@ -112,7 +112,7 @@ public class AIAssistantViewController {
         tagsLabel.clear();
     }
     
-
+    // ===== CHỨC NĂNG 1: TÓM TẮT =====
     
     @FXML
     private void handleSummarize() {
@@ -144,7 +144,7 @@ public class AIAssistantViewController {
         });
     }
     
-
+    // ===== CHỨC NĂNG 2: GỢI Ý TIÊU ĐỀ =====
     
     @FXML
     private void handleSuggestTitle() {
@@ -176,7 +176,7 @@ public class AIAssistantViewController {
         });
     }
     
-
+    // ===== CHỨC NĂNG 3: GỢI Ý TAGS =====
     
     @FXML
     private void handleSuggestTags() {
@@ -210,7 +210,7 @@ public class AIAssistantViewController {
         });
     }
     
-
+    // ===== CHỨC NĂNG 4: PHÂN TÍCH TẤT CẢ =====
     
     @FXML
     private void handleAnalyzeAll() {
@@ -259,7 +259,7 @@ public class AIAssistantViewController {
         });
     }
     
-
+    // ===== COPY RESULTS =====
     
     @FXML
     private void handleCopySummary() {
@@ -286,7 +286,7 @@ public class AIAssistantViewController {
         }
     }
     
-
+    // ===== HELPER METHODS =====
     
     private void copyToClipboard(String text) {
         Clipboard clipboard = Clipboard.getSystemClipboard();

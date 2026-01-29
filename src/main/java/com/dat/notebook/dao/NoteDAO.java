@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 public class NoteDAO {
     
-
+    // ==================== SQL QUERIES ====================
     // Tất cả query đều có UserID filter
     
     private static final String SQL_INSERT = 
@@ -94,7 +94,7 @@ public class NoteDAO {
     private static final String SQL_COUNT_BY_USER = 
         "SELECT COUNT(*) FROM Notes WHERE UserID = ? AND IsArchived = 0";
     
-
+    // ==================== CREATE ====================
     
     /**
      * Tạo ghi chú mới
@@ -150,7 +150,7 @@ public class NoteDAO {
         return false;
     }
     
-
+    // ==================== READ ====================
     
     /**
      * Lấy ghi chú theo ID (BẮT BUỘC kiểm tra userId)
@@ -311,7 +311,7 @@ public class NoteDAO {
         return notes;
     }
     
-
+    // ==================== UPDATE ====================
     
     /**
      * Cập nhật ghi chú
@@ -444,7 +444,7 @@ public class NoteDAO {
         return false;
     }
     
-
+    // ==================== DELETE ====================
     
     /**
      * Soft delete - chuyển vào thùng rác
@@ -521,7 +521,7 @@ public class NoteDAO {
         return false;
     }
     
-
+    // ==================== UTILITY ====================
     
     /**
      * Đếm số ghi chú của user

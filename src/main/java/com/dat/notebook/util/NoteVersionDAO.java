@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class NoteVersionDAO {
     
-
+    // ==================== CREATE ====================
     
     /**
      * Tạo version mới cho ghi chú
@@ -129,7 +129,7 @@ public class NoteVersionDAO {
         }
     }
     
-
+    // ==================== READ ====================
     
     /**
      * Lấy tất cả versions của một ghi chú
@@ -268,7 +268,7 @@ public class NoteVersionDAO {
         return 0;
     }
     
-
+    // ==================== DELETE ====================
     
     /**
      * Xóa một version cụ thể
@@ -346,7 +346,7 @@ public class NoteVersionDAO {
         }
     }
     
-
+    // ==================== ROLLBACK ====================
     
     /**
      * Rollback note về một version cụ thể
@@ -377,7 +377,7 @@ public class NoteVersionDAO {
         }
     }
     
-
+    // ==================== HELPER METHODS ====================
     
     /**
      * Lấy version number tiếp theo cho note

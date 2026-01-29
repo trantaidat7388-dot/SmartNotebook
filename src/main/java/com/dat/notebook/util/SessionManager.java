@@ -12,7 +12,7 @@ import com.dat.notebook.model.User;
  */
 public class SessionManager {
     
-
+    // ==================== SINGLETON ====================
     
     private static SessionManager instance;
     
@@ -27,12 +27,12 @@ public class SessionManager {
         return instance;
     }
     
-
+    // ==================== FIELDS ====================
     
     private User currentUser;
     private boolean isDemo = false;
     
-
+    // ==================== SESSION METHODS ====================
     
     /**
      * Lưu user vào session sau khi đăng nhập thành công

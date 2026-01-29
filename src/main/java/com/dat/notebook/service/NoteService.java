@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 public class NoteService {
 
-
+    // ==================== DEPENDENCIES ====================
 
     private final NoteRepository noteRepository;
     private final TagRepository tagRepository;
@@ -49,7 +49,7 @@ public class NoteService {
     private final TitleSuggestionService titleSuggestionService;
     private final TagSuggestionService tagSuggestionService;
 
-
+    // ==================== CONSTRUCTOR ====================
 
     public NoteService() {
         this.noteRepository = new NoteRepository();
@@ -69,7 +69,7 @@ public class NoteService {
         this.tagSuggestionService = TagSuggestionService.getInstance();
     }
 
-
+    // ==================== CREATE ====================
 
     /**
      * Tạo ghi chú mới với các tính năng Smart
@@ -104,13 +104,13 @@ public class NoteService {
         note.setContent(content);
         note.setStatus(status != null ? status : Note.STATUS_REGULAR);
 
-
+        // ===== SMART FEATURE: Auto-suggest title =====
         if (title == null || title.trim().isEmpty()) {
             title = titleSuggestionService.suggestTitle(content);
         }
         note.setTitle(title);
 
-
+        // ===== SMART FEATURE: Auto-generate summary =====
         String summary = summaryService.summarize(content);
         note.setSummary(summary);
 
@@ -186,7 +186,7 @@ public class NoteService {
         return null;
     }
 
-
+    // ==================== READ ====================
 
     /**
      * Lấy ghi chú theo ID
@@ -294,7 +294,7 @@ public class NoteService {
         return noteRepository.findByUserAndCategory(userId, categoryId);
     }
 
-
+    // ==================== UPDATE ====================
 
     /**
      * Cập nhật ghi chú
@@ -307,7 +307,7 @@ public class NoteService {
             return false;
         }
 
-
+        // ===== SMART FEATURE: Re-generate summary =====
         String newSummary = summaryService.summarize(note.getContent());
         note.setSummary(newSummary);
 
@@ -365,7 +365,7 @@ public class NoteService {
         return updateStatus(noteId, Note.STATUS_COMPLETED);
     }
 
-
+    // ==================== DELETE ====================
 
     /**
      * Archive ghi chú (soft delete)
@@ -421,7 +421,7 @@ public class NoteService {
         return noteRepository.deletePermanently(noteId);
     }
 
-
+    // ==================== SEARCH ====================
 
     /**
      * Tìm kiếm ghi chú theo từ khóa
@@ -471,7 +471,7 @@ public class NoteService {
         return SmartTextUtil.highlightKeywords(text, keyword, highlightStart, highlightEnd);
     }
 
-
+    // ==================== TAGS ====================
 
     /**
      * Thêm tag vào ghi chú
@@ -530,7 +530,7 @@ public class NoteService {
         return tagSuggestionService.suggestTags(content);
     }
 
-
+    // ==================== STATISTICS ====================
 
     /**
      * Lấy thống kê ghi chú
@@ -560,7 +560,7 @@ public class NoteService {
         return noteRepository.countByUser(userId);
     }
 
-
+    // ==================== SMART UTILITIES ====================
 
     /**
      * ===== SMART FEATURE: Tạo summary cho nội dung =====

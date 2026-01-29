@@ -11,7 +11,7 @@ import javafx.util.Duration;
  */
 public class TransitionUtil {
 
-
+    // ==================== SCENE TRANSITIONS ====================
     
     /**
      * Fade in + Slide right animation for scene transition
@@ -62,7 +62,7 @@ public class TransitionUtil {
         parallel.play();
     }
 
-
+    // ==================== BUTTON ANIMATIONS ====================
     
     /**
      * Add hover animation to button (scale + shadow)
@@ -97,7 +97,7 @@ public class TransitionUtil {
         });
     }
 
-
+    // ==================== CARD ANIMATIONS ====================
     
     /**
      * Add hover effect to card (scale + lift)
@@ -160,7 +160,7 @@ public class TransitionUtil {
         pulse.play();
     }
 
-
+    // ==================== VALIDATION ANIMATIONS ====================
     
     /**
      * Shake animation for error validation
@@ -188,7 +188,7 @@ public class TransitionUtil {
         bounce.play();
     }
 
-
+    // ==================== LOADING ANIMATIONS ====================
     
     /**
      * Fade + Rotate loading animation
@@ -215,7 +215,7 @@ public class TransitionUtil {
         timeline.play();
     }
 
-
+    // ==================== SIDEBAR ANIMATIONS ====================
     
     /**
      * Slide menu item on hover

@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 public class UserRepository {
     
-
+    // ==================== SQL QUERIES ====================
     
     private static final String SQL_FIND_BY_ID = 
         "SELECT user_id, username, password_hash, email, full_name, is_active, created_at, updated_at " +
@@ -61,7 +61,7 @@ public class UserRepository {
         "SELECT user_id, username, password_hash, email, full_name, is_active, created_at, updated_at " +
         "FROM [User] WHERE username = ? AND password_hash = ?";
     
-
+    // ==================== FIND OPERATIONS ====================
     
     /**
      * Tìm user theo ID
@@ -149,7 +149,7 @@ public class UserRepository {
         return users;
     }
     
-
+    // ==================== AUTHENTICATION ====================
     
     /**
      * Xác thực đăng nhập
@@ -201,7 +201,7 @@ public class UserRepository {
         return false;
     }
     
-
+    // ==================== CRUD OPERATIONS ====================
     
     /**
      * Thêm user mới
@@ -295,7 +295,7 @@ public class UserRepository {
         return false;
     }
     
-
+    // ==================== HELPER METHODS ====================
     
     /**
      * Map ResultSet thành đối tượng User

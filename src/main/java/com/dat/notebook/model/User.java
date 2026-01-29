@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class User {
     
-
+    // ==================== FIELDS ====================
     
     private int id;                    // UserID - Primary Key
     private String username;           // Tên đăng nhập (unique)
@@ -26,7 +26,7 @@ public class User {
     private LocalDateTime createdAt;   // Thời điểm tạo
     private LocalDateTime updatedAt;   // Thời điểm cập nhật
     
-
+    // ==================== CONSTRUCTORS ====================
     
     /**
      * Constructor mặc định
@@ -65,7 +65,7 @@ public class User {
         this.fullName = fullName;
     }
     
-
+    // ==================== GETTERS & SETTERS ====================
     
     public int getId() {
         return id;
@@ -139,7 +139,7 @@ public class User {
         this.updatedAt = updatedAt;
     }
     
-
+    // ==================== UTILITY METHODS ====================
     
     /**
      * Lấy tên hiển thị (ưu tiên fullName, nếu không có thì dùng username)
@@ -171,7 +171,7 @@ public class User {
         return displayName.substring(0, Math.min(2, displayName.length())).toUpperCase();
     }
     
-
+    // ==================== OBJECT METHODS ====================
     
     @Override
     public boolean equals(Object o) {

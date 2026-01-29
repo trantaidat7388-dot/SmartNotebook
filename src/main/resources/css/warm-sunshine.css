@@ -1,13 +1,25 @@
-/* Warm Sunshine Theme - Smart Notebook */
+/*
+ * ============================================
+ * WARM SUNSHINE THEME
+ * Smart Notebook - JavaFX Application
+ * ============================================
+ * Gradient: Warm Orange → Soft Yellow
+ * Style: Friendly, Eye-Comfortable, Modern
+ * ============================================
+ */
 
+/* ============================================
+   ROOT VARIABLES & BASE STYLES
+   ============================================ */
 .root {
     -fx-background-color: linear-gradient(to bottom right, #FFFBF5, #FEF3C7);
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-font-size: 14px;
 }
 
-/* SPLASH SCREEN */
-
+/* ============================================
+   SPLASH SCREEN
+   ============================================ */
 .splash-root {
     -fx-background-color: linear-gradient(to bottom right, #F97316, #FB923C, #FBBF24);
 }
@@ -101,8 +113,7 @@
     -fx-text-fill: #FDBA74;
 }
 
-.text-field-fresh,
-.password-field-fresh {
+.text-field-fresh, .password-field-fresh {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-font-size: 15px;
@@ -111,8 +122,7 @@
     -fx-padding: 12 10 12 10;
 }
 
-.text-field-fresh:focused,
-.password-field-fresh:focused {
+.text-field-fresh:focused, .password-field-fresh:focused {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
 }

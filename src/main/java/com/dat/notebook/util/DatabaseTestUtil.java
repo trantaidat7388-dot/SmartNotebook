@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
  */
 public class DatabaseTestUtil {
     
-
+    // ==================== CONNECTION TESTING ====================
     
     /**
      * Test kết nối database cơ bản
@@ -54,7 +54,7 @@ public class DatabaseTestUtil {
         return false;
     }
     
-
+    // ==================== TABLE STRUCTURE TESTING ====================
     
     /**
      * Kiểm tra cấu trúc bảng Notes
@@ -150,7 +150,7 @@ public class DatabaseTestUtil {
         }
     }
     
-
+    // ==================== DATA TESTING ====================
     
     /**
      * Test SELECT * FROM User
@@ -375,7 +375,7 @@ public class DatabaseTestUtil {
         }
     }
     
-
+    // ==================== SECURITY TESTING ====================
     
     /**
      * Verify notes không bị load nhầm của user khác
@@ -422,7 +422,7 @@ public class DatabaseTestUtil {
         }
     }
     
-
+    // ==================== UTILITY METHODS ====================
     
     /**
      * Log chi tiết SQL Exception

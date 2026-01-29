@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  */
 public class ValidationUtil {
     
-
+    // ==================== REGEX PATTERNS ====================
     
     /** Email pattern theo RFC 5322 đơn giản */
     private static final Pattern EMAIL_PATTERN = 
@@ -26,7 +26,7 @@ public class ValidationUtil {
     private static final Pattern USERNAME_PATTERN = 
         Pattern.compile("^[a-zA-Z0-9_]{3,30}$");
     
-
+    // ==================== STRING VALIDATION ====================
     
     /**
      * Kiểm tra chuỗi có rỗng không (null hoặc chỉ có whitespace)
@@ -62,7 +62,7 @@ public class ValidationUtil {
         return len >= min && len <= max;
     }
     
-
+    // ==================== EMAIL VALIDATION ====================
     
     /**
      * Validate email address
@@ -96,7 +96,7 @@ public class ValidationUtil {
         return validateEmail(email) == null;
     }
     
-
+    // ==================== USERNAME VALIDATION ====================
     
     /**
      * Validate username
@@ -141,7 +141,7 @@ public class ValidationUtil {
         return validateUsername(username) == null;
     }
     
-
+    // ==================== PASSWORD VALIDATION ====================
     
     /**
      * Validate password
@@ -210,7 +210,7 @@ public class ValidationUtil {
         return null; // Valid
     }
     
-
+    // ==================== NOTE VALIDATION ====================
     
     /**
      * Validate tiêu đề ghi chú
@@ -245,7 +245,7 @@ public class ValidationUtil {
         return null; // Valid
     }
     
-
+    // ==================== FORM VALIDATION RESULT ====================
     
     /**
      * Class để chứa kết quả validate form
@@ -286,7 +286,7 @@ public class ValidationUtil {
         }
     }
     
-
+    // ==================== FORM VALIDATION ====================
     
     /**
      * Validate form đăng ký

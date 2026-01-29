@@ -119,7 +119,7 @@ public class DBConnection {
         }
     }
     
-
+    // ==================== GET CONNECTION ====================
     
     /**
      * BƯỚC 3: Tạo kết nối SQL Server với TLS 1.0
@@ -185,7 +185,7 @@ public class DBConnection {
         return testConnection();
     }
     
-
+    // ==================== MAIN FOR TESTING ====================
     
     /**
      * Test kết nối và hiển thị thông tin database

@@ -40,17 +40,15 @@
 
 ## 💻 YÊU CẦU HỆ THỐNG
 
-### **Option 1: Traditional Setup**
+### **Bắt buộc:**
 - ✅ **Windows 10/11**
 - ✅ **Java 17+** → [Download JDK](https://www.oracle.com/java/technologies/downloads/#java17)
 - ✅ **SQL Server** → [Download SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
 
-### **Option 2: Docker Setup** 🐋
-- ✅ **Windows 10/11**
-- ✅ **Java 17+** → [Download JDK](https://www.oracle.com/java/technologies/downloads/#java17)
-- ✅ **Docker Desktop** → [Download Docker](https://www.docker.com/products/docker-desktop/)
-
-> 💡 **Docker = Dễ hơn!** Không cần cài SQL Server, chỉ cần `docker-start.bat`
+### **Không cần cài:**
+- ❌ Maven (tự động cài qua script)
+- ❌ JavaFX (Maven tự download)
+- ❌ SQL Driver (Maven tự download)
 
 ---
 
@@ -101,31 +99,6 @@ Nếu SQL Server khác cổng 1433 hoặc khác username/password:
    db.user=sa                # Username SQL
    db.password=123456        # Password SQL
    ```
-
----
-
-### **🐋 OPTION: Docker Setup (Dễ hơn!)**
-
-Nếu muốn dùng Docker thay vì cài SQL Server thủ công:
-
-1. **Cài Docker Desktop**: https://www.docker.com/products/docker-desktop/
-
-2. **Start SQL Server:**
-   ```batch
-   docker-start.bat
-   ```
-
-3. **Initialize database:**
-   ```batch
-   docker-init-db.bat
-   ```
-
-4. **DONE!** Run app:
-   ```batch
-   run.bat
-   ```
-
-> 📘 Chi tiết: [DOCKER.md](DOCKER.md)
 
 ---
 

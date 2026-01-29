@@ -28,14 +28,14 @@ import java.io.IOException;
  */
 public class SplashController {
     
-
+    // ==================== FXML COMPONENTS ====================
     
     @FXML private VBox mainContainer;
     @FXML private Label logoIcon;
     @FXML private Label loadingText;
     @FXML private ProgressBar progressBar;
     
-
+    // ==================== CONSTANTS ====================
     
     private static final String[] LOADING_MESSAGES = {
         "✨ Loading your ideas...",
@@ -45,7 +45,7 @@ public class SplashController {
         "🚀 Almost there..."
     };
     
-
+    // ==================== INITIALIZATION ====================
     
     @FXML
     public void initialize() {
@@ -141,7 +141,7 @@ public class SplashController {
         fadeOut.play();
     }
     
-
+    // ==================== NAVIGATION ====================
     
     /**
      * Chuyển sang màn hình Login với fade out animation
