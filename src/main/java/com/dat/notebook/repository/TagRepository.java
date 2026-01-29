@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 public class TagRepository {
     
-    // ==================== SQL QUERIES ====================
+
     
     private static final String SQL_FIND_BY_ID = 
         "SELECT TagID, UserID, Name, Color, CreatedAt " +
@@ -75,7 +75,7 @@ public class TagRepository {
     private static final String SQL_CHECK_NOTE_HAS_TAG = 
         "SELECT COUNT(*) FROM NoteTags WHERE NoteID = ? AND TagID = ?";
     
-    // ==================== FIND OPERATIONS ====================
+
     
     /**
      * Tìm tag theo ID
@@ -219,7 +219,7 @@ public class TagRepository {
         return tags;
     }
     
-    // ==================== CRUD OPERATIONS ====================
+
     
     /**
      * Thêm tag mới
@@ -357,7 +357,7 @@ public class TagRepository {
         return false;
     }
     
-    // ==================== NOTE-TAG RELATIONSHIP ====================
+
     
     /**
      * Gắn tag vào ghi chú
@@ -484,7 +484,7 @@ public class TagRepository {
         return true;
     }
     
-    // ==================== HELPER METHODS ====================
+
     
     /**
      * Map ResultSet thành đối tượng Tag

@@ -1,0 +1,42 @@
+# Build artifacts
+target/
+*.class
+*.jar
+!maven-wrapper.jar
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (not needed in image)
+*.md
+!README.md
+SETUP_GUIDE.txt
+
+# Scripts (not needed in image)
+*.bat
+*.sh
+
+# Maven
+.m2/
+dependency-reduced-pom.xml
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+~*

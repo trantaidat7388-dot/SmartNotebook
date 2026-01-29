@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class Tag {
     
-    // ==================== FIELDS ====================
+
     
     private int id;                    // TagID - Primary Key
     private int userId;                // UserID - Foreign Key (tag thuộc về user nào)
@@ -23,7 +23,7 @@ public class Tag {
     private int usageCount;            // Số lần sử dụng
     private LocalDateTime createdAt;   // Thời điểm tạo
     
-    // ==================== CONSTRUCTORS ====================
+
     
     /**
      * Constructor mặc định
@@ -69,7 +69,7 @@ public class Tag {
         this.color = color;
     }
     
-    // ==================== GETTERS & SETTERS ====================
+
     
     public int getId() {
         return id;
@@ -119,7 +119,7 @@ public class Tag {
         this.createdAt = createdAt;
     }
     
-    // ==================== UTILITY METHODS ====================
+
     
     /**
      * Chuẩn hóa tên tag: lowercase, thay khoảng trắng bằng dấu gạch ngang
@@ -162,7 +162,7 @@ public class Tag {
         return "#" + name;
     }
     
-    // ==================== OBJECT METHODS ====================
+
     
     @Override
     public boolean equals(Object o) {

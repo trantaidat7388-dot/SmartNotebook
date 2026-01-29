@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 public class SettingsController {
 
-    // ==================== FXML COMPONENTS ====================
+
     
     // Profile Fields
     @FXML private TextField txtDisplayName;
@@ -51,12 +51,12 @@ public class SettingsController {
     @FXML private Label notificationIcon;
     @FXML private Label notificationLabel;
     
-    // ==================== SERVICES ====================
+
     
     private final AuthService authService = AuthService.getInstance();
     private final UserService userService = UserService.getInstance();
 
-    // ==================== INITIALIZATION ====================
+
     
     @FXML
     public void initialize() {
@@ -95,7 +95,7 @@ public class SettingsController {
         }
     }
 
-    // ==================== PROFILE UPDATE ====================
+
     
     /**
      * Xử lý cập nhật thông tin cá nhân (tên hiển thị, email)
@@ -134,7 +134,7 @@ public class SettingsController {
         }
     }
     
-    // ==================== PASSWORD CHANGE ====================
+
     
     /**
      * Xử lý đổi mật khẩu
@@ -192,7 +192,7 @@ public class SettingsController {
         }
     }
     
-    // ==================== LOGOUT ====================
+
     
     /**
      * Xử lý đăng xuất
@@ -240,7 +240,7 @@ public class SettingsController {
         });
     }
 
-    // ==================== NOTIFICATION HELPERS ====================
+
     
     /**
      * Hiển thị notification với kiểu success/error/warning

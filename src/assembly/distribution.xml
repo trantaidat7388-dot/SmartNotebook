@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>distribution</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <baseDirectory>SmartNotebook-${project.version}</baseDirectory>
+    
+    <fileSets>
+        <!-- Fat JAR chính -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>SmartNotebook.jar</include>
+            </includes>
+        </fileSet>
+        
+        <!-- File cấu hình -->
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/config</outputDirectory>
+            <includes>
+                <include>config.properties</include>
+            </includes>
+        </fileSet>
+        
+        <!-- Resources từ src/main/resources -->
+        <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <outputDirectory>/resources</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
+                <include>**/*.properties</include>
+                <include>nlp/**/*</include>
+            </includes>
+        </fileSet>
+        
+        <!-- Database scripts -->
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/database</outputDirectory>
+            <includes>
+                <include>database.sql</include>
+            </includes>
+        </fileSet>
+        
+        <!-- Documentation -->
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/docs</outputDirectory>
+            <includes>
+                <include>README.md</include>
+                <include>LICENSE</include>
+            </includes>
+        </fileSet>
+        
+        <!-- Scripts launcher -->
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>run.bat</include>
+                <include>setup.bat</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    
+    <files>
+        <!-- Hướng dẫn cài đặt cho end-user -->
+        <file>
+            <source>${project.basedir}/SETUP_GUIDE.txt</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+    </files>
+</assembly>

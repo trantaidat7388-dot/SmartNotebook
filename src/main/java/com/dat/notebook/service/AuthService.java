@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public class AuthService {
     
-    // ==================== SINGLETON ====================
+
     
     private static AuthService instance;
     
@@ -41,13 +41,13 @@ public class AuthService {
         return instance;
     }
     
-    // ==================== FIELDS ====================
+
     
     private final UserRepository userRepository;
     private final UserService userService;
     private User currentUser;  // Người dùng đang đăng nhập
     
-    // ==================== AUTHENTICATION ====================
+
     
     /**
      * Đăng nhập với username và password
@@ -114,7 +114,7 @@ public class AuthService {
         return currentUser != null ? currentUser.getId() : -1;
     }
     
-    // ==================== REGISTRATION ====================
+
     
     /**
      * Đăng ký tài khoản mới
@@ -171,7 +171,7 @@ public class AuthService {
         return register(username, password, null, null);
     }
     
-    // ==================== PASSWORD MANAGEMENT ====================
+
     
     /**
      * Đổi mật khẩu cho người dùng hiện tại
@@ -226,7 +226,7 @@ public class AuthService {
         return userRepository.updatePassword(userId, newHash);
     }
     
-    // ==================== USER PROFILE ====================
+
     
     /**
      * Cập nhật thông tin profile
@@ -265,7 +265,7 @@ public class AuthService {
         return userRepository.findByUsername(username);
     }
     
-    // ==================== DEMO MODE ====================
+
     
     /**
      * Đăng nhập với tài khoản demo (không cần database)
