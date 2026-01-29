@@ -27,7 +27,7 @@ import java.sql.SQLException;
  */
 public class UserService {
     
-    // ==================== SINGLETON PATTERN ====================
+
     
     /** Instance duy nhất của UserService */
     private static UserService instance;
@@ -49,12 +49,12 @@ public class UserService {
         return instance;
     }
     
-    // ==================== FIELDS ====================
+
     
     /** Repository để thao tác với database */
     private final SimpleUserRepository userRepository;
     
-    // ==================== INNER CLASS: Registration Result ====================
+
     
     /**
      * Class chứa kết quả đăng ký với status và message chi tiết.
@@ -110,7 +110,7 @@ public class UserService {
         }
     }
     
-    // ==================== REGISTRATION METHODS ====================
+
     
     /**
      * Đăng ký tài khoản mới với đầy đủ thông tin.
@@ -133,7 +133,7 @@ public class UserService {
         System.out.println("Username: " + username);
         System.out.println("Email: " + (email != null && !email.isEmpty() ? email : "(không có)"));
         
-        // ===== BƯỚC 1: Validate dữ liệu =====
+
         
         // 1.1 Kiểm tra username
         if (username == null || username.trim().isEmpty()) {
@@ -164,7 +164,7 @@ public class UserService {
             );
         }
         
-        // ===== BƯỚC 2: Kiểm tra kết nối database =====
+
         
         if (!DatabaseConfig.testConnection()) {
             System.out.println("❌ Lỗi: Không kết nối được database");
@@ -174,7 +174,7 @@ public class UserService {
             );
         }
         
-        // ===== BƯỚC 3: Kiểm tra username đã tồn tại =====
+
         
         try {
             if (isUsernameExists(username)) {
@@ -193,7 +193,7 @@ public class UserService {
             );
         }
         
-        // ===== BƯỚC 4: Kiểm tra email đã tồn tại (nếu có) =====
+
         
         if (email != null && !email.trim().isEmpty()) {
             email = email.trim();
@@ -215,12 +215,12 @@ public class UserService {
             }
         }
         
-        // ===== BƯỚC 5: Hash mật khẩu =====
+
         
         String passwordHash = PasswordUtil.hashPassword(password);
         System.out.println("✓ Đã hash mật khẩu (MD5)");
         
-        // ===== BƯỚC 6: Insert user vào database =====
+
         
         try {
             int userId = createUserWithEmail(username, passwordHash, email);
@@ -269,7 +269,7 @@ public class UserService {
         return registerUser(username, password, null);
     }
     
-    // ==================== DATABASE METHODS ====================
+
     
     /**
      * Kiểm tra username đã tồn tại trong database chưa
@@ -378,7 +378,7 @@ public class UserService {
         return -1;
     }
     
-    // ==================== UTILITY METHODS ====================
+
     
     /**
      * Validate định dạng email
@@ -418,7 +418,7 @@ public class UserService {
         return password != null && password.length() >= 6;
     }
     
-    // ==================== UPDATE PROFILE METHODS ====================
+
     
     /**
      * Cập nhật thông tin profile user (full name và email)

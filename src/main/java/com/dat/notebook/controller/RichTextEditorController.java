@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RichTextEditorController {
     
-    // ==================== FXML CONTROLS ====================
+
     
     @FXML private TabPane noteTabPane;
     @FXML private Tab emptyTab;
@@ -73,7 +73,7 @@ public class RichTextEditorController {
     @FXML private Label lblLastSaved;
     @FXML private Label lblTabCount;
     
-    // ==================== SERVICES & DATA ====================
+
     
     private NoteService noteService;
     private NoteVersionDAO versionDAO;
@@ -87,7 +87,7 @@ public class RichTextEditorController {
     private ScheduledExecutorService autoSaveExecutor;
     private static final long AUTO_SAVE_DELAY_SECONDS = 3;
     
-    // ==================== INITIALIZATION ====================
+
     
     public void initialize() {
         noteService = new NoteService();
@@ -152,7 +152,7 @@ public class RichTextEditorController {
         });
     }
     
-    // ==================== TAB MANAGEMENT ====================
+
     
     /**
      * Tạo ghi chú mới trong tab mới
@@ -331,7 +331,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== AUTO-SAVE ====================
+
     
     /**
      * Schedule auto-save sau một khoảng thời gian
@@ -408,7 +408,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== MANUAL SAVE ====================
+
     
     /**
      * Lưu note hiện tại (manual save with version)
@@ -502,7 +502,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== VERSION HISTORY ====================
+
     
     /**
      * Hiển thị lịch sử phiên bản
@@ -630,7 +630,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== FORMATTING ACTIONS ====================
+
     
     /**
      * Chèn ảnh từ file (Base64 embedded)
@@ -688,7 +688,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== HELPER METHODS ====================
+
     
     private void updateTabCount() {
         int count = noteTabPane.getTabs().size();
@@ -739,7 +739,7 @@ public class RichTextEditorController {
         }
     }
     
-    // ==================== INNER CLASS ====================
+
     
     /**
      * Wrapper class cho một note tab

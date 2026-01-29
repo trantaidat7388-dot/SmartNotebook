@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class SmartTextUtil {
 
-    // ==================== HTML UTILITY ====================
+
 
     /**
      * Strip HTML tags từ content
@@ -86,7 +86,7 @@ public class SmartTextUtil {
         return html.toString();
     }
 
-    // ==================== CONSTANTS ====================
+
 
     /** Số câu tối đa trong summary */
     private static final int MAX_SUMMARY_SENTENCES = 3;
@@ -122,7 +122,7 @@ public class SmartTextUtil {
             "these", "those", "am", "it", "its", "he", "she", "they", "them", "his",
             "her", "their", "what", "which", "who", "whom", "i", "you", "we");
 
-    // ==================== SUMMARY GENERATION ====================
+
 
     /**
      * ===== SMART FEATURE: Tạo summary tự động cho văn bản =====
@@ -231,7 +231,7 @@ public class SmartTextUtil {
         return scores;
     }
 
-    // ==================== TITLE SUGGESTION ====================
+
 
     /**
      * ===== SMART FEATURE: Gợi ý tiêu đề dựa trên nội dung =====
@@ -288,7 +288,7 @@ public class SmartTextUtil {
         return "Ghi chú mới";
     }
 
-    // ==================== KEYWORD EXTRACTION ====================
+
 
     /**
      * ===== SMART FEATURE: Trích xuất từ khóa quan trọng =====
@@ -340,7 +340,7 @@ public class SmartTextUtil {
         return freq;
     }
 
-    // ==================== HIGHLIGHT ====================
+
 
     /**
      * ===== SMART FEATURE: Highlight từ khóa trong text =====
@@ -376,7 +376,7 @@ public class SmartTextUtil {
         return highlightKeywords(text, keyword, "«", "»");
     }
 
-    // ==================== UTILITY METHODS ====================
+
 
     /**
      * Tách văn bản thành các câu

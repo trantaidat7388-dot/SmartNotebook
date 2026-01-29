@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 public class NoteRepository {
     
-    // ==================== SQL QUERIES ====================
+
     
     private static final String SQL_FIND_BY_ID = 
         "SELECT NoteID, UserID, CategoryID, Title, Content, Summary, Status, " +
@@ -115,7 +115,7 @@ public class NoteRepository {
         "  SUM(CASE WHEN IsFavorite = 1 THEN 1 ELSE 0 END) AS FavoriteCount " +
         "FROM Notes WHERE UserID = ? AND IsArchived = 0";
     
-    // ==================== FIND OPERATIONS ====================
+
     
     /**
      * Tìm ghi chú theo ID
@@ -319,7 +319,7 @@ public class NoteRepository {
         return notes;
     }
     
-    // ==================== CRUD OPERATIONS ====================
+
     
     /**
      * Thêm ghi chú mới
@@ -585,7 +585,7 @@ public class NoteRepository {
         return notes;
     }
     
-    // ==================== STATISTICS ====================
+
     
     /**
      * Đếm số ghi chú của user
@@ -637,7 +637,7 @@ public class NoteRepository {
         return stats;
     }
     
-    // ==================== HELPER METHODS ====================
+
     
     /**
      * Map ResultSet thành đối tượng Note

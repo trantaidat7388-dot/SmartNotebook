@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class RegisterController {
     
-    // ==================== FXML COMPONENTS ====================
+
     
     /** TextField nhập tên đăng nhập */
     @FXML private TextField usernameField;
@@ -55,12 +55,12 @@ public class RegisterController {
     @FXML private Label passwordError;
     @FXML private Label confirmPasswordError;
     
-    // ==================== SERVICES ====================
+
     
     /** Service xử lý logic người dùng */
     private final UserService userService = UserService.getInstance();
     
-    // ==================== INITIALIZATION ====================
+
     
     /**
      * Phương thức khởi tạo, được gọi sau khi FXML được load
@@ -89,7 +89,7 @@ public class RegisterController {
         }
     }
     
-    // ==================== EVENT HANDLERS ====================
+
     
     /**
      * Xử lý sự kiện nút Đăng ký
@@ -103,13 +103,13 @@ public class RegisterController {
      */
     @FXML
     private void handleRegister() {
-        // ===== BƯỚC 1: Lấy dữ liệu từ form =====
+
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
         
-        // ===== BƯỚC 2: Validate dữ liệu =====
+
         
         // 2.1 Kiểm tra username rỗng
         if (username.isEmpty()) {
@@ -161,12 +161,12 @@ public class RegisterController {
             return;
         }
         
-        // ===== BƯỚC 3 & 4: Gọi UserService để đăng ký =====
+
         try {
             // Gọi service đăng ký
             UserService.RegistrationResult result = userService.registerUser(username, password, email);
             
-            // ===== BƯỚC 5: Xử lý kết quả =====
+
             switch (result.getStatus()) {
                 case SUCCESS:
                     // Đăng ký thành công
@@ -280,7 +280,7 @@ public class RegisterController {
         }
     }
     
-    // ==================== VALIDATION METHODS ====================
+
     
     /**
      * Kiểm tra định dạng email hợp lệ
@@ -294,7 +294,7 @@ public class RegisterController {
         return email.matches(emailRegex);
     }
     
-    // ==================== UI UTILITY METHODS ====================
+
     
     /**
      * Hiển thị thông báo lỗi (màu đỏ)

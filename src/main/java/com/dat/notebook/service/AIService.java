@@ -84,7 +84,7 @@ public class AIService {
         return offlinePrompts.getOrDefault(type.toUpperCase(), offlinePrompts.get("GENERAL"));
     }
 
-    // ===== CHỨC NĂNG 1: TÓM TẮT GHI CHÚ =====
+
 
     /**
      * Tóm tắt nội dung ghi chú
@@ -100,7 +100,7 @@ public class AIService {
         return com.dat.notebook.service.ai.AIEngine.generateSummary(content);
     }
 
-    // ===== CHỨC NĂNG 2: GỢI Ý TIÊU ĐỀ =====
+
 
     /**
      * Gợi ý 1 tiêu đề tốt nhất cho ghi chú
@@ -131,7 +131,7 @@ public class AIService {
         return Arrays.asList(com.dat.notebook.service.ai.AIEngine.generateTitle(content));
     }
 
-    // ===== CHỨC NĂNG 3: GỢI Ý TAG =====
+
 
     /**
      * Gợi ý tags để phân loại ghi chú
@@ -147,7 +147,7 @@ public class AIService {
         return com.dat.notebook.service.ai.AIEngine.generateTags(content);
     }
 
-    // ===== HELPER METHOD: Format tags để hiển thị =====
+
 
     /**
      * Format danh sách tags thành chuỗi hiển thị
@@ -164,7 +164,7 @@ public class AIService {
                 .collect(Collectors.joining(" "));
     }
 
-    // ===== KẾT QUẢ TỔNG HỢP =====
+
 
     /**
      * Class chứa kết quả AI tổng hợp

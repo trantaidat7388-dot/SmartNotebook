@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 public class Note {
 
-    // ==================== CONSTANTS ====================
+
 
     /** Các trạng thái của ghi chú */
     public static final String STATUS_REGULAR = "REGULAR";
@@ -30,7 +30,7 @@ public class Note {
     /** Màu mặc định */
     public static final String DEFAULT_COLOR = "#ffffff";
 
-    // ==================== FIELDS ====================
+
 
     private int id; // NoteID - Primary Key
     private int userId; // UserID - Foreign Key
@@ -56,7 +56,7 @@ public class Note {
     private Integer versionCount; // Số lượng versions
     private Integer latestVersion; // Version number mới nhất
 
-    // ==================== CONSTRUCTORS ====================
+
 
     /**
      * Constructor mặc định
@@ -145,7 +145,7 @@ public class Note {
         this.status = status != null ? status : STATUS_REGULAR;
     }
 
-    // ==================== GETTERS & SETTERS ====================
+
 
     public int getId() {
         return id;
@@ -358,7 +358,7 @@ public class Note {
         }
     }
 
-    // ==================== UTILITY METHODS ====================
+
 
     /**
      * Kiểm tra trạng thái hợp lệ
@@ -508,7 +508,7 @@ public class Note {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // ==================== OBJECT METHODS ====================
+
 
     @Override
     public boolean equals(Object o) {
