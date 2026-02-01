@@ -210,7 +210,8 @@ public class MainControllerV2 {
                     // Wait for WebView to load
                     webView.getEngine().getLoadWorker().stateProperty().addListener((obs, old, state) -> {
                         if (state == javafx.concurrent.Worker.State.SUCCEEDED) {
-                            RichTextStyleManager.setupFontProtection(webView);
+                            // RichTextStyleManager.initializeRichTextProtection(webView);
+                            System.out.println("✅ WebView initialized for HTML Editor");
                         }
                     });
                 }
@@ -519,21 +520,72 @@ public class MainControllerV2 {
         Node boldNode = htmlEditor.lookup(".html-editor-bold");
         if (boldNode instanceof ToggleButton) {
             boldBtn = (ToggleButton) boldNode;
-            boldBtn.setOnAction(e -> RichTextStyleManager.toggleBold(webView));
+            
+            // Clear any existing handlers first
+            boldBtn.setOnAction(null);
+            
+            // Set our custom handler that prevents default behavior
+            boldBtn.setOnAction(e -> {
+                // Consume the event to prevent default HTMLEditor behavior
+                e.consume();
+                
+                // Force focus to webview first
+                webView.requestFocus();
+                
+                // Toggle bold with our improved method
+                RichTextStyleManager.toggleBold(webView);
+                
+                System.out.println("🟠 Bold button clicked - custom handler");
+            });
+            
             boldBtn.setFocusTraversable(false);
         }
 
         Node italicNode = htmlEditor.lookup(".html-editor-italic");
         if (italicNode instanceof ToggleButton) {
             italicBtn = (ToggleButton) italicNode;
-            italicBtn.setOnAction(e -> RichTextStyleManager.toggleItalic(webView));
+            
+            // Clear any existing handlers first
+            italicBtn.setOnAction(null);
+            
+            // Set our custom handler that prevents default behavior
+            italicBtn.setOnAction(e -> {
+                // Consume the event to prevent default HTMLEditor behavior
+                e.consume();
+                
+                // Force focus to webview first
+                webView.requestFocus();
+                
+                // Toggle italic with our improved method
+                RichTextStyleManager.toggleItalic(webView);
+                
+                System.out.println("🔴 Italic button clicked - custom handler");
+            });
+            
             italicBtn.setFocusTraversable(false);
         }
 
         Node underlineNode = htmlEditor.lookup(".html-editor-underline");
         if (underlineNode instanceof ToggleButton) {
             underlineBtn = (ToggleButton) underlineNode;
-            underlineBtn.setOnAction(e -> RichTextStyleManager.toggleUnderline(webView));
+            
+            // Clear any existing handlers first
+            underlineBtn.setOnAction(null);
+            
+            // Set our custom handler that prevents default behavior
+            underlineBtn.setOnAction(e -> {
+                // Consume the event to prevent default HTMLEditor behavior
+                e.consume();
+                
+                // Force focus to webview first
+                webView.requestFocus();
+                
+                // Toggle underline with our improved method
+                RichTextStyleManager.toggleUnderline(webView);
+                
+                System.out.println("🟢 Underline button clicked - custom handler");
+            });
+            
             underlineBtn.setFocusTraversable(false);
         }
 
