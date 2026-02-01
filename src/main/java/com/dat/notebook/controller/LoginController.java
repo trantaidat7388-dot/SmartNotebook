@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.application.Platform;
 
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 /**
  * Controller cho màn hình đăng nhập - Gen Z Edition
@@ -41,6 +42,8 @@ public class LoginController {
     private javafx.scene.layout.HBox errorBox;
     @FXML
     private Label errorLabel;
+    @FXML
+    private CheckBox rememberMeCheckbox;
 
     // ==================== FXML COMPONENTS - REGISTER ====================
 
@@ -68,6 +71,9 @@ public class LoginController {
     // ==================== SERVICES ====================
 
     private final AuthService authService = AuthService.getInstance();
+    private static final Preferences prefs = Preferences.userNodeForPackage(LoginController.class);
+    private static final String PREF_USERNAME = "remembered_username";
+    private static final String PREF_REMEMBER = "remember_me";
 
     // ==================== INITIALIZATION ====================
 
@@ -80,6 +86,9 @@ public class LoginController {
         // Set focus to username field
         Platform.runLater(() -> usernameField.requestFocus());
 
+        // Load remembered username if exists
+        loadRememberedUsername();
+
         // Check database connection
         checkDatabaseConnection();
     }
@@ -90,6 +99,40 @@ public class LoginController {
     private void checkDatabaseConnection() {
         if (!DatabaseConfig.testConnection()) {
             showWarning("Không thể kết nối database. Bạn có thể sử dụng chế độ Demo để trải nghiệm.");
+        }
+    }
+
+    /**
+     * Load remembered username from preferences
+     */
+    private void loadRememberedUsername() {
+        boolean rememberMe = prefs.getBoolean(PREF_REMEMBER, false);
+        if (rememberMe) {
+            String rememberedUsername = prefs.get(PREF_USERNAME, "");
+            if (!rememberedUsername.isEmpty()) {
+                usernameField.setText(rememberedUsername);
+                if (rememberMeCheckbox != null) {
+                    rememberMeCheckbox.setSelected(true);
+                }
+                // Focus on password field since username is prefilled
+                Platform.runLater(() -> passwordField.requestFocus());
+                System.out.println("✓ Loaded remembered username: " + rememberedUsername);
+            }
+        }
+    }
+
+    /**
+     * Save or clear remembered username based on checkbox
+     */
+    private void saveRememberPreference(String username) {
+        if (rememberMeCheckbox != null && rememberMeCheckbox.isSelected()) {
+            prefs.put(PREF_USERNAME, username);
+            prefs.putBoolean(PREF_REMEMBER, true);
+            System.out.println("✓ Saved login preference for: " + username);
+        } else {
+            prefs.remove(PREF_USERNAME);
+            prefs.putBoolean(PREF_REMEMBER, false);
+            System.out.println("✓ Cleared login preferences");
         }
     }
 
@@ -122,6 +165,10 @@ public class LoginController {
         if (user != null) {
             // Login success
             System.out.println("Đăng nhập thành công: " + user.getDisplayName());
+
+            // Save remember-me preference BEFORE navigating
+            saveRememberPreference(username);
+
             navigateToMainScreen();
         } else {
             // Login failed

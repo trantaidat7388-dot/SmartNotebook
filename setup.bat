@@ -76,10 +76,10 @@ echo   ✅ SETUP HOÀN TẤT!
 echo ================================================
 echo.
 echo 📝 Bước tiếp theo:
-echo   1. Kiểm tra file 'config.properties' (nếu cần sửa SQL)
+echo   1. Kiểm tra file 'db.properties' (nếu cần sửa SQL)
 echo   2. Chạy ứng dụng: double-click 'run.bat'
 echo.
 echo ⚙️  Nếu SQL Server khác cổng 1433:
-echo    → Sửa 'config.properties'
+echo    → Sửa 'db.properties'
 echo.
 pause

@@ -80,7 +80,7 @@
             </VBox>
 
             <HBox alignment="CENTER" spacing="120" prefWidth="380">
-                <CheckBox text="Ghi nhớ đăng nhập" style="-fx-text-fill: #4E342E; -fx-font-size: 13px;"/>
+                <CheckBox fx:id="rememberMeCheckbox" text="Ghi nhớ đăng nhập" style="-fx-text-fill: #4E342E; -fx-font-size: 13px;"/>
                 <Hyperlink text="Quên mật khẩu?" style="-fx-text-fill: #F57C00; -fx-font-size: 13px;" onAction="#handleForgotPassword"/>
             </HBox>
 
