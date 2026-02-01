@@ -55,8 +55,8 @@ public class KeywordExtractor {
 
     // Cấu hình mặc định
     private static final int DEFAULT_TOP_KEYWORDS = 10;
-    private static final int MIN_WORD_LENGTH = 2;
-    private static final int MIN_WORD_FREQUENCY = 1;
+    private static final int MIN_WORD_LENGTH = 4; // Giảm xuống 4 để cho phép từ có nghĩa
+    private static final int MIN_WORD_FREQUENCY = 1; // Giảm xuống 1
 
     /**
      * Constructor private - Singleton pattern
@@ -111,12 +111,72 @@ public class KeywordExtractor {
 
     /**
      * Trích xuất từ khóa với số lượng mặc định (10)
+     * Ưu tiên cụm từ 2 chữ có nghĩa
      * 
      * @param content Nội dung văn bản
-     * @return Danh sách từ khóa
+     * @return Danh sách từ khóa quan trọng nhất
      */
     public List<String> extractKeywords(String content) {
-        return extractKeywords(content, DEFAULT_TOP_KEYWORDS);
+        return extractMeaningfulKeywords(content, DEFAULT_TOP_KEYWORDS);
+    }
+
+    /**
+     * Trích xuất từ khóa ưu tiên cụm từ 2 chữ có nghĩa
+     */
+    public List<String> extractMeaningfulKeywords(String content, int topN) {
+        if (content == null || content.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Tách thành các câu
+        List<String> sentences = textService.splitSentences(content);
+        if (sentences.isEmpty()) {
+            sentences = Collections.singletonList(content);
+        }
+
+        // Thu thập cụm từ 2 chữ có nghĩa
+        Set<String> meaningfulPhrases = new HashSet<>();
+        
+        for (String sentence : sentences) {
+            List<String> words = textService.tokenize(sentence);
+            words = textService.removeStopwords(words);
+            
+            // Tạo cụm từ 2 chữ
+            for (int i = 0; i < words.size() - 1; i++) {
+                String word1 = words.get(i).toLowerCase().trim();
+                String word2 = words.get(i + 1).toLowerCase().trim();
+                
+                // Lọc từ có nghĩa
+                if (word1.length() >= 3 && word2.length() >= 3 
+                    && !isCommonStopword(word1) && !isCommonStopword(word2)
+                    && !word1.matches("\\d+") && !word2.matches("\\d+")) {
+                    
+                    String phrase = word1 + " " + word2;
+                    meaningfulPhrases.add(phrase);
+                }
+            }
+            
+            // Thêm từ đơn có nghĩa nếu không đủ cụm từ
+            for (String word : words) {
+                String clean = word.toLowerCase().trim();
+                if (clean.length() >= 5 && !isCommonStopword(clean) && !clean.matches("\\d+")) {
+                    meaningfulPhrases.add(clean);
+                }
+            }
+        }
+
+        // Sắp xếp theo độ dài (ưu tiên cụm từ dài)
+        return meaningfulPhrases.stream()
+                .sorted((a, b) -> {
+                    int wordsA = a.split("\\s+").length;
+                    int wordsB = b.split("\\s+").length;
+                    if (wordsA != wordsB) {
+                        return Integer.compare(wordsB, wordsA); // Ưu tiên nhiều từ hơn
+                    }
+                    return Integer.compare(b.length(), a.length()); // Rồi ưu tiên dài hơn
+                })
+                .limit(topN)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -199,10 +259,11 @@ public class KeywordExtractor {
             List<String> words = textService.tokenize(sentence);
             words = textService.removeStopwords(words);
 
-            // Filter: chỉ lấy từ đủ dài
+            // Filter: chỉ lấy từ đủ dài và có nghĩa
             words = words.stream()
                     .filter(w -> w.length() >= MIN_WORD_LENGTH)
                     .filter(w -> !w.matches("\\d+")) // Loại bỏ số thuần
+                    .filter(w -> !isCommonStopword(w)) // Loại bỏ stopword phổ biến
                     .collect(Collectors.toList());
 
             Set<String> uniqueWordsInSentence = new HashSet<>();
@@ -308,6 +369,85 @@ public class KeywordExtractor {
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Kiểm tra từ phổ biến cần loại bỏ (đơn giản hóa)
+     */
+    private boolean isCommonStopword(String word) {
+        if (word == null || word.trim().isEmpty()) {
+            return true;
+        }
+        
+        String clean = word.toLowerCase().trim();
+        
+        // Các từ cực kỳ phổ biến cần loại bỏ
+        String[] veryCommonWords = {
+            "và", "của", "có", "là", "để", "cho", "với", "từ", "tại", 
+            "về", "được", "các", "một", "những", "này", "đó", "như", "sẽ"
+        };
+        
+        for (String stopword : veryCommonWords) {
+            if (clean.equals(stopword)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    /**
+     * Kiểm tra từ có phải mảnh từ bị cắt không
+     */
+    private boolean isWordFragment(String word) {
+        if (word == null || word.trim().isEmpty()) {
+            return true;
+        }
+        
+        String clean = word.toLowerCase().trim();
+        
+        // Những từ rõ ràng là mảnh từ (cần cập nhật dựa trên dữ liệu thực tế)
+        String[] fragments = {
+            "dụng", "thông", "trong", "người", "việc", "công", "nghi", 
+            "phát", "triển", "quan", "trọng", "sinh", "viên", "làm",
+            "cần", "nơi", "lưu", "trữ", "dung", "còn", "các", "cụ"
+        };
+        
+        for (String fragment : fragments) {
+            if (clean.equals(fragment)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Kiểm tra từ có phải từ tiếng Việt hợp lệ không
+     */
+    private boolean isValidVietnameseWord(String word) {
+        if (word == null || word.trim().isEmpty()) {
+            return false;
+        }
+        
+        String clean = word.toLowerCase().trim();
+        
+        // Từ quá ngắn
+        if (clean.length() < 5) {
+            return false;
+        }
+        
+        // Từ hợp lệ phải chứa ít nhất 1 nguyên âm tiếng Việt
+        if (!clean.matches(".*[aeiouăâêôơưàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ].*")) {
+            return false;
+        }
+        
+        // Phải chứa ít nhất 1 phụ âm
+        if (!clean.matches(".*[bcdfghjklmnpqrstvwxyz].*")) {
+            return false;
+        }
+        
         return true;
     }
 }

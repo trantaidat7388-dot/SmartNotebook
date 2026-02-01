@@ -37,7 +37,7 @@ public class TitleSuggestionService {
     private static TitleSuggestionService instance;
     private TextAnalysisService textService;
 
-    private static final int MAX_TITLE_WORDS = 12;
+    private static final int MAX_TITLE_WORDS = 20; // Allow longer meaningful titles
     private static final int MIN_TITLE_WORDS = 3;
     private static final int TOP_KEYWORDS = 5;
 
@@ -68,13 +68,15 @@ public class TitleSuggestionService {
         // Phương án 1: Lấy câu đầu nếu đủ ngắn
         String firstSentence = getFirstSentence(content);
         if (isGoodTitle(firstSentence)) {
-            return capitalizeFirstLetter(truncateToWords(firstSentence, MAX_TITLE_WORDS));
+            // Nếu câu đã tốt, giữ nguyên thay vì cắt
+            return capitalizeFirstLetter(firstSentence.trim());
         }
 
         // Phương án 2: Tìm câu chứa nhiều keyword nhất
         String keywordRichSentence = findKeywordRichSentence(content);
         if (isGoodTitle(keywordRichSentence)) {
-            return capitalizeFirstLetter(truncateToWords(keywordRichSentence, MAX_TITLE_WORDS));
+            // Nếu câu đã tốt, giữ nguyên thay vì cắt
+            return capitalizeFirstLetter(keywordRichSentence.trim());
         }
 
         // Phương án 3: Ghép các keyword thành tiêu đề
@@ -107,13 +109,13 @@ public class TitleSuggestionService {
         // Gợi ý 1: Câu đầu tiên
         String firstSentence = getFirstSentence(content);
         if (isGoodTitle(firstSentence)) {
-            suggestions.add(capitalizeFirstLetter(truncateToWords(firstSentence, MAX_TITLE_WORDS)));
+            suggestions.add(capitalizeFirstLetter(firstSentence.trim()));
         }
 
         // Gợi ý 2: Câu chứa nhiều keyword
         String keywordRich = findKeywordRichSentence(content);
-        if (isGoodTitle(keywordRich) && !suggestions.contains(capitalizeFirstLetter(keywordRich))) {
-            suggestions.add(capitalizeFirstLetter(truncateToWords(keywordRich, MAX_TITLE_WORDS)));
+        if (isGoodTitle(keywordRich) && !suggestions.contains(capitalizeFirstLetter(keywordRich.trim()))) {
+            suggestions.add(capitalizeFirstLetter(keywordRich.trim()));
         }
 
         // Gợi ý 3: Keywords ghép lại
@@ -145,14 +147,53 @@ public class TitleSuggestionService {
     }
 
     /**
-     * Lấy câu đầu tiên từ content
+     * Lấy phần đầu tiên có nghĩa từ content (tránh dấu câu ở cuối)
      */
     private String getFirstSentence(String content) {
-        List<String> sentences = textService.splitSentences(content);
-        if (!sentences.isEmpty()) {
-            return sentences.get(0);
+        if (content == null || content.trim().isEmpty()) {
+            return content;
         }
-        return content.split("\n")[0].trim();
+        
+        String text = content.trim();
+        
+        // Thử tách theo mệnh đề (bao gồm dấu phẩy)
+        List<String> clauses = textService.splitClauses(text);
+        if (!clauses.isEmpty()) {
+            String firstClause = clauses.get(0).trim();
+            
+            // Loại bỏ dấu câu ở cuối
+            firstClause = firstClause.replaceAll("[.,:;!?]+$", "").trim();
+            
+            // Nếu mệnh đề đầu quá ngắn, gộp với mệnh đề thứ 2
+            if (clauses.size() > 1 && firstClause.length() < 50) {
+                String secondClause = clauses.get(1).trim().replaceAll("[.,:;!?]+$", "").trim();
+                String combined = firstClause + " " + secondClause;
+                // Kiểm tra độ dài hợp lý
+                if (combined.length() <= 150 && textService.tokenize(combined).size() <= MAX_TITLE_WORDS + 5) {
+                    return combined;
+                }
+            }
+            
+            // Nếu mệnh đề đầu đủ dài, dùng nó
+            if (firstClause.length() >= 30) {
+                return firstClause;
+            }
+        }
+        
+        // Fallback: tách theo câu hoàn chỉnh và loại bỏ dấu câu
+        List<String> sentences = textService.splitSentences(text);
+        if (!sentences.isEmpty()) {
+            String sentence = sentences.get(0).trim().replaceAll("[.,:;!?]+$", "").trim();
+            return sentence;
+        }
+        
+        // Fallback cuối: lấy dòng đầu tiên
+        String firstLine = text.split("\n")[0].trim().replaceAll("[.,:;!?]+$", "").trim();
+        if (firstLine.length() > 0) {
+            return firstLine;
+        }
+        
+        return text.replaceAll("[.,:;!?]+$", "").trim();
     }
 
     /**
@@ -212,40 +253,83 @@ public class TitleSuggestionService {
 
     /**
      * Kiểm tra xem một chuỗi có phù hợp làm tiêu đề không
+     * Cải thiện cho tiếng Việt: ưu tiên câu hoàn chỉnh
      */
     private boolean isGoodTitle(String text) {
         if (text == null || text.trim().isEmpty())
             return false;
 
-        int wordCount = textService.tokenize(text).size();
-        return wordCount >= MIN_TITLE_WORDS && wordCount <= MAX_TITLE_WORDS * 2;
+        String clean = text.trim();
+        int wordCount = textService.tokenize(clean).size();
+        
+        // Nếu quá ngắn, loại bỏ
+        if (wordCount < MIN_TITLE_WORDS) {
+            return false;
+        }
+        
+        // Nếu trong giới hạn bình thường, OK
+        if (wordCount <= MAX_TITLE_WORDS) {
+            return true;
+        }
+        
+        // Nếu vượt quá nhưng là câu hoàn chỉnh và không quá dài, vẫn chấp nhận
+        if (clean.matches(".*[.!?]$") && wordCount <= MAX_TITLE_WORDS + 15) {
+            return true;
+        }
+        
+        // Nếu không có dấu kết thúc câu nhưng không quá dài, vẫn có thể chấp nhận
+        if (wordCount <= MAX_TITLE_WORDS + 8) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**
-     * Cắt ngắn chuỗi theo số từ
+     * Cắt ngắn chuỗi theo số từ với ưu tiên giữ nguyên câu hoàn chỉnh
      */
     private String truncateToWords(String text, int maxWords) {
         if (text == null)
             return "";
 
-        String[] words = text.split("\\s+");
+        String clean = text.trim();
+        String[] words = clean.split("\\s+");
+        
+        // Nếu text ngắn hơn hoặc bằng maxWords, giữ nguyên
         if (words.length <= maxWords) {
-            return text.trim();
+            return clean;
         }
 
+        // Nếu là câu hoàn chỉnh và không quá dài, giữ nguyên
+        if (clean.matches(".*[.!?]$") && words.length <= maxWords + 8) {
+            return clean;
+        }
+        
+        // Tìm điểm cắt hợp lý (ưu tiên dấu câu)
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < maxWords; i++) {
-            if (i > 0)
+        int usedWords = 0;
+        
+        for (int i = 0; i < words.length && usedWords < maxWords; i++) {
+            if (usedWords > 0) {
                 result.append(" ");
+            }
             result.append(words[i]);
+            usedWords++;
+            
+            // Nếu gặp dấu câu và đã đủ từ, dừng lại
+            if (words[i].matches(".*[.!?]$") && usedWords >= MIN_TITLE_WORDS) {
+                return result.toString().trim();
+            }
         }
-
+        
         String truncated = result.toString().trim();
         
-        // Add ellipsis only if text was actually cut
-        if (words.length > maxWords && !truncated.endsWith(".") && 
-            !truncated.endsWith("!") && !truncated.endsWith("?")) {
-            truncated += "...";
+        // Chỉ thêm "..." nếu thực sự cắt đi nhiều nội dung
+        if (words.length > maxWords + 3) {
+            // Tránh thêm "..." vào giữa từ
+            if (!truncated.matches(".*[.!?,:;]$")) {
+                truncated += "...";
+            }
         }
         
         return truncated;

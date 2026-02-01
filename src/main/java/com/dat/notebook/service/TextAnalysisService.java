@@ -30,6 +30,7 @@ public class TextAnalysisService {
 
     // Regex patterns
     private static final Pattern SENTENCE_PATTERN = Pattern.compile("[.!?]+\\s*");
+    private static final Pattern CLAUSE_PATTERN = Pattern.compile("[.!?;,]\\s*"); // New pattern for clauses
     private static final Pattern WORD_PATTERN = Pattern.compile("[\\s\\p{Punct}]+");
     private static final Pattern DIACRITICS_PATTERN = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
 
@@ -90,6 +91,30 @@ public class TextAnalysisService {
                 "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "just",
                 "and", "but", "if", "or", "because", "until", "while", "it", "this", "that" };
         stopwords.addAll(Arrays.asList(english));
+    }
+
+    /**
+     * Tách văn bản thành các mệnh đề (cho tiếng Việt)
+     * Bao gồm cả dấu phẩy, chấm phẩy
+     */
+    public List<String> splitClauses(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Tách theo dấu chấm, chấm hỏi, chấm than, phẩy, chấm phẩy
+        String[] clauses = CLAUSE_PATTERN.split(text.trim());
+
+        List<String> result = new ArrayList<>();
+        for (String clause : clauses) {
+            clause = clause.trim();
+            // Allow meaningful clauses (minimum 10 characters for Vietnamese)
+            if (clause.length() >= 10 && !clause.isEmpty() && clause.matches(".*[\\p{L}\\p{N}].*")) {
+                result.add(clause);
+            }
+        }
+
+        return result;
     }
 
     /**
