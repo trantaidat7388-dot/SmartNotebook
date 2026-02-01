@@ -109,8 +109,8 @@ public class TextAnalysisService {
         List<String> result = new ArrayList<>();
         for (String sentence : sentences) {
             sentence = sentence.trim();
-            // Chỉ lấy câu có độ dài hợp lý (ít nhất 10 ký tự)
-            if (sentence.length() >= 10) {
+            // Allow meaningful short sentences (minimum 3 characters)
+            if (sentence.length() >= 3 && !sentence.isEmpty() && sentence.matches(".*[\\p{L}\\p{N}].*")) {
                 result.add(sentence);
             }
         }

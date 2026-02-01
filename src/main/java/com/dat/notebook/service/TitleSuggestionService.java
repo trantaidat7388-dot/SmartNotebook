@@ -240,7 +240,15 @@ public class TitleSuggestionService {
             result.append(words[i]);
         }
 
-        return result.toString().trim();
+        String truncated = result.toString().trim();
+        
+        // Add ellipsis only if text was actually cut
+        if (words.length > maxWords && !truncated.endsWith(".") && 
+            !truncated.endsWith("!") && !truncated.endsWith("?")) {
+            truncated += "...";
+        }
+        
+        return truncated;
     }
 
     /**
